@@ -33,7 +33,6 @@ class SortieFormType extends AbstractType
                 'class' => Etat::class,
                 'choice_label' => 'libelle'
             ])
-            ->add('organisateur')
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom'
