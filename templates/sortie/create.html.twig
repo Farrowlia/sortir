@@ -3,7 +3,18 @@
 {% block body %}
 <div>
     {{ form_start(sortieForm) }}
+{#    {{ form_row(sortieForm.nom) }}
+    {{ form_row(sortieForm.dateDebut) }}
+    {{ form_row(sortieForm.dateCloture) }}
+    {{ form_row(sortieForm.nbreInscriptionMax) }}
+    {{ form_row(sortieForm.duree) }}
+    {{ form_row(sortieForm.description) }}
+    {{ form_row(sortieForm.campus) }}
+    {{ form_row(sortieForm.lieu) }}#}
+
     {{ form_widget(sortieForm) }}
+    <button>Ajouter lieu</button>
+
     <button>Enregistrer</button>
     <button>Publier la sortie</button>
     <button>Annuler</button>
@@ -12,6 +23,6 @@
 {% endblock %}
 
 {% block title %}
-Créer une nouvelle sortie | {#{{ Parent()#} }}
+Créer une nouvelle sortie | {#{{ Parent() }}#}
 {% endblock %}
 
