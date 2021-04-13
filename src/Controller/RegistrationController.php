@@ -36,6 +36,7 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the password
+            $passwordEnClair = $form->get('plainPassword')->getData();
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
@@ -45,27 +46,29 @@ class RegistrationController extends AbstractController
             $user->setRoles(['ROLE_USER']);
             $user->setAdministrateur(false);
             $user->setActif(true);
+            $user->setIsVerified(true);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user, $passwordEnClair,
                 (new TemplatedEmail())
                     ->from(new Address('no-reply@sortir.com', 'Sortir.com'))
                     ->to($user->getEmail())
-                    ->subject('Confirmation adresse email')
+                    ->subject('Validez votre inscription')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-            // do anything else you need here, like send an email
 
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
+            // Permet la connexion automatique après l'inscription
+//            return $guardHandler->authenticateUserAndHandleSuccess(
+//                $user,
+//                $request,
+//                $authenticator,
+//                'main' // firewall name in security.yaml
+//            );
+            return $this->redirectToRoute('app_register');
         }
 
         return $this->render('registration/register.html.twig', [
