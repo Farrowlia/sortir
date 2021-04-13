@@ -37,6 +37,19 @@ class UserController extends AbstractController
         $userForm = $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()){
+
+            // on récupère les images de l'user
+            if ($userForm->get('image')->getData()) {
+                if ($user->getUrlImage()) {
+                    unlink($this->getParameter('image_user_directory') . '/' . $user->getUrlImage());
+                }
+
+                $image = $userForm->get('image')->getData();
+                $urlImage = md5(uniqid()) . '.' . $image->guessExtension();
+                $image->move($this->getParameter('image_user_directory'), $urlImage);
+                $user->setUrlImage($urlImage);
+            }
+
             // encode the password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
