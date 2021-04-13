@@ -1,0 +1,19 @@
+<nav class="navbar navbar-expand-lg p-3 bg-light"> <a class="navbar-brand" href="{{ path('main') }}">SORTIR.COM</a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+{#            <li {% if app.request.get('_route') == 'main' %} class="nav-item active" {% else %} class="nav-item" {% endif %}> <a class="nav-link" href="{{ path('main') }}">SORTIE</a></li>#}
+        </ul>
+    </div>
+    <div>
+        {% if app.user %}
+            {% if app.user.roles == ["ROLE_ADMIN"] %}
+                <a type="button" class="btn btn-outline-primary" href="{{ path('ville') }}">Villes</a>
+                <a type="button" class="btn btn-outline-primary" href="{{ path('campus') }}">Campus</a>
+            {% endif %}
+            <a type="button" class="btn btn-outline-primary" href="{{ path('user') }}">Mon profil</a>
+            <a type="button" class="btn btn-outline-primary" href="{{ path('app_logout') }}">Déconnexion</a>
+        {% else %}
+            <a type="button" class="btn btn-outline-primary" href="{{ path('app_login') }}">Connexion</a>
+        {% endif %}
+    </div>
+</nav>
