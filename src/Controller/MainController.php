@@ -13,6 +13,6 @@ class MainController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->redirectToRoute('app_login');
+        return $this->redirectToRoute('sortie');
     }
 }

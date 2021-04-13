@@ -4,10 +4,15 @@
 
 {% block body %}
 
-    <p>{{ user.nom }}</p>
-    <p>{{ user.prenom }}</p>
-    <p>{{ user.email }}</p>
-    <p>{{ user.pseudo }}</p>
+    <p>Nom : {{ user.nom }}</p>
+    <p>Prénom : {{ user.prenom }}</p>
+    <p>Téléphone : {{ user.telephone }}</p>
+    <p>Email : {{ user.email }}</p>
+    <p>Pseudo : {{ user.pseudo }}</p>
+    <p>Campus : {{ user.campus.nom }}</p>
+    {% if user.urlImage %}
+    <img src="{{ 'images/users/' ~ user.urlImage }}" alt="avatar">
+    {% endif %}
 
     <a href="{{ path('user_modifier') }}">Modifier le profil</a>
 
