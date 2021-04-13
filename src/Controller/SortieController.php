@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
+use App\Entity\User;
 use App\Form\SortieFormType;
+use App\Repository\EtatRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +29,10 @@ class SortieController extends AbstractController
      * @Route("/sortie/create", name="sortie_create")
      * @return Response
      */
-    public function create(EntityManagerInterface $entityManager, Request $request): Response
+    public function create(EntityManagerInterface $entityManager,
+                           Request $request,
+                           EtatRepository $etatRepository
+    ): Response
     {
         $sortie = new Sortie();
         /*$sortie->setOrganisateur($this->getUser()->getPseudo());*/
@@ -36,7 +42,13 @@ class SortieController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
-            $entityManager->persist();
+            // TODO gérer les états en fonction des règles métier
+            $etat = new Etat();
+            $etat = $etatRepository->find(2);
+            $sortie->setEtat($etat);
+            $sortie->setOrganisateur('Hugo'); //TODO
+            $sortie->setCampus('Saint-Herblain'); //TODO
+            $entityManager->persist($sortie);
             $entityManager->flush();
 
             $this->addFlash('succes', 'Votre sortie a bien été créée !');
