@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Modifier profil
+{% endblock %}
+
+{% block body %}
+
+    {{ form_start(userForm) }}
+    {{ form_widget(userForm) }}
+    <button type="submit" class="btn">Enregister</button>
+    {{ form_end(userForm) }}
+
+{% endblock %}
+
+
+
