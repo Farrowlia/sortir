@@ -83,6 +83,12 @@ class User implements UserInterface
      */
     private $urlImage;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $campus;
+
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
@@ -288,6 +294,18 @@ class User implements UserInterface
     public function setUrlImage(?string $urlImage): self
     {
         $this->urlImage = $urlImage;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): self
+    {
+        $this->campus = $campus;
 
         return $this;
     }
