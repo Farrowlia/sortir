@@ -1,36 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion!{% endblock %}
+{% block title %}Connexion{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
 
-        {% if app.user %}
-            <div class="mb-3">
-                Vous êtes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
+    <div class="container-fluid">
+        <div class="row no-gutter">
+            <div class="col-md-6 d-none d-md-flex p-0 login">
+                <img src="{{ asset('images/divers/background-login.jpg') }}" alt="">
             </div>
-        {% endif %}
-
-        <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-        <label for="inputEmail">Email</label>
-        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
-        <label for="inputPassword">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" required>
-
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me">Se souvenir de moi
-            </label>
+            <div class="col-md-6 bg-light">
+                <div class="d-flex align-items-center py-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-10 col-xl-7 mx-auto">
+                                <h3 class="display-4">Connexion</h3>
+                                <p class="text-muted mb-4">Créez, participez à des sorties entres élèves.</p>
+                                <form method="post">
+                                    <div class="form-group mb-3">
+                                        <input value="{{ last_username }}" id="inputEmail" name="email"  type="email" placeholder="Email/Pseudo" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4">
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <input id="inputPassword" type="password" name="password"  placeholder="Mot de passe" required="" class="form-control rounded-pill border-0 shadow-sm px-4 text-primary">
+                                    </div>
+                                    <div class="row">
+                                        <div class="custom-control custom-checkbox mb-3 col-lg-6 col-md-12">
+                                            <input id="customCheck1" type="checkbox" name="_remember_me" class="custom-control-input">
+                                            <label for="customCheck1" class="custom-control-label">Se souvenir de moi</label>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="{{ path('app_reset_password', {'token': 'x'}) }}" class="text-end fs-6">Mot de passe oublié</a>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                    <button type="submit" class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm">Valider</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            Se connecter
-        </button>
-        <a href="{{ path('app_reset_password', {'token': 'x'}) }}">Mot de passe oublié</a>
-    </form>
 {% endblock %}
