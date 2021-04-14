@@ -27,7 +27,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_USER")
      * @Route("/user/modifier", name="user_modifier")
      */
     public function modifier(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder): Response
