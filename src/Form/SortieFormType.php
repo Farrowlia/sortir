@@ -35,9 +35,13 @@ class SortieFormType extends AbstractType
                 'placeholder' => 'Choisissez la ville',
                 'mapped' => false,
             ])
-/*            ->add('lieu', EntityType::class, [
+/*            ->add('lieu', EntityType::class,             [
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
+                'auto_initialize' => false,
+                'placeholder' => 'La ville doit être sélectionnée',
+                'choices' => [],
+
             ])*/
 /*            ->add('lieuForm', LieuFormType::class, [
                 ''
@@ -53,14 +57,16 @@ class SortieFormType extends AbstractType
           $builder->get('ville')->addEventListener(
           FormEvents::POST_SUBMIT,
           function (FormEvent $event) {
-              $ville = $event->getForm()->getData();
+              /*$ville = $event->getForm()->getData();*/
               $form = $event->getForm();
               $this->addLieuField($form->getParent(), $form->getData());
 
               /* pour info $form->getParent() == récupère le formulaire initial */
+              /*vidéo youtube 35:15*/
 
           }
         );
+
     }
 
     /**
@@ -76,17 +82,28 @@ class SortieFormType extends AbstractType
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
                 'auto_initialize' => false,
-                'placeholder' => 'Sélectionner un lieu existant',
-                'choices' => $ville->getLieux(),
+                'placeholder' => $ville ? 'Sélectionner un lieu existant' : 'La ville doit être sélectionnée',
+                'choices' => $ville ? $ville->getLieux() : [],
 
             ]
         );
+        /* après c'est plutôt une méthode à utiliser dans modifier la sortie*/
         $builder->addEventListener(
-            FormEvents::POST_SUBMIT,
+            FormEvents::POST_SET_DATA,
             function (FormEvent $event)
             {
-                dump($event->getForm());
-                //TODO
+                $data = $event->getData();
+                /* @var $lieu Lieu */ //ce commentaire permet d'obtenir l'autocomplétion
+                $lieu = $data->getLieu();
+                //TODO ecouter si la ville est sélectionnée
+                if ($lieu) {
+                    $ville = $lieu->getVille();
+                    $form = $event->getForm();
+                    $this->addLieuField($form, $ville);
+                    $form->get('ville')->setData($ville);
+                } else {
+                    $this->addLieuField($form, $ville);
+                }
             }
         );
         $form->add($builder->getForm());
