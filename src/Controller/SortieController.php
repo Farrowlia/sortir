@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Entity\User;
+use App\Form\SearchSortieFormType;
 use App\Form\SortieFormType;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
+use App\Services\SearchSortie;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,11 +21,27 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie", name="sortie")
      */
-    public function index(SortieRepository $sortieRepository): Response
+    public function index(Request $request, SortieRepository $sortieRepository): Response
     {
-        $tableauSorties = $sortieRepository->findAll();
+        $searchSortie = new SearchSortie();
+        $searchSortie->page = $request->get('page', 1);
+
+        $searchSortieFormType = $this->createForm(SearchSortieFormType::class, $searchSortie);
+        $searchSortieFormType->handleRequest($request);
+//        [$min, $max] = $repository->findMinMax($searchSortie);
+        $tableauSorties = $sortieRepository->findSearch($searchSortie);
+
+
+//        return $this->render('product/index.html.twig', [
+//            'products' => $products,
+//            'form' => $form->createView(),
+//            'min' => $min,
+//            'max' => $max
+//        ]);
+
 
         return $this->render('sortie/index.html.twig', [
+            'searchSortieFormType' => $searchSortieFormType->createView(),
             'tableauSorties' => $tableauSorties
         ]);
     }

@@ -11,6 +11,16 @@
             </div>
         </div>
         <div class="row">
+            <div class="col">
+                {{ form_start(searchSortieFormType) }}
+                {{ form_row(searchSortieFormType.q) }}
+                {{ form_row(searchSortieFormType.campus) }}
+                {{ form_row(searchSortieFormType.archive) }}
+                <button type="submit" class="btn btn-primary">Filtrer</button>
+                {{ form_end(searchSortieFormType) }}
+            </div>
+        </div>
+        <div class="row">
             {% for sortie in tableauSorties %}
                 <div class="col-3">
                     <div class="sortieBox">
@@ -49,6 +59,11 @@
                     <div class="col"><a type="button" class="btn btn-outline-primary" href="{{ path('sortie_create') }}">Créer une sortie</a></div>
                 </div>
             {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ knp_pagination_render(tableauSorties) }}
+            </div>
         </div>
     </div>
 
