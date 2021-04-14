@@ -7,6 +7,7 @@ use App\Entity\Sortie;
 use App\Entity\User;
 use App\Form\SortieFormType;
 use App\Repository\EtatRepository;
+use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +19,12 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie", name="sortie")
      */
-    public function index(): Response
+    public function index(SortieRepository $sortieRepository): Response
     {
+        $tableauSorties = $sortieRepository->findAll();
+
         return $this->render('sortie/index.html.twig', [
-            'controller_name' => 'SortieController',
+            'tableauSorties' => $tableauSorties
         ]);
     }
 

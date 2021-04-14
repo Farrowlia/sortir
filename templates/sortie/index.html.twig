@@ -3,18 +3,53 @@
 {% block title %}Hello SortieController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="container">
+        <div class="row p-3">
+            <div class="col">
+                <h1 class="text-center">Les sorties</h1>
+            </div>
+        </div>
+        <div class="row">
+            {% for sortie in tableauSorties %}
+                <div class="col-3">
+                    <div class="sortieBox">
+                        <div class="imgbox">
+                            <img src="{{ 'images/sorties/' ~ sortie.urlImage }}" alt="image sortie">
+                        </div>
+                        <div class="specifies">
+                            <div class="row">
+                                <div class="col"><h4>{{ sortie.nom }}</h4></div>
+                                <div class="col text-end"><h4>{{ sortie.dateDebut | date('d/M/Y') }}</h4></div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><h6>{{ sortie.organisateur }}</h6></div>
+                                <div class="col-3"><h6 class="text-end">{{ sortie.dateDebut | date('hh:mm') }}</h6></div>
+                            </div>
+                            <div class="row pt-2 pb-2">
+                                <div class="col">
+                                    <ul>
+                                        <li>Date cloture : {{ sortie.dateCloture }}</li>
+                                        <li>Inscrit : {{ sortie.nbreInscriptionMax }}</li>
+                                        <li>Etat : {{ sortie.etat }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row pb-2">
+                                <div class="col"><button class="btn btn-primary">Afficher</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col"><i class="bi bi-emoji-frown"></i> Il n'y pas de sortie à venir</div>
+                </div>
+                <div class="row p-3">
+                    <div class="col"><a type="button" class="btn btn-outline-primary" href="{{ path('sortie_create') }}">Créer une sortie</a></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/sortir.com/src/Controller/SortieController.php'|file_link(0) }}">src/Controller/SortieController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/sortir.com/templates/sortie/gererLesVilles.html.twig'|file_link(0) }}">templates/sortie/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}
