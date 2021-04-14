@@ -10,16 +10,24 @@
                 <h1 class="text-center">Les sorties</h1>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                {{ form_start(searchSortieFormType) }}
+        {{ form_start(searchSortieFormType) }}
+        <div class="row justify-content-center">
+            <div class="col-4">
                 {{ form_row(searchSortieFormType.q) }}
                 {{ form_row(searchSortieFormType.campus) }}
+            </div>
+            <div class="col-4">
+                {{ form_row(searchSortieFormType.dateMin) }}
+                {{ form_row(searchSortieFormType.dateMax) }}
                 {{ form_row(searchSortieFormType.archive) }}
-                <button type="submit" class="btn btn-primary">Filtrer</button>
-                {{ form_end(searchSortieFormType) }}
             </div>
         </div>
+        <div class="row justify-content-center p-2">
+            <div class="col-3">
+                <button type="submit" class="btn btn-primary w-100">Rechercher</button>
+            </div>
+        </div>
+        {{ form_end(searchSortieFormType) }}
         <div class="row">
             {% for sortie in tableauSorties %}
                 <div class="col-3">

@@ -9,6 +9,7 @@ use App\Services\SearchSortie;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,6 +36,14 @@ class SearchSortieFormType extends AbstractType
             ])
             ->add('archive', CheckboxType::class, [
                 'label' => 'Archivée',
+                'required' => false,
+            ])
+            ->add('dateMin', DateTimeType::class, [
+                'label' => 'Entre le',
+                'required' => false,
+            ])
+            ->add('dateMax', DateTimeType::class, [
+                'label' => 'et le',
                 'required' => false,
             ])
         ;

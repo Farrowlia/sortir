@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entity\Campus;
+use DateTime;
 
 class SearchSortie
 {
@@ -22,15 +23,15 @@ class SearchSortie
      */
     public $campus;
 
-//    /**
-//     * @var null|integer
-//     */
-//    public $max;
-//
-//    /**
-//     * @var null|integer
-//     */
-//    public $min;
+    /**
+     * @var null|DateTime
+     */
+    public $dateMin;
+
+    /**
+     * @var null|DateTime
+     */
+    public $dateMax;
 
     /**
      * @var boolean

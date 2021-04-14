@@ -47,8 +47,6 @@ class SortieRepository extends ServiceEntityRepository
 
     private function getSearchQuery(SearchSortie $searchSortie): QueryBuilder
     {
-        $today = date("Y-m-d H:i:s");
-
         $query = $this
             ->createQueryBuilder('s')
             ->select('c', 's')
@@ -62,13 +60,26 @@ class SortieRepository extends ServiceEntityRepository
 
         if (!empty($searchSortie->archive)) {
             $query = $query
-                ->andWhere('s.dateDebut < :today');
+                ->andWhere('s.dateDebut < :today')
+                ->setParameter('today', date("Y-m-d H:i:s"));
         }
 
         if (!empty($searchSortie->campus)) {
             $query = $query
                 ->andWhere('c.id IN (:campus)')
                 ->setParameter('campus', $searchSortie->campus);
+        }
+
+        if (!empty($searchSortie->dateMin)) {
+            $query = $query
+                ->andWhere('s.dateDebut > :dateMin')
+                ->setParameter('dateMin', $searchSortie->dateMin);
+        }
+
+        if (!empty($searchSortie->dateMax)) {
+            $query = $query
+                ->andWhere('s.dateDebut < :dateMax')
+                ->setParameter('dateMax', $searchSortie->dateMax);
         }
 
         return $query;
