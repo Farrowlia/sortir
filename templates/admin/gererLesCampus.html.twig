@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CampusController!{% endblock %}
+
+{% block body %}
+    <section class="grid-container">
+        <h2 class="div1">Gérer les campus</h2>
+
+        <div class="div2">
+            <h3>Filtrer par sites</h3>
+
+            <label for="Le nom contient"></label>
+            <input type="text" id="nomCampus" alt="nom du campus">
+            <button>Rechercher</button>
+        </div>
+
+        <table class="list_campus">
+            <thead>
+            <tr>
+                <th>Campus</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for campus in tableauCampus %}
+                <tr>
+                    <td>{{ campus.nom }}</td>
+                    <td>Modifier - Supprimer</td>
+                </tr>
+            {% endfor %}
+            {{ form_start(campusForm) }}
+            <tr>
+                <td>{{ form_widget(campusForm.nom) }} {{ form_errors(campusForm.nom) }}</td>
+                <td><button type="submit" alt="ajouter">Ajouter</button></td>
+            </tr>
+            {{ form_end(campusForm) }}
+            </tbody>
+        </table>
+    </section>
+
+{% endblock %}

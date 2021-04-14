@@ -3,13 +3,16 @@
 {% block title %}Hello VilleController!{% endblock %}
 
 {% block body %}
-    <section>
-        <h2>Gérer les villes</h2>
-        <h3>Filtrer les villes</h3>
+    <section class="grid-container">
+        <h2 class="div1">Gérer les villes</h2>
 
-        <label for="Le nom contient"></label>
-        <input type="text" value="nomVille">
-        <button>Rechercher</button>
+        <div class="div2">
+            <h3>Filtrer par ville</h3>
+
+            <label for="Le nom contient"></label>
+            <input type="text" id="nomVille" alt="nom de la ville">
+            <button>Rechercher</button>
+        </div>
 
         <table class="list_villes">
             <thead>
@@ -31,7 +34,7 @@
             <tr>
                 <td>{{ form_widget(villeForm.nom) }} {{ form_errors(villeForm.nom) }}</td>
                 <td>{{ form_widget(villeForm.codePostal) }} {{ form_errors(villeForm.codePostal) }}</td>
-                <td>Ajouter</td>
+                <td><button type="submit" alt="ajouter">Ajouter</button></td>
             </tr>
                 {{ form_end(villeForm) }}
             </tbody>

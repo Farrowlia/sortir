@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class VilleController extends AbstractController
 {
     /**
-     * @Route("/gererlesvilles", name="gerer_les_villes")
+     * @Route("admin/villes", name="villes")
      */
     public function create(
         Request $request,
@@ -37,7 +37,7 @@ class VilleController extends AbstractController
             //TODO voir l'ajout d'une popup de confirmation ou message flash
             //return vers un rafraichissement de la page ?
         }
-        return $this->render('Ville/gererLesVilles.html.twig', [
+        return $this->render('admin/gererLesVilles.html.twig', [
             'villeForm' => $villeForm->createView(),
             'villes' => $tableauVilles
         ]);

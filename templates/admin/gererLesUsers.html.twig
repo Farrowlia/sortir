@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Admin !{% endblock %}
+
+{% block body %}
+<section class="grid-container">
+    <h2 class="div1">Gérer les utilisateurs</h2>
+
+    <div class="div2">
+        <h3>Filtrer par utilisateur</h3>
+
+        <label for="Le nom contient"></label>
+        <input type="text" id="nomUtilisateur" alt="nom de l'utilisateur">
+        <button>Rechercher</button>
+    </div>
+
+    <table class="list_users">
+        <thead>
+        <tr>
+            <th>Pseudo</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+{#        {% for campus in tableauCampus %}#}
+{#            <tr>#}
+{#                <td>{{ user.pseudo }}</td>#}
+{#                <td>{{ user.nom }}</td>#}
+{#                <td>{{ user.prenom }}</td>#}
+{#                <td>{{ user.email }}</td>#}
+{#                <td>Supprimer - Désactiver</td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}
