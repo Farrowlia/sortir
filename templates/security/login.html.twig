@@ -17,11 +17,14 @@
                                 <h3 class="display-4">Connexion</h3>
                                 <p class="text-muted mb-4">Créez, participez à des sorties entres élèves.</p>
                                 <form method="post">
+                                    {% if error %}
+                                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                    {% endif %}
                                     <div class="form-group mb-3">
-                                        <input value="{{ last_username }}" id="inputEmail" name="email"  type="email" placeholder="Email/Pseudo" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4">
+                                        <input value="{{ last_username }}" id="inputEmail" type="text" name="username" placeholder="Email/Pseudo" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4">
                                     </div>
                                     <div class="form-group mb-3">
-                                        <input id="inputPassword" type="password" name="password"  placeholder="Mot de passe" required="" class="form-control rounded-pill border-0 shadow-sm px-4 text-primary">
+                                        <input id="inputPassword" type="password" name="password" placeholder="Mot de passe" required="" class="form-control rounded-pill border-0 shadow-sm px-4 text-primary">
                                     </div>
                                     <div class="row">
                                         <div class="custom-control custom-checkbox mb-3 col-lg-6 col-md-12">
