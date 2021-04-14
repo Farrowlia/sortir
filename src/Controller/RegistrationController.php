@@ -57,7 +57,7 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('no-reply@sortir.com', 'Sortir.com'))
                     ->to($user->getEmail())
-                    ->subject('Validez votre inscription')
+                    ->subject('Salut le nouveau, viens vite nous rejoindre')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 

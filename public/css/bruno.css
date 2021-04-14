@@ -1,0 +1,9 @@
+.login{
+    height: 90vh;
+}
+
+.login img{
+    width: 100%;
+    object-fit: none;
+}
+
