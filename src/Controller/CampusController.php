@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
+use App\Form\CampusFormType;
+use App\Repository\CampusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,16 +14,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class CampusController extends AbstractController
 {
     /**
-     * @Route("/campus", name="campus")
+     * @Route("admin/campus", name="campus")
      */
     public function create(
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        CampusRepository $campusRepository
     ): Response
     {
+        $tableauCampus = $campusRepository->findAll();
+
         $campus = new Campus();
         $campusForm = $this->createForm(CampusFormType::class, $campus);
-        $campusForm->handleRequest($request);
+        $campusForm = $campusForm->handleRequest($request);
 
         if ($campusForm->isSubmitted() && $campusForm->isValid()) {
             $campus->setNom();
@@ -32,8 +38,9 @@ class CampusController extends AbstractController
             //return vers un rafraichissement de la page ?
         }
 
-        return $this->render('admin/dashboard', [
-            'campusForm' => $campusForm->createView()
+        return $this->render('admin/gererLesCampus.html.twig', [
+            'campusForm' => $campusForm->createView(),
+            'tableauCampus' => $tableauCampus
         ]);
     }
 }

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello VilleController!{% endblock %}
+
+{% block body %}
+    <section class="grid-container">
+        <h2 class="div1">Gérer les villes</h2>
+
+        <div class="div2">
+            <h3>Filtrer par ville</h3>
+
+            <label for="Le nom contient"></label>
+            <input type="text" id="nomVille" alt="nom de la ville">
+            <button>Rechercher</button>
+        </div>
+
+        <table class="list_villes">
+            <thead>
+            <tr>
+                <th>Ville</th>
+                <th>Code postal</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ville in villes %}
+                <tr>
+                    <td>{{ ville.nom }}</td>
+                    <td>{{ ville.codePostal }}</td>
+                    <td>Modifier - Supprimer</td>
+                </tr>
+            {% endfor %}
+                {{ form_start(villeForm) }}
+            <tr>
+                <td>{{ form_widget(villeForm.nom) }} {{ form_errors(villeForm.nom) }}</td>
+                <td>{{ form_widget(villeForm.codePostal) }} {{ form_errors(villeForm.codePostal) }}</td>
+                <td><button type="submit" alt="ajouter">Ajouter</button></td>
+            </tr>
+                {{ form_end(villeForm) }}
+            </tbody>
+        </table>
+    </section>
+
+{% endblock %}

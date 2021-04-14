@@ -9,12 +9,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CampusFormType extends AbstractType
 {
-    public function buildFormCampus(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('campus', null, [
-                'required' => true
-            ])
+            ->add('nom')
         ;
     }
 
