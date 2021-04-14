@@ -7,7 +7,7 @@
     <div>
         {% if app.user %}
             {% if app.user.roles == ["ROLE_ADMIN"] %}
-                <a type="button" class="btn btn-outline-primary" href="{{ path('ville') }}">Villes</a>
+                <a type="button" class="btn btn-outline-primary" href="{{ path('gerer_les_villes') }}">Villes</a>
                 <a type="button" class="btn btn-outline-primary" href="{{ path('campus') }}">Campus</a>
             {% endif %}
             <a type="button" class="btn btn-outline-primary" href="{{ path('user') }}">Mon profil</a>
