@@ -12,6 +12,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -25,9 +26,17 @@ class SortieFormType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, ['label' => 'Nom de la sortie'])
-            ->add('dateDebut', DateTimeType::class, ['label' => 'Date et heure de début', 'html5' => true, 'widget' => 'choice', ])
+            ->add('dateDebut', DateTimeType::class, [
+                'label' => 'Date et heure de début',
+                'html5' => true,
+                'widget' => 'choice',
+                ])
             ->add('duree', IntegerType::class, ['label' => 'Durée'])
-            ->add('dateCloture', DateType::class, ['label' => 'Date et heure de fin', 'html5' => true, 'widget' => 'single_text',])
+            ->add('dateCloture', DateTimeType::class, [
+                'label' => 'Date et heure de fin',
+                'html5' => true,
+                'widget' => 'choice',
+                ])
             ->add('nbreInscriptionMax')
             ->add('description')
             ->add('urlImage')
@@ -40,7 +49,14 @@ class SortieFormType extends AbstractType
                 'mapped' => false,
                 'label' => 'Créer un lieu',
                 'attr' => ['style' => 'display:none'],
-            ]);
+            ])
+            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
+            ->add('saveAndPublish', SubmitType::class, ['label' => 'Publier la sortie'])
+            ->add('cancel', SubmitType::class, [
+                'label' => 'Annuler',
+                'validation_groups' => ['Registration']])
+
+        ;
 
 /*        $builder->get('lieu')->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
            $form = $event->getForm();
@@ -68,10 +84,7 @@ class SortieFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Sortie::class,
-            'empty_data' => function (FormInterface $form) {
-                return new Lieu($form->get('lieu')->getData());
-            }
+            'data_class' => Sortie::class
         ]);
     }
 

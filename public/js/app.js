@@ -1,6 +1,9 @@
 function afficherLieuForm()
 {
         $('#sortie_form_lieuForm').show();
+        $('#sortie_form_lieuForm_nom').attr("required", "true");
+        $('#sortie_form_lieuForm_rue').attr("required", "true");
+        $('#sortie_form_lieuForm_ville').attr("required", "true");
         /*let formLieu = document.getElementById("sortie_form_lieuForm").childNodes
         for (var i = 0;i<formLieu.length;i++) {
                 formLieu[i].lastChild.style.display = block;
@@ -10,6 +13,13 @@ function afficherLieuForm()
         $('#formLieu').disabled = false;
 */
 
+}
+
+function cacherLieuForm() {
+        $('#sortie_form_lieuForm').hide();
+        $('#sortie_form_lieuForm_nom').attr("required", "false");
+        $('#sortie_form_lieuForm_rue').attr("required", "false");
+        $('#sortie_form_lieuForm_ville').attr("required", "false");
 }
 
 function onLieuSelected() {
