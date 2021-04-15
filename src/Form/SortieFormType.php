@@ -9,6 +9,7 @@ use App\Entity\Sortie;
 use App\Entity\Ville;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -52,17 +53,18 @@ class SortieFormType extends AbstractType
             ])
             ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('saveAndPublish', SubmitType::class, ['label' => 'Publier la sortie'])
-            ->add('cancel', SubmitType::class, [
-                'label' => 'Annuler',
-                'validation_groups' => ['Registration']])
+            ->add('cancel', ButtonType::class, [
+                'label' => 'Annuler'])
 
         ;
 
-/*        $builder->get('lieu')->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+        $builder->get('lieu')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) {
            $form = $event->getForm();
-           $this->setLieuForm($form->getParent(), $form->getData());
+           dump($form->getData());
 
-        });*/
+        });
 //            ->add('ville', EntityType::class, [
 //                'class' => Ville::class,
 //                'choice_label' => 'nom',
@@ -102,5 +104,23 @@ class SortieFormType extends AbstractType
 
             ]
         );
+
+//        $builder
+//            ->add('nom', TextType::class, [
+//                'label' => 'Nom *',
+//                'required' => false,
+//            ]) //TODO ajouter des astérisques sur les champs obligatoires
+//            ->add('rue', TextType::class, [
+//                'label' => 'Rue *',
+//                'required' => false,
+//            ])
+//            ->add('ville', EntityType::class, [
+//                'class' => Ville::class,
+//                'placeholder' => 'Sélectionner une ville',
+//                'label' => 'Ville *',
+//                'required' => false,
+//            ])
+//            ->add('latitude')
+//            ->add('longitude')
     }
 }

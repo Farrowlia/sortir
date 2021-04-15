@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class LieuController extends AbstractController
 {
     /**
-     *@Route("/admin/campus", name="lieu_get")
      */
     public function create(EntityManagerInterface $entityManager, Request $request): Response
     {

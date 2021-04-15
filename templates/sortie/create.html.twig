@@ -10,7 +10,8 @@
     {{ form_row(sortieForm.duree) }}
     {{ form_row(sortieForm.description) }}
     {{ form_row(sortieForm.urlImage) }}
-    {{ form_row(sortieForm.lieu, {'attr' : { 'onchange' : 'onLieuSelected()'}}) }}
+    {{ form_row(sortieForm.lieu) }}
+    //, {'attr' : { 'onchange' : 'onLieuSelected(this.value)'}}
     <input type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="Ajouter lieu">
     <input type="button" id="btnCancelLieu" onclick="cacherLieuForm()" value="Annuler nouveau lieu">
 

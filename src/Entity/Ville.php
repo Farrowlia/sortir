@@ -99,6 +99,6 @@ class Ville
     }
 
     public function __toString():string {
-        return $this->nom.' ('.$this->codePostal.')';
+        return $this->codePostal.' '.$this->nom;
     }
 }
