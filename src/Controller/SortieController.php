@@ -10,6 +10,7 @@ use App\Form\SortieFormType;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use App\Services\SearchSortie;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,14 +49,20 @@ class SortieController extends AbstractController
 
     /**
      * @Route("/sortie/create", name="sortie_create")
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @param EtatRepository $etatRepository
+     * @param $userRepository
      * @return Response
      */
     public function create(EntityManagerInterface $entityManager,
                            Request $request,
-                           EtatRepository $etatRepository
+                           EtatRepository $etatRepository,
+                           UserRepository $userRepository
     ): Response
     {
         $sortie = new Sortie();
+        $sortie->setDateDebut(new \DateTime('now'));
         /*$sortie->setOrganisateur($this->getUser()->getPseudo());*/
 
         $sortieForm = $this->createForm(SortieFormType::class, $sortie);
@@ -63,12 +70,11 @@ class SortieController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
-            // TODO gérer les états en fonction des règles métier
-            $etat = new Etat();
-            $etat = $etatRepository->find(2);
+            $user = $userRepository->find($this->getUser());
+            $etat = $etatRepository->find(1);
             $sortie->setEtat($etat);
-            $sortie->setOrganisateur('Hugo'); //TODO
-            $sortie->setCampus('Saint-Herblain'); //TODO
+            $sortie->setOrganisateur($user);
+            $sortie->setCampus($this->getUser()->getCampus());
             $entityManager->persist($sortie);
             $entityManager->flush();
 
