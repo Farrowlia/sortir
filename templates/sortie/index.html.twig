@@ -38,18 +38,18 @@
                         <div class="specifies">
                             <div class="row">
                                 <div class="col"><h4>{{ sortie.nom }}</h4></div>
-                                <div class="col text-end"><h4>{{ sortie.dateDebut | date('d/M/Y') }}</h4></div>
+                                <div class="col text-end"><h4>{{ sortie.nom }}</h4></div>
                             </div>
                             <div class="row">
-                                <div class="col"><h6>{{ sortie.organisateur }}</h6></div>
+                                <div class="col"><h6>{{ sortie.nom }}</h6></div>
                                 <div class="col-3"><h6 class="text-end">{{ sortie.dateDebut | date('hh:mm') }}</h6></div>
                             </div>
                             <div class="row pt-2 pb-2">
                                 <div class="col">
                                     <ul>
-                                        <li>Date cloture : {{ sortie.dateCloture }}</li>
+                                        <li>Date cloture : {{ sortie.nom }}</li>
                                         <li>Inscrit : {{ sortie.nbreInscriptionMax }}</li>
-                                        <li>Etat : {{ sortie.etat }}</li>
+                                        <li>Etat : {{ sortie.etat.libelle }}</li>
                                     </ul>
                                 </div>
                             </div>
