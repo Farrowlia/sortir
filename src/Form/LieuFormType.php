@@ -6,6 +6,8 @@ use App\Entity\Lieu;
 use App\Entity\Ville;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ResetType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -19,7 +21,7 @@ class LieuFormType extends AbstractType
             ->add('nom', TextType::class, [
                 'label' => 'Nom *',
                 'required' => false,
-            ]) //TODO ajouter des astérisques sur les champs obligatoires
+            ])
             ->add('rue', TextType::class, [
                 'label' => 'Rue *',
                 'required' => false,
@@ -32,6 +34,10 @@ class LieuFormType extends AbstractType
             ])
             ->add('latitude')
             ->add('longitude')
+            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
+            ->add('reset', ResetType::class, [
+                'label' => 'Annuler'
+            ])
 
         ;
     }

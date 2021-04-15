@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -46,15 +47,16 @@ class SortieFormType extends AbstractType
                 'placeholder' => 'Sélectionner un lieu',
 
             ])
-            ->add('lieuForm', LieuFormType::class, [
-                'mapped' => false,
-                'label' => 'Créer un lieu',
-                'attr' => ['style' => 'display:none'],
-            ])
+//            ->add('lieuForm', LieuFormType::class, [
+//                'mapped' => false,
+//                'label' => 'Créer un lieu',
+//                'attr' => ['style' => 'display:none'],
+//            ])
             ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('saveAndPublish', SubmitType::class, ['label' => 'Publier la sortie'])
-            ->add('cancel', ButtonType::class, [
-                'label' => 'Annuler'])
+            ->add('cancel', ResetType::class, [
+                'label' => 'Annuler'
+            ])
 
         ;
 
