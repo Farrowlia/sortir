@@ -152,6 +152,6 @@ class Lieu
         return $this;
     }
     public function __toString():string{
-        return $this->nom.' à '.$this->ville;
+        return $this->nom.','.$this->getRue().' '.$this->ville;
     }
 }

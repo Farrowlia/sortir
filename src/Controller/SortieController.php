@@ -6,11 +6,13 @@ use App\Entity\Sortie;
 use App\Form\SearchSortieFormType;
 use App\Form\SortieFormType;
 use App\Repository\EtatRepository;
+use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use App\Services\SearchSortie;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -56,7 +58,8 @@ class SortieController extends AbstractController
     public function create(EntityManagerInterface $entityManager,
                            Request $request,
                            EtatRepository $etatRepository,
-                           UserRepository $userRepository
+                           UserRepository $userRepository,
+                           LieuRepository $lieuRepository
     ): Response
     {
         $sortie = new Sortie();
@@ -65,9 +68,16 @@ class SortieController extends AbstractController
         $sortieForm = $this->createForm(SortieFormType::class, $sortie);
         $sortieForm->handleRequest($request);
 
-        if ($sortieForm->isSubmitted() && $sortieForm->get('cancel')->isClicked()) {
+//        if ($request->isMethod('get')) {
+//            $lieuId = $request->query->get('id');
+//            $lieuSelected = $lieuRepository->find($lieuId);
+//            dump($lieuSelected);
+//            return new JsonResponse($lieuSelected);
+//        }
+
+        /*if ($sortieForm->get('cancel')) {
             return $this->redirectToRoute('main');
-        }
+        }*/
         if ($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
             /*if ($request->)*/

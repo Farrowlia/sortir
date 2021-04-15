@@ -22,20 +22,36 @@ function cacherLieuForm() {
         $('#sortie_form_lieuForm_ville').attr("required", "false");
 }
 
-function onLieuSelected() {
-        console.log("onlieuselected") // s'affiche mais le reste ne fonctionne pas
-        let lieuID = $('#sortie_form_lieu').val();
-        $.ajax({
-                method: "POST",
-                url: "{{ path('lieu_get') }}",
-                data: {id: lieuID},
-                success: function (result) {
-                        console.log(result)
-                }
-            }
+function onLieuSelected(id) {
+        let lieuID = $('#sortie_form_lieu').val()
+        // console.log("onlieuselected",id, lieuID) // s'affiche mais le reste ne fonctionne pas
+        // $.ajax({
+        //         method: "GET",
+        //         url: "/sortir/public/sortie/create",
+        //         data: {id: id},
+        //         success: function (result) {
+        //                 console.log("result ", result)
+        //         }
+        //     }
+        //
+        // )
 
-        )
 }
+$(document).on('change', '#sortie_form_lieu', function () {
+        let $field = $(this);
+        let $lieuField = $('#sortie_form_lieu');
+        let $form = $field.closest('sortie_form_lieuForm');
+        let data = {}
+        data[$lieuField.attr('name')] = $lieuField.val()
+        data[$field.attr('name')] = $field.val()
+        console.log(data)
+        $.post($form.attr('action'), data).then(function (data) {
+                console.log(data)
+        })
+
+})
+
+
 
 /*
 //Fonction pour modifier dynamiquement le formulaire de création de sorties

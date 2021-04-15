@@ -26,7 +26,6 @@ class LieuFormType extends AbstractType
             ])
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
-                'choice_label' => 'nom',
                 'placeholder' => 'Sélectionner une ville',
                 'label' => 'Ville *',
                 'required' => false,
