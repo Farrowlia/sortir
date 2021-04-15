@@ -49,12 +49,15 @@ class SortieRepository extends ServiceEntityRepository
     {
         $query = $this
             ->createQueryBuilder('s')
-            ->select('c', 's')
+            ->select('c', 's', 'u')
+            ->join('s.organisateur', 'u')
+            ->join('s.etat', 'e')
             ->join('s.campus', 'c');
 
         if (!empty($searchSortie->q)) {
             $query = $query
                 ->andWhere('s.nom LIKE :q')
+                ->orWhere('s.description LIKE :q')
                 ->setParameter('q', "%{$searchSortie->q}%");
         }
 
