@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LieuController extends AbstractController
 {
     /**
-     *
+     *@Route("/admin/campus", name="lieu_get")
      */
     public function create(EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -39,7 +39,7 @@ class LieuController extends AbstractController
     }
 
     /**
-     * @Route("/", name="lieu_get")
+     * @Route("/admin/campus", name="lieu_get")
      * ça ne fonctionne pas, je n'arrive pas à appeler cette méthode
      */
     public function detail(EntityManagerInterface $entityManager,

@@ -1,78 +1,82 @@
 App\Entity\Etat:
-  etat1:
+  etat_1:
     libelle: 'creee'
-  etat2:
+  etat_2:
     libelle: 'ouverte'
-  etat3:
+  etat_3:
     libelle: 'cloturee'
-  etat4:
+  etat_4:
     libelle: 'en_cours'
-  etat5:
+  etat_5:
     libelle: 'terminee'
-  etat6:
+  etat_6:
     libelle: 'annulee'
 
 
 App\Entity\Campus:
-  campus1:
+  campus_1:
     nom: 'NIORT'
-  campus2:
+  campus_2:
     nom: 'RENNES'
-  campus3:
+  campus_3:
     nom: 'LAVAL'
-  campus4:
+  campus_4:
     nom: 'QUIMPER'
-  campus5:
+  campus_5:
     nom: 'LE MANS'
-  campus6:
+  campus_6:
     nom: 'ANGERS'
-  campus7:
+  campus_7:
     nom: 'NANTES'
-  campus8:
+  campus_8:
     nom: 'LA ROCHE SUR YON'
 
 
 App\Entity\Ville:
   ville_{1..20}:
-    nom: '<name()>'
-    codePostal: '<numberBetween(10000, 90000)>'
+    nom: '<city()>'
+    codePostal: '<numberBetween(0, 9)><numberBetween(0, 9)>000'
 
 
 App\Entity\Lieu:
   lieu_{1..30}:
-    nom: '<name()>'
-    rue: '<text(20)>'
-    latitude: '<numberBetween(0, 1)>'
-    longitude: '<numberBetween(0, 1)>'
+    nom: '<cityPrefix()>'
+    rue: '<streetAddress()>'
+    latitude: '<latitude(42, 50)>'
+    longitude: '<longitude(-4, 8)>'
     ville: '@ville_*'
 
 
-#App\Entity\User:
-#  user_{1..100}:
-#  email: '<email()>'
-#  roles: '['ROLE_USER']'
-#  password: 'dobermann'
-#  nom: '<lastName()>'
-#  prenom: '<firstName()>'
-##  telephone: '50%? "0" 9x<numberBetween(0, 9)>'
-#  pseudo: '<username()>'
-#  administrateur: 'false'
-#  actif: 'true'
-#  isVerified: 'true'
-##  urlImage:
-#  campus: '@campus_*'
+App\Entity\User:
+  user_{1..100}:
+    email: '<email()>'
+    roles: ['ROLE_USER']
+    password: '<password()>'
+    nom: '<lastName()>'
+    prenom: '<firstName()>'
+    telephone: '80%? <e164PhoneNumber()>'
+    pseudo: '<username()>'
+    administrateur: '<numberBetween(0, 0)>'
+    actif: '<numberBetween(1, 1)>'
+    isVerified: '<numberBetween(1, 1)>'
+    urlImage: 'http://picsum.photos/id/<numberBetween(1,1000)>/290/180'
+    campus: '@campus_*'
 
-#App\Entity\Sortie:
-#  sortie_{1..50}:
-#    nom: '<productName()>'
-#    dateDebut: '<dateTimeBetween("-<numberBetween(1, 100) days", <dateTimeBetween("+<numberBetween(1, 100) days", "now")>)>'
-#    duree: '<numberBetween(20, 500)>'
-#    dateCloture: '<dateTimeBetween("-<numberBetween(1, 5)> days", $dateDebut)>'
-#    nbreInscriptionMax: '<numberBetween(2, 20)>'
-#    description: '<text(100)>'
-#    urlImage: '80%? http://picsum.photos/id/<numberBetween(400,800)>/290/180'
-#    lieu: '@lieu_*'
-#    etat: '@etat_*'
+App\Entity\Sortie:
+  sortie_{1..50}:
+    nom: '<name()>'
+#    dateDebut: '<dateTimeBetween(- 60 days, now, Europe/Paris)>'
+#    dateDebut: '<dateTimeThisYear("now", Europe/Paris)>'
+#    dateDebut: '<dateTimeInInterval(- 60 days, now, Europe/Paris)>'
+    dateDebut: '<dateTime(now)>'
+    duree: '<numberBetween(20, 500)>'
+    dateCloture: '<dateTime(now)>'
+    nbreInscriptionMax: '<numberBetween(2, 20)>'
+    description: '<text(100)>'
+    urlImage: 'http://picsum.photos/id/<numberBetween(1,1000)>/290/180'
+    lieu: '@lieu_*'
+    etat: '@etat_*'
 #    participant: '<numberBetween(1,$nbreInscriptionMax)>x @user_*'
-#    organisateur: '@user_*'
-#    campus: '@campus_*'
+#    participant: '<numberBetween(1, 2)>x @user_*'
+    organisateur: '@user_*'
+    campus: '@campus_*'
