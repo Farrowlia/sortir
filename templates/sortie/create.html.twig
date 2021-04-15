@@ -12,13 +12,13 @@
     {{ form_row(sortieForm.urlImage) }}
     {{ form_row(sortieForm.lieu, {'attr' : { 'onchange' : 'onLieuSelected()'}}) }}
     <input type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="Ajouter lieu">
+    <input type="button" id="btnCancelLieu" onclick="cacherLieuForm()" value="Annuler nouveau lieu">
 
     {{ form_row(sortieForm.lieuForm, {'attr' : { 'display' : 'none'}}) }}
+    {{ form_row(sortieForm.save) }}
+    {{ form_row(sortieForm.saveAndPublish) }}
+    {{ form_row(sortieForm.cancel) }}
 
-
-    <button>Enregistrer</button>
-    <button>Publier la sortie</button>
-    <button>Annuler</button>
     {{ form_end(sortieForm) }}
 </div>
 {% endblock %}

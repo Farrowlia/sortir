@@ -62,16 +62,20 @@ class SortieController extends AbstractController
     ): Response
     {
         $sortie = new Sortie();
-        $sortie->setDateDebut(new \DateTime('now'));
-        /*$sortie->setOrganisateur($this->getUser()->getPseudo());*/
+/*        $sortie->setDateDebut(new \DateTime('now'));*/
 
         $sortieForm = $this->createForm(SortieFormType::class, $sortie);
         $sortieForm->handleRequest($request);
 
+        if ($sortieForm->isSubmitted() && $sortieForm->get('cancel')->isClicked()) {
+            return $this->redirectToRoute('main');
+        }
         if ($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
-            $user = $userRepository->find($this->getUser());
+            /*if ($request->)*/
+            //TODO conditions sur l'état : bouton "enregistrer" => etat_id = 1, si bouton "publier" => etat_id = 2
             $etat = $etatRepository->find(1);
+            $user = $userRepository->find($this->getUser());
             $sortie->setEtat($etat);
             $sortie->setOrganisateur($user);
             $sortie->setCampus($this->getUser()->getCampus());
@@ -79,7 +83,7 @@ class SortieController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('succes', 'Votre sortie a bien été créée !');
-            return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
+            return $this->redirectToRoute('main'); //TODO
         }
 
         return $this->render('sortie/create.html.twig', ['sortieForm' => $sortieForm->createView()]);
