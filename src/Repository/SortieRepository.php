@@ -29,7 +29,7 @@ class SortieRepository extends ServiceEntityRepository
     public function findSearch(SearchSortie $searchSortie): PaginationInterface
     {
         $query = $this->getSearchQuery($searchSortie)->getQuery();
-        return $this->paginator->paginate($query, $searchSortie->page, 9);
+        return $this->paginator->paginate($query, $searchSortie->page, 12);
     }
 
 //    /**

@@ -40,7 +40,7 @@ App\Entity\Ville:
 
 App\Entity\Lieu:
   lieu_{1..30}:
-    nom: '<cityPrefix()>'
+    nom: '<sentence(2, true)>'
     rue: '<streetAddress()>'
     latitude: '<latitude(42, 50)>'
     longitude: '<longitude(-4, 8)>'
@@ -48,10 +48,24 @@ App\Entity\Lieu:
 
 
 App\Entity\User:
-  user_{1..100}:
+  user_1:
+    email: 'admin@gmail.com'
+    roles: ['ROLE_ADMIN']
+#    <shuffle()> permet de passer le caractère $ sans qu'il pense que ce soit une variable
+    password: '<shuffle($)>argon2id<shuffle($)>v=19<shuffle($)>m=65536,t=4,p=1<shuffle($)>UmNWZ2g3WlYzalY5SnJLdw<shuffle($)>LGI3TbsTkH7bWtFbBoOoIdXMA87Z3OFuM2fw+5o86Tc'
+    nom: '<lastName()>'
+    prenom: '<firstName()>'
+    telephone: '<e164PhoneNumber()>'
+    pseudo: 'admin'
+    administrateur: '<numberBetween(1, 1)>'
+    actif: '<numberBetween(1, 1)>'
+    isVerified: '<numberBetween(1, 1)>'
+    urlImage: '<avatar()>'
+    campus: '@campus_*'
+  user_{2..100}:
     email: '<email()>'
     roles: ['ROLE_USER']
-    password: '<password()>'
+    password: '<shuffle($)>argon2id<shuffle($)>v=19<shuffle($)>m=65536,t=4,p=1<shuffle($)>UmNWZ2g3WlYzalY5SnJLdw<shuffle($)>LGI3TbsTkH7bWtFbBoOoIdXMA87Z3OFuM2fw+5o86Tc'
     nom: '<lastName()>'
     prenom: '<firstName()>'
     telephone: '80%? <e164PhoneNumber()>'
@@ -59,24 +73,20 @@ App\Entity\User:
     administrateur: '<numberBetween(0, 0)>'
     actif: '<numberBetween(1, 1)>'
     isVerified: '<numberBetween(1, 1)>'
-    urlImage: 'http://picsum.photos/id/<numberBetween(1,1000)>/290/180'
+    urlImage: '<avatar()>'
     campus: '@campus_*'
 
 App\Entity\Sortie:
-  sortie_{1..50}:
-    nom: '<name()>'
-#    dateDebut: '<dateTimeBetween(- 60 days, now, Europe/Paris)>'
-#    dateDebut: '<dateTimeThisYear("now", Europe/Paris)>'
-#    dateDebut: '<dateTimeInInterval(- 60 days, now, Europe/Paris)>'
-    dateDebut: '<dateTime(now)>'
+  sortie_{1..100}:
+    nom: '<sentence(4, true)>'
+    dateDebut: '<dateTimeBetween("-100 days", "+100 days")>'
     duree: '<numberBetween(20, 500)>'
-    dateCloture: '<dateTime(now)>'
+    dateCloture: '<dateTimeBetween("-10 days", "+10 days")>'
     nbreInscriptionMax: '<numberBetween(2, 20)>'
-    description: '<text(100)>'
-    urlImage: 'http://picsum.photos/id/<numberBetween(1,1000)>/290/180'
+    description: '<paragraph(3, true)>'
+    urlImage: 'http://picsum.photos/id/<numberBetween(1,1000)>/400/400'
     lieu: '@lieu_*'
     etat: '@etat_*'
-#    participant: '<numberBetween(1,$nbreInscriptionMax)>x @user_*'
-#    participant: '<numberBetween(1, 2)>x @user_*'
+#    participant: '<numberBetween(1, $nbreInscriptionMax)>x @user_*'
     organisateur: '@user_*'
     campus: '@campus_*'

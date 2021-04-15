@@ -10,10 +10,19 @@
     <p>Email : {{ user.email }}</p>
     <p>Pseudo : {{ user.pseudo }}</p>
     <p>Campus : {{ user.campus.nom }}</p>
-    {% if user.urlImage %}
-    <img src="{{ 'images/users/' ~ user.urlImage }}" alt="avatar">
-    {% endif %}
-
+    <div class="row">
+        <div class="col-2">
+            {% if user.urlImage %}
+                {% if 'http' in user.urlImage %}
+                    <img src="{{ user.urlImage }}" alt="image user">
+                {% else %}
+                    <img src="{{ 'images/users/' ~ user.urlImage }}" alt="image user">
+                {% endif %}
+            {% else %}
+                <img src="{{ 'images/users/imageUserParDefault.png' }}" alt="image user" width="100%">
+            {% endif %}
+        </div>
+    </div>
     <a href="{{ path('user_modifier') }}">Modifier le profil</a>
 
 {% endblock %}
