@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Entity\Campus;
+use App\Entity\Etat;
+use App\Entity\User;
 use DateTime;
 
 class SearchSortie
@@ -37,5 +39,15 @@ class SearchSortie
      * @var boolean
      */
     public $archive = false;
+
+    /**
+     * @var User
+     */
+    public $organisateur;
+
+    /**
+     * @var Etat
+     */
+    public $etat;
 
 }

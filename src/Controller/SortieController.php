@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Etat;
 use App\Entity\Sortie;
-use App\Entity\User;
 use App\Form\SearchSortieFormType;
 use App\Form\SortieFormType;
 use App\Repository\EtatRepository;
@@ -62,7 +60,7 @@ class SortieController extends AbstractController
     ): Response
     {
         $sortie = new Sortie();
-/*        $sortie->setDateDebut(new \DateTime('now'));*/
+        /*        $sortie->setDateDebut(new \DateTime('now'));*/
 
         $sortieForm = $this->createForm(SortieFormType::class, $sortie);
         $sortieForm->handleRequest($request);

@@ -21,7 +21,7 @@ class Lieu
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
      * @Assert\NotBlank(message="Merci d'entrer un nom pour ce lieu")
      */
     private $nom;
