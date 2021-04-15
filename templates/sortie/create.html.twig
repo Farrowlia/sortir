@@ -1,26 +1,51 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div>
-    {{ form_start(sortieForm) }}
-    {{ form_row(sortieForm.nom) }}
+<div class="container">
+            {{ form_start(sortieForm)  }}
+    <div class="form-group">
+            {{ form_row(sortieForm.nom) }}
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
     {{ form_row(sortieForm.dateDebut) }}
+        </div>
+        <div class="form-group col-md-3">
     {{ form_row(sortieForm.dateCloture) }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col">
     {{ form_row(sortieForm.nbreInscriptionMax) }}
+        </div>
+        <div class="col">
     {{ form_row(sortieForm.duree) }}
+        </div>
+    </div>
     {{ form_row(sortieForm.description) }}
+
     {{ form_row(sortieForm.urlImage) }}
-    {{ form_row(sortieForm.lieu) }}
-    //, {'attr' : { 'onchange' : 'onLieuSelected(this.value)'}}
-    <input type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="Ajouter lieu">
+    <div class="form-row">
+        <div class="col">
+        {{ form_row(sortieForm.lieu) }}
+        </div>
+        <div class="col">
+        <input class="btn btn-success" type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="+">
+        </div>
+    </div>
     <input type="button" id="btnCancelLieu" onclick="cacherLieuForm()" value="Annuler nouveau lieu">
 
-    {{ form_row(sortieForm.lieuForm, {'attr' : { 'display' : 'none'}}) }}
     {{ form_row(sortieForm.save) }}
     {{ form_row(sortieForm.saveAndPublish) }}
-    {{ form_row(sortieForm.cancel) }}
+    <a href="{{ path('main') }}">{{ form_row(sortieForm.cancel) }}</a>
 
     {{ form_end(sortieForm) }}
+
+    {{ form_start(sortieForm) }}
+    {{ form_widget(lieuForm, {'attr' : { 'display' : 'none'}}) }}
+    {{ form_end(sortieForm) }}
+
+    {#{'attr' : { 'onchange' : 'onLieuSelected(this.value)'}}#}
 </div>
 {% endblock %}
 
