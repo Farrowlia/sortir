@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Form\LieuFormType;
 use App\Form\SearchSortieFormType;
 use App\Form\SortieFormType;
 use App\Repository\CommentaireSortieRepository;
@@ -60,14 +62,38 @@ class SortieController extends AbstractController
                            Request $request,
                            EtatRepository $etatRepository,
                            UserRepository $userRepository,
-                           LieuRepository $lieuRepository
+                           LieuRepository $lieuRepository,
+                           ?Lieu $lieu
     ): Response
     {
         $sortie = new Sortie();
         /*        $sortie->setDateDebut(new \DateTime('now'));*/
 
+
+
+
+        //----------- FORMULAIRE DE CREATION DE LIEU -----------
+        $lieu = new Lieu();
+
+        $lieuForm = $this->createForm(LieuFormType::class, $lieu);
+        $lieuForm->handleRequest($request);
+
+        if ($lieuForm->isSubmitted() && $lieuForm->isValid())
+        {
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+
+            $nouveauLieu = $lieuRepository->find($lieu->getId());
+
+            $sortie->setLieu($nouveauLieu);
+        }
+
+
+        //----------- FIN DU FORMULAIRE DE CREATION DE LIEU ---------------------
+
         $sortieForm = $this->createForm(SortieFormType::class, $sortie);
         $sortieForm->handleRequest($request);
+
 
 //        if ($request->isMethod('get')) {
 //            $lieuId = $request->query->get('id');
@@ -76,12 +102,12 @@ class SortieController extends AbstractController
 //            return new JsonResponse($lieuSelected);
 //        }
 
-        /*if ($sortieForm->get('cancel')) {
-            return $this->redirectToRoute('main');
-        }*/
+
         if ($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
-            /*if ($request->)*/
+            if ($sortieForm->get('save')->isClicked()) {
+                dump('save is clicked');
+            }
             //TODO conditions sur l'état : bouton "enregistrer" => etat_id = 1, si bouton "publier" => etat_id = 2
             $etat = $etatRepository->find(1);
             $user = $userRepository->find($this->getUser());
@@ -95,7 +121,7 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('main'); //TODO
         }
 
-        return $this->render('sortie/create.html.twig', ['sortieForm' => $sortieForm->createView()]);
+        return $this->render('sortie/create.html.twig', ['sortieForm' => $sortieForm->createView(), 'lieuForm' => $lieuForm->createView()]);
     }
 
     /**
@@ -119,4 +145,27 @@ class SortieController extends AbstractController
             'commentaires' => $commentaires,
         ]);
     }
+    public function setLieuForm(EntityManagerInterface $entityManager,
+                                Request $request,
+                                LieuRepository $lieuRepository) {
+        $lieu = new Lieu();
+
+        $lieuForm = $this->createForm(LieuFormType::class, $lieu);
+        $lieuForm->handleRequest($request);
+
+        if ($lieuForm->isSubmitted() && $lieuForm->isValid())
+        {
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+
+            $nouveauLieu = $lieuRepository->find($lieu->getId());
+
+            return $this->redirectToRoute('sortie_create', ['nouveauLieu' => $nouveauLieu]);
+        }
+
+        return $this->redirectToRoute('sortie_create', [
+            'LieuForm' => $lieuForm->createView(),
+        ]);
+    }
+
 }

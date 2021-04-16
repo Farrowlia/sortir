@@ -1,3 +1,24 @@
-.dn {
-    display: none;
+/*label {*/
+/*    display: block;*/
+/*}*/
+
+/*input, textarea, select {*/
+/*    margin-bottom: 1rem;*/
+/*    box-sizing: border-box;*/
+/*}*/
+
+.group {
+    display: flex;
+}
+.col1 {
+    flex: 1 120px;
+}.col2 {
+    flex: 2 120px;
+}
+.sous-group button {
+    height: 30px;
+    background: pink;
+    display: block;
+    margin-top: 10px;
+    padding: 10px
 }

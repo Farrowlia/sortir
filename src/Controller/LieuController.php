@@ -17,28 +17,17 @@ class LieuController extends AbstractController
 {
     /**
      */
-    public function create(EntityManagerInterface $entityManager, Request $request): Response
+    public function create(EntityManagerInterface $entityManager,
+                           Request $request,
+                           LieuRepository $lieuRepository
+    ): Response
     {
-        $lieu = new Lieu();
 
-        $lieuForm = $this->createForm(LieuFormType::class, $lieu);
-        $lieuForm->handleRequest($request);
+            return $this->redirectToRoute('sortie_create');
 
-        if ($lieuForm->isValid() && $lieuForm->isSubmitted())
-        {
-            $entityManager->persist($lieu);
-            $entityManager->flush();
-
-            return $lieu; //TODO
-        }
-
-        return $this->render('lieu/index.html.twig', [
-            'LieuForm' => $lieuForm->createView(),
-        ]);
     }
 
     /**
-     * @Route("/admin/campus", name="lieu_get")
      * ça ne fonctionne pas, je n'arrive pas à appeler cette méthode
      */
     public function detail(EntityManagerInterface $entityManager,
