@@ -41,15 +41,14 @@ class VilleController extends AbstractController
         }
 
         if ($request->get('ajax')){
-            dd("test");
 
-            $ville->setNom($request->get("0"));
-            $ville->setCodePostal($request->get("1"));
-
+            $villeUpdate = $villeRepository->find($request->get('id'));
+            $villeUpdate->setNom($request->get("nom"));
+            $villeUpdate->setCodePostal($request->get("codePostal"));
             $entityManager->flush();
 
             return new JsonResponse([
-                'content' => $this->renderView('admin/gererLesVilles..html.twig')
+                'content' => $this->renderView('admin/content/_villes.html.twig', compact('villeUpdate'))
             ]);
         }
 
