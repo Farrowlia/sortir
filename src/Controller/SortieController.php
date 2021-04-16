@@ -108,6 +108,9 @@ class SortieController extends AbstractController
             if ($sortieForm->get('save')->isClicked()) {
                 dump('save is clicked');
             }
+            if ($sortieForm->get('saveAndPublish')->isClicked()) {
+                dump('saveAndPublish is clicked');
+            }
             //TODO conditions sur l'état : bouton "enregistrer" => etat_id = 1, si bouton "publier" => etat_id = 2
             $etat = $etatRepository->find(1);
             $user = $userRepository->find($this->getUser());
@@ -131,6 +134,7 @@ class SortieController extends AbstractController
     {
         $sortie = $sortieRepository->find($id);
         $commentaires = [];
+            dump('test back', $request->get('ajax'));
 
         // On vérifie si on a une requête Ajax
         if ($request->get('ajax')){
