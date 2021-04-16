@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Sortie;
 use App\Form\SearchSortieFormType;
 use App\Form\SortieFormType;
-use App\Repository\CommentaireSortieRepository;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
@@ -100,23 +99,11 @@ class SortieController extends AbstractController
 
     /**
      * @Route("/sortie/{id}", name="sortie_detail", requirements={"id"="\d+"})
+     * @return Response
      */
-    public function detail(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, Request $request): Response
+    public function detail(): Response
     {
-        $sortie = $sortieRepository->find($id);
-        $commentaires = [];
-
-        // On vérifie si on a une requête Ajax
-        if ($request->get('ajax')){
-            $commentaires = $commentaireSortieRepository->findAll();
-            return new JsonResponse([
-                'content' => $this->renderView('sortie/content/_commentaires.html.twig', compact('commentaires'))
-            ]);
-        }
-
-        return $this->render('sortie/detail.html.twig', [
-            'sortie' => $sortie,
-            'commentaires' => $commentaires,
-        ]);
+        //TODO
     }
+
 }

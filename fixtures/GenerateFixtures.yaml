@@ -76,7 +76,6 @@ App\Entity\User:
     urlImage: '<avatar()>'
     campus: '@campus_*'
 
-
 App\Entity\Sortie:
   sortie_{1..100}:
     nom: '<sentence(4, true)>'
@@ -91,11 +90,3 @@ App\Entity\Sortie:
 #    participant: '<numberBetween(1, $nbreInscriptionMax)>x @user_*'
     organisateur: '@user_*'
     campus: '@campus_*'
-
-
-App\Entity\CommentaireSortie:
-  commentaire_{1..300}:
-    texte: '<paragraph(2, true)>'
-    auteur: '@user_*'
-    sortie: '@sortie_*'
-    date: '<dateTimeBetween("-100 days", "+100 days")>'
