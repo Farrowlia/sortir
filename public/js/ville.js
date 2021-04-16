@@ -2,10 +2,10 @@
 function modifierVille(id) {
     document.getElementById("afficherNomVille" + id).innerHTML="<input name='nom' id=\"nomVille" + id + "\" type=\"text\" placeholder=\"Ville ...\">";
     document.getElementById("afficherCPville" + id).innerHTML="<input name='codePostal' id=\"cpVille" + id + "\" type=\"text\" placeholder=\"Code postal ...\">" + "<input type='hidden' name='id' value=" + id + ">";
-    document.getElementById("modifier" + id).innerHTML="<input type='button' onclick='enregistrerVilleVersion2(" + id + ")'>Enregistrer</input>";
+    document.getElementById("modifier" + id).innerHTML="<input value='Enregistrer' type='button' onclick='enregistrerVille(" + id + ")'>";
 }
 
-function enregistrerVilleVersion2(id) {
+function enregistrerVille(id) {
 
     const nameId = "#formVille" + id;
     const formAjax = document.querySelector(nameId);
