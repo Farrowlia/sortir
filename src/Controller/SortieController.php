@@ -134,7 +134,7 @@ class SortieController extends AbstractController
 
         // On vérifie si on a une requête Ajax
         if ($request->get('ajax')){
-            $commentaires = $commentaireSortieRepository->findAll();
+            $commentaires = $commentaireSortieRepository->findBy([$id]);
             return new JsonResponse([
                 'content' => $this->renderView('sortie/content/_commentaires.html.twig', compact('commentaires'))
             ]);
