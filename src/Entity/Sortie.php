@@ -85,9 +85,15 @@ class Sortie
      */
     private $campus;
 
+    /**
+     * @ORM\OneToMany(targetEntity=CommentaireSortie::class, mappedBy="sortie", orphanRemoval=true)
+     */
+    private $commentaireSorties;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->commentaireSorties = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -247,6 +253,36 @@ class Sortie
     public function setCampus(?Campus $campus): self
     {
         $this->campus = $campus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CommentaireSortie[]
+     */
+    public function getCommentaireSorties(): Collection
+    {
+        return $this->commentaireSorties;
+    }
+
+    public function addCommentaireSorty(CommentaireSortie $commentaireSorty): self
+    {
+        if (!$this->commentaireSorties->contains($commentaireSorty)) {
+            $this->commentaireSorties[] = $commentaireSorty;
+            $commentaireSorty->setSortie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaireSorty(CommentaireSortie $commentaireSorty): self
+    {
+        if ($this->commentaireSorties->removeElement($commentaireSorty)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaireSorty->getSortie() === $this) {
+                $commentaireSorty->setSortie(null);
+            }
+        }
 
         return $this;
     }
