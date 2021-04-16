@@ -1,49 +1,41 @@
 
 function modifierVille(id) {
-    document.getElementById("afficherNomVille" + id).innerHTML="<input id=\"nomVille" + id + "\" type=\"text\" placeholder=\"Ville ...\">";
-    document.getElementById("afficherCPville" + id).innerHTML="<input id=\"cpVille" + id + "\" type=\"text\" placeholder=\"Code postal ...\">" + "<input id=\"test" + id + "\" type=\"hidden\" value='jsmodif'>";
-    document.getElementById("modifier" + id).innerHTML="<button onclick=\"enregistrerVille("+id+")\">Enregistrer</button>";
+    document.getElementById("afficherNomVille" + id).innerHTML="<input name='nom' id=\"nomVille" + id + "\" type=\"text\" placeholder=\"Ville ...\">";
+    document.getElementById("afficherCPville" + id).innerHTML="<input name='codePostal' id=\"cpVille" + id + "\" type=\"text\" placeholder=\"Code postal ...\">" + "<input type='hidden' name='id' value=" + id + ">";
+    document.getElementById("modifier" + id).innerHTML="<input type='button' onclick='enregistrerVilleVersion2(" + id + ")'>Enregistrer</input>";
 }
 
-function enregistrerVille(id) {
+function enregistrerVilleVersion2(id) {
 
-    // console.log("clic ok sur enregistrer");
-    // alert("la valeur du bouton afficherNomVille " + document.getElementById("nomVille" + id).value);
+    const nameId = "#formVille" + id;
+    const formAjax = document.querySelector(nameId);
 
-            // On récupère les données du formulaire
-            const Form = new FormData(document.querySelector("#formVille" + id));
+    // On boucle sur les buttons
+    // document.querySelectorAll("#formVille1 button").forEach(button => {
+    //     button.addEventListener("click", () => {
 
-            // On fabrique la "queryString"
-            const Params = new URLSearchParams();
-            const Inputs = document.querySelectorAll("#formVille" + id + " input");
+    const Form = new FormData(formAjax);
+    const Params = new URLSearchParams();
 
-            Inputs.forEach((value, key) => {
-                Params.append(key, value.value);
-            });
+    Form.forEach((value, key) => {
+        Params.append(key, value);
+    });
 
-            // On récupère l'url active
-            const Url = new URL(window.location.href);
-            alert(Url.pathname + "?" + Params.toString() + "&ajax=1");
+    const Url = new URL(window.location.href);
 
-
-            // On lance la requête ajax
-            fetch(Url.pathname + "?" + Params.toString() + "&ajax=1", {
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                }
-            }).then(response =>
-                response.json()
-            ).then(data => {
-                // On va chercher la zone de contenu
-                // const content = document.querySelector("#contentCommentaire");
-                console.log("super ça marche !")
-
-                // On remplace le contenu
-                // content.innerHTML = data.content;
-
-                // On met à jour l'url
-                history.pushState({}, null, Url.pathname + "?" + Params.toString());
-            }).catch(e => alert(e));
-
+    fetch(Url.pathname + "?" + Params.toString() + "&ajax=1", {
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
         }
+    }).then(response =>
+        response.json()
+    ).then(data => {
 
+        const content = document.querySelector(nameId);
+        content.innerHTML = data.content;
+
+        // On met à jour l'url
+        // history.pushState({}, null, Url.pathname + "?" + Params.toString());
+    }).catch(e => alert(e));
+
+}

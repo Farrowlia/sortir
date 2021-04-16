@@ -33,6 +33,7 @@ class SortieController extends AbstractController
         $searchSortieFormType = $this->createForm(SearchSortieFormType::class, $searchSortie);
         $searchSortieFormType->handleRequest($request);
 //        [$min, $max] = $repository->findMinMax($searchSortie);
+
         $tableauSorties = $sortieRepository->findSearch($searchSortie);
 
 
@@ -138,7 +139,7 @@ class SortieController extends AbstractController
 
         // On vérifie si on a une requête Ajax
         if ($request->get('ajax')){
-            $commentaires = $commentaireSortieRepository->findBy([$id]);
+            $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
             return new JsonResponse([
                 'content' => $this->renderView('sortie/content/_commentaires.html.twig', compact('commentaires'))
             ]);
