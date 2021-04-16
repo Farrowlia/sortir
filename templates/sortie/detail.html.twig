@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ sortie.nom }}{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row p-5">
+            <div class="col">
+                <p>Nom: {{ sortie.nom }}</p>
+                <p>Date sortie: {{ sortie.dateDebut | date('d/m/Y à h:m') }}</p>
+                <p>Durée: {{ sortie.duree }} min</p>
+                <p>Date cloture: {{ sortie.dateCloture | date('d/m/Y') }}</p>
+                <p>Inscription: {{ sortie.nbreInscriptionMax }}</p>
+                <p>Description: {{ sortie.description }}</p>
+                <p>Rue: {{ sortie.lieu.rue }}</p>
+                <p>Ville: {{ sortie.lieu.ville }}</p>
+                <p>Organisateur :{{ sortie.organisateur.pseudo }}</p>
+                <p>Campus ENI: {{ sortie.campus.nom }}</p>
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col" id="contentCommentaire">
+                        {% include "sortie/content/_commentaires.html.twig" %}
+                    </div>
+                </div>
+                <br>
+                <form id="formAjax">
+                    <label for="inputText">Texte</label>
+                    <input type="text" name="inputText" id="inputText">
+                    <input type="hidden" name="inputHidden" value="JeSuisInputHidden">
+                    <input type="button" id="buttonAjax">Envoyer
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}<script src="{{ asset('js/bruno.js') }}"></script>{% endblock %}
+
