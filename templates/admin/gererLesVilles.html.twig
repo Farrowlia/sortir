@@ -1,44 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello VilleController!{% endblock %}
+{% block title %}Gérer les villes{% endblock %}
 
 {% block body %}
-    <section class="grid-container">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <section class="container-fluid">
         <h2 class="div1">Gérer les villes</h2>
 
-        <div class="div2">
-            <h3>Filtrer par ville</h3>
-
-            <label for="Le nom contient"></label>
-            <input type="text" id="nomVille" alt="nom de la ville">
-            <button>Rechercher</button>
+        <div class="div2 row justify-content-start">
+            <input class="inputRechercherVille form-control col sm-3" type="text" id="nomVille" alt="nom de la ville" placeholder="Filtrer par ville">
+            <button class="btnRechercherVille btn btn-light col sm-2">Rechercher</button>
         </div>
 
-        <table class="list_villes">
-            <thead>
-            <tr>
-                <th>Ville</th>
-                <th>Code postal</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for ville in villes %}
-                <tr>
-                    <td>{{ ville.nom }}</td>
-                    <td>{{ ville.codePostal }}</td>
-                    <td>Modifier - Supprimer</td>
-                </tr>
+        {{ form_start(villeForm) }}
+            <div class="div3 row justify-content-start">
+                <input class="form-control col sm-3" placeholder="Ajouter une ville ..." {{ form_widget(villeForm.nom) }} {{ form_errors(villeForm.nom) }}>
+                <input class="form-control col sm-2" placeholder="Ajouter un code postal ..." {{ form_widget(villeForm.codePostal) }} {{ form_errors(villeForm.codePostal) }}>
+                <button type="submit" class="btnAJouterVille btn btn-light col sm-2" alt="ajouter">Ajouter</button>
+            </div>
+        {{ form_end(villeForm) }}
+
+        <ul class="list-group list-group-horizontal row justify-content-center">
+            <li class="list-group-item col-3">Ville</li>
+            <li class="list-group-item col-2">Code postal</li>
+            <li class="list-group-item col-4">Actions</li>
+        </ul>
+
+        {% for ville in villes %}
+                <form method="post" id="formVille{{ ville.id }}">
+                    <ul class="list-group list-group-horizontal row justify-content-center">
+                    <li class="list-group-item col-3" id="afficherNomVille{{ ville.id }}">{{ ville.nom }}</li>
+                    <li class="list-group-item col-2" id="afficherCPville{{ ville.id }}">{{ ville.codePostal }}</li>
+                    <li class="list-group-item col-2" id="modifier{{ ville.id }}"><button  onclick="modifierVille({{ ville.id }})">Modifier</button></li>
+                    <li class="list-group-item col-2" id="supprimer{{ ville.id }}"><button >Supprimer</button></li>
+            </ul>
+                </form>
             {% endfor %}
-                {{ form_start(villeForm) }}
-            <tr>
-                <td>{{ form_widget(villeForm.nom) }} {{ form_errors(villeForm.nom) }}</td>
-                <td>{{ form_widget(villeForm.codePostal) }} {{ form_errors(villeForm.codePostal) }}</td>
-                <td><button type="submit" alt="ajouter">Ajouter</button></td>
-            </tr>
-                {{ form_end(villeForm) }}
-            </tbody>
-        </table>
+
+
     </section>
 
+<script src="{{ asset('js/ville.js') }}"></script>
 {% endblock %}

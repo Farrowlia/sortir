@@ -29,17 +29,19 @@ class VilleController extends AbstractController
         $villeForm = $villeForm->handleRequest($request);
 
         if ($villeForm->isSubmitted() && $villeForm->isValid()) {
-            $ville->setNom();
 
-            $entityManager->persist();
+            $entityManager->persist($ville);
             $entityManager->flush();
 
+            $this->addFlash('success', 'La ville a été ajoutée !');
+            return $this->redirectToRoute('villes');
+
             //TODO voir l'ajout d'une popup de confirmation ou message flash
-            //return vers un rafraichissement de la page ?
         }
         return $this->render('admin/gererLesVilles.html.twig', [
             'villeForm' => $villeForm->createView(),
             'villes' => $tableauVilles
         ]);
     }
+
 }
