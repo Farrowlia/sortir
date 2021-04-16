@@ -90,9 +90,15 @@ class User implements UserInterface
      */
     private $campus;
 
+    /**
+     * @ORM\OneToMany(targetEntity=CommentaireSortie::class, mappedBy="auteur", orphanRemoval=true)
+     */
+    private $commentaireSorties;
+
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
+        $this->commentaireSorties = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -307,6 +313,36 @@ class User implements UserInterface
     public function setCampus(?Campus $campus): self
     {
         $this->campus = $campus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CommentaireSortie[]
+     */
+    public function getCommentaireSorties(): Collection
+    {
+        return $this->commentaireSorties;
+    }
+
+    public function addCommentaireSorty(CommentaireSortie $commentaireSorty): self
+    {
+        if (!$this->commentaireSorties->contains($commentaireSorty)) {
+            $this->commentaireSorties[] = $commentaireSorty;
+            $commentaireSorty->setAuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaireSorty(CommentaireSortie $commentaireSorty): self
+    {
+        if ($this->commentaireSorties->removeElement($commentaireSorty)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaireSorty->getAuteur() === $this) {
+                $commentaireSorty->setAuteur(null);
+            }
+        }
 
         return $this;
     }

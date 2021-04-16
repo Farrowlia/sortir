@@ -1,0 +1,5 @@
+<p>Liste des commentaires</p>
+{% for commentaire in commentaires %}
+    <p>Posté par {{ commentaire.auteur.pseudo }} le {{ commentaire.date | date('d/m/Y à h:m') }}</p>
+    <p>Texte: {{ commentaire.texte }}</p>
+{% endfor %}
