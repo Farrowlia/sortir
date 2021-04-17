@@ -10,10 +10,6 @@ function enregistrerVille(id) {
     const nameId = "#formVille" + id;
     const formAjax = document.querySelector(nameId);
 
-    // On boucle sur les buttons
-    // document.querySelectorAll("#formVille1 button").forEach(button => {
-    //     button.addEventListener("click", () => {
-
     const Form = new FormData(formAjax);
     const Params = new URLSearchParams();
 
@@ -34,7 +30,6 @@ function enregistrerVille(id) {
         const content = document.querySelector(nameId);
         content.innerHTML = data.content;
 
-        // On met à jour l'url
         history.pushState({}, null, Url.pathname);
     }).catch(e => alert(e));
 
