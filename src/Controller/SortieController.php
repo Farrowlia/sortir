@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\CommentaireSortie;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\LieuFormType;
@@ -131,19 +132,35 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie/{id}", name="sortie_detail", requirements={"id"="\d+"})
      */
-    public function detail(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, Request $request): Response
+    public function detail(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $sortie = $sortieRepository->find($id);
-        $commentaires = [];
+        $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
             dump('test back', $request->get('ajax'));
 
         // On vérifie si on a une requête Ajax
         if ($request->get('ajax')){
+
+            $newCommentaires = new CommentaireSortie();
+            $newCommentaires->setSortie($sortie);
+            $newCommentaires->setDate(new \DateTime());
+            $newCommentaires->setAuteur($userRepository->find($this->getUser()));
+            $newCommentaires->setTexte($request->get("inputCommentaireTexte"));
+            $entityManager->persist($newCommentaires);
+            $entityManager->flush();
+
             $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
+
             return new JsonResponse([
                 'content' => $this->renderView('sortie/content/_commentaires.html.twig', compact('commentaires'))
             ]);
         }
+//        if ($request->get('ajax')){
+//            $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
+//            return new JsonResponse([
+//                'content' => $this->renderView('sortie/content/_commentaires.html.twig', compact('commentaires'))
+//            ]);
+//        }
 
         return $this->render('sortie/detail.html.twig', [
             'sortie' => $sortie,

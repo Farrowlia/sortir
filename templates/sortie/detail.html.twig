@@ -25,17 +25,20 @@
                     </div>
                 </div>
                 <br>
-                <form id="formAjax">
-                    <label for="inputText">Texte</label>
-                    <input type="text" name="inputText" id="inputText">
-                    <input type="hidden" name="inputHidden" value="JeSuisInputHidden">
-                    <input type="button" id="buttonAjax">Envoyer
-                </form>
+                <div class="row">
+                    <div class="col">
+                        <form id="formAjax">
+                            <label for="inputText">Votre message</label>
+                            <textarea type="textarea" name="inputCommentaireTexte" id="inputText"></textarea>
+                            <input type="button" id="buttonAjax" value="Envoyer">
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
 {% endblock %}
 
-{% block javascripts %}<script src="{{ asset('js/bruno.js') }}"></script>{% endblock %}
+{% block javascripts %}<script src="{{ asset('js/commentaireSortie.js') }}"></script>{% endblock %}
 
