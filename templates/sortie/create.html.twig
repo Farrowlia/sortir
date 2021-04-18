@@ -1,57 +1,70 @@
 {% extends 'base.html.twig' %}
 
 {% block styleSheets %}<link rel="stylesheet" href="{{ asset('css/marie-laure.css') }}">{% endblock %}
+{% block title %}Créer une nouvelle sortie | Sortir.com{% endblock %}
 
 {% block body %}
-<div class="container">
-            {{ form_start(sortieForm)  }}
-    <div class="form-group">
+    <div class="container">
+        {{ form_start(sortieForm, {'attr': {'id': 'formAjoutSortie'}}) }}
+        <div class="form-group">
             {{ form_row(sortieForm.nom) }}
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                {{ form_row(sortieForm.dateDebut) }}
+            </div>
+            <div class="form-group col-md-3">
+                {{ form_row(sortieForm.dateCloture) }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                {{ form_row(sortieForm.nbreInscriptionMax) }}
+            </div>
+            <div class="col">
+                {{ form_row(sortieForm.duree) }}
+            </div>
+        </div>
+        {{ form_row(sortieForm.description) }}
+
+        {{ form_row(sortieForm.image) }}
+{#        {{ form_row(sortieForm.ville) }}#}
+        <label for="selectVille"></label>
+        <select name="selectVille" id="selectVille">
+            <option value="">--Choisir une ville--</option>
+            {% for ville in tableauVille %}
+                <option value={{ ville.id }}>{{ ville.nom }}</option>
+            {% endfor %}
+        </select>
+        <div class="form-row">
+            <div class="col" id="contentSelectLieu">
+            </div>
+            <div class="col">
+                <input class="btn btn-success" type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="+">
+            </div>
+        </div>
+{#        <input type="button" id="btnCancelLieu" onclick="cacherLieuForm()" value="Annuler nouveau lieu">#}
+
+{#        {{ form_row(sortieForm.save) }}#}
+{#        {{ form_row(sortieForm.saveAndPublish) }}#}
+{#        <input type="button" value="Enregistrer">#}
+        <button type="submit" class="btn btn-success">Enregister</button>
+        <a type="submit" class="btn btn-primary" href="{{ path('main') }}">Annuler</a>
+
+
+        {{ form_end(sortieForm) }}
+
+        {#    {{ form_start(sortieForm) }}#}
+        {#    {{ form_widget(lieuForm, {'attr' : { 'display' : 'none'}}) }}#}
+        {#    {{ form_end(sortieForm) }}#}
+
+        {#{'attr' : { 'onchange' : 'onLieuSelected(this.value)'}}#}
     </div>
-    <div class="form-row">
-        <div class="form-group col-md-3">
-    {{ form_row(sortieForm.dateDebut) }}
-        </div>
-        <div class="form-group col-md-3">
-    {{ form_row(sortieForm.dateCloture) }}
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="col">
-    {{ form_row(sortieForm.nbreInscriptionMax) }}
-        </div>
-        <div class="col">
-    {{ form_row(sortieForm.duree) }}
-        </div>
-    </div>
-    {{ form_row(sortieForm.description) }}
-
-    {{ form_row(sortieForm.urlImage) }}
-    <div class="form-row">
-        <div class="col">
-        {{ form_row(sortieForm.lieu) }}
-        </div>
-        <div class="col">
-        <input class="btn btn-success" type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="+">
-        </div>
-    </div>
-    <input type="button" id="btnCancelLieu" onclick="cacherLieuForm()" value="Annuler nouveau lieu">
-
-    {{ form_row(sortieForm.save) }}
-    {{ form_row(sortieForm.saveAndPublish) }}
-    <a href="{{ path('main') }}">{{ form_row(sortieForm.cancel) }}</a>
-
-    {{ form_end(sortieForm) }}
-
-    {{ form_start(sortieForm) }}
-    {{ form_widget(lieuForm, {'attr' : { 'display' : 'none'}}) }}
-    {{ form_end(sortieForm) }}
-
-    {#{'attr' : { 'onchange' : 'onLieuSelected(this.value)'}}#}
-</div>
 {% endblock %}
 
-{% block title %}
-Créer une nouvelle sortie | Sortir.com
+{% block javascripts %}
+    <script>
+        requeteAjaxGet('#selectVille', "change", '#contentSelectLieu', true); //'#formAjoutSortie input[name="sortie_form[ville]"]'
+    </script>
 {% endblock %}
 

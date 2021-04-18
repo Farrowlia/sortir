@@ -12,6 +12,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -31,42 +32,51 @@ class SortieFormType extends AbstractType
             ->add('dateDebut', DateTimeType::class, [
                 'label' => 'Date et heure de début',
                 'html5' => true,
-                'widget' => 'choice',
+                'widget' => 'single_text',
                 ])
             ->add('duree', IntegerType::class, ['label' => 'Durée'])
-            ->add('dateCloture', DateTimeType::class, [
-                'label' => 'Date et heure de fin',
+            ->add('dateCloture', DateType::class, [
+                'label' => 'Date cloture inscription',
                 'html5' => true,
-                'widget' => 'choice',
+                'widget' => 'single_text',
                 ])
             ->add('nbreInscriptionMax')
             ->add('description')
-            ->add('urlImage')
-            ->add('lieu', EntityType::class, [
-                'class' => Lieu::class,
-                'placeholder' => 'Sélectionner un lieu',
-
-            ])
+//            ->add('urlImage')
+            ->add('image', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Image'])
+//            ->add('ville', EntityType::class, [
+//                'class' => Ville::class,
+//                'choice_label' => 'nom',
+//                'placeholder' => 'Ville',
+//                'mapped' => false
+//            ])
+//            ->add('lieu', EntityType::class, [
+//                'class' => Lieu::class,
+//                'placeholder' => 'Sélectionner un lieu',
+//            ])
 //            ->add('lieuForm', LieuFormType::class, [
 //                'mapped' => false,
 //                'label' => 'Créer un lieu',
 //                'attr' => ['style' => 'display:none'],
 //            ])
-            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
-            ->add('saveAndPublish', SubmitType::class, ['label' => 'Publier la sortie'])
-            ->add('cancel', ResetType::class, [
-                'label' => 'Annuler'
-            ])
+//            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
+//            ->add('saveAndPublish', SubmitType::class, ['label' => 'Publier la sortie'])
+//            ->add('cancel', ResetType::class, [
+//                'label' => 'Effacer'
+//            ])
 
         ;
 
-        $builder->get('lieu')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) {
-           $form = $event->getForm();
-           dump($form->getData());
-
-        });
+//        $builder->get('lieu')->addEventListener(
+//            FormEvents::POST_SUBMIT,
+//            function (FormEvent $event) {
+//           $form = $event->getForm();
+//           dump($form->getData());
+//
+//        });
 //            ->add('ville', EntityType::class, [
 //                'class' => Ville::class,
 //                'choice_label' => 'nom',
@@ -92,37 +102,39 @@ class SortieFormType extends AbstractType
         ]);
     }
 
-    /**
-     * tentative d'afficher les détails du lieu sélectionné
-     * TODO
-     */
-    private function setLieuForm(FormInterface $form, ?Lieu $lieu)
-    {
-        $builder = $form->getConfig()->getFormFactory()->createNamedBuilder(
-            'lieuForm',
-            LieuFormType::class,
-            null,
-            [
+//
+//    /**
+//     * tentative d'afficher les détails du lieu sélectionné
+//     * TODO
+//     */
+//    private function setLieuForm(FormInterface $form, ?Lieu $lieu)
+//    {
+//        $builder = $form->getConfig()->getFormFactory()->createNamedBuilder(
+//            'lieuForm',
+//            LieuFormType::class,
+//            null,
+//            [
+//
+//            ]
+//        );
+//
+////        $builder
+////            ->add('nom', TextType::class, [
+////                'label' => 'Nom *',
+////                'required' => false,
+////            ]) //TODO ajouter des astérisques sur les champs obligatoires
+////            ->add('rue', TextType::class, [
+////                'label' => 'Rue *',
+////                'required' => false,
+////            ])
+////            ->add('ville', EntityType::class, [
+////                'class' => Ville::class,
+////                'placeholder' => 'Sélectionner une ville',
+////                'label' => 'Ville *',
+////                'required' => false,
+////            ])
+////            ->add('latitude')
+////            ->add('longitude')
+//    }
 
-            ]
-        );
-
-//        $builder
-//            ->add('nom', TextType::class, [
-//                'label' => 'Nom *',
-//                'required' => false,
-//            ]) //TODO ajouter des astérisques sur les champs obligatoires
-//            ->add('rue', TextType::class, [
-//                'label' => 'Rue *',
-//                'required' => false,
-//            ])
-//            ->add('ville', EntityType::class, [
-//                'class' => Ville::class,
-//                'placeholder' => 'Sélectionner une ville',
-//                'label' => 'Ville *',
-//                'required' => false,
-//            ])
-//            ->add('latitude')
-//            ->add('longitude')
-    }
 }
