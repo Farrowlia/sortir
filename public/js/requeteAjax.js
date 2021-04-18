@@ -35,6 +35,9 @@ function requeteAjaxFormulaire(selectorFormulaire, selectorElementAction, typeAc
             if (modificationUrl) {
                 history.pushState({}, null, Url.pathname + "?" + Params.toString());
             }
+            else {
+                history.pushState({}, null, Url.pathname);
+            }
 
         }).catch(e => alert(e));
 
