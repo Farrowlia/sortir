@@ -40,5 +40,9 @@
 
 {% endblock %}
 
-{% block javascripts %}<script src="{{ asset('js/commentaireSortie.js') }}"></script>{% endblock %}
+{% block javascripts %}
+    <script>
+        requeteAjaxFormulaire('#formAjax', '#formAjax input[type="submit"]', "click", '#contentCommentaire', false);
+    </script>
+{% endblock %}
 
