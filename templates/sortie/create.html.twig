@@ -1,51 +1,48 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container">
-            {{ form_start(sortieForm)  }}
-    <div class="form-group">
-            {{ form_row(sortieForm.nom) }}
+<div class="container bg-white p-3 w-75 my-3">
+    <div class="d-flex">
+            {{ form_start(sortieForm, {'attr': { 'class':"row g-3 needs-validation"}})  }}
+    <div class="form-group ">
+        <div class="col-md-4">
+            {{ form_row(sortieForm.nom, {'attr': {'class':"col-md-4 form-control" }})}}
     </div>
-    <div class="form-row">
-        <div class="form-group col-md-3">
-    {{ form_row(sortieForm.dateDebut) }}
-        </div>
-        <div class="form-group col-md-3">
-    {{ form_row(sortieForm.dateCloture) }}
-        </div>
     </div>
-    <div class="form-row">
-        <div class="col">
-    {{ form_row(sortieForm.nbreInscriptionMax) }}
-        </div>
-        <div class="col">
-    {{ form_row(sortieForm.duree) }}
-        </div>
+    <div class="form-group d-inline-flex">
+        <div class="form-floating">{{ form_row(sortieForm.dateDebut, {'attr': {'class':"col-md-6 form-control" }})}}</div>
+    <div class="form-floating">{{ form_row(sortieForm.dateCloture, {'attr': {'class':"col-md-6 form-control" }})}}</div>
+
     </div>
-    {{ form_row(sortieForm.description) }}
+    <div class="form-group d-inline-flex row-cols-md-4">
+    {{ form_row(sortieForm.nbreInscriptionMax, {'attr': {'class':"form-control" }})}}
+    {{ form_row(sortieForm.duree, {'attr': {'class':"form-control" }})}} minutes
+    </div>
+    <div class="form-group col-md-6">
+    {{ form_row(sortieForm.description, {'attr': {'class':"form-control" }})}}
+    </div>
 
     {{ form_row(sortieForm.urlImage) }}
     <div class="form-row">
-        <div class="col">
         {{ form_row(sortieForm.lieu) }}
-        </div>
-        <div class="col">
-        <input class="btn btn-success" type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="+">
-        </div>
+            <input class="btn btn-success" type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="+">
     </div>
-    <input type="button" id="btnCancelLieu" onclick="cacherLieuForm()" value="Annuler nouveau lieu">
 
-    {{ form_row(sortieForm.save) }}
-    {{ form_row(sortieForm.saveAndPublish) }}
-    <a href="{{ path('main') }}">{{ form_row(sortieForm.cancel) }}</a>
+        <div class="form-group d-inline-flex">
+            {{ form_row(sortieForm.save) }}
+            {{ form_row(sortieForm.saveAndPublish) }}
+            <a href="{{ path('main') }}">{{ form_row(sortieForm.cancel) }}</a>
+        </div>
+    {{ form_end(sortieForm, {'attr': { 'class':"form-group row g-3 needs-validation"}})  }}
 
-    {{ form_end(sortieForm) }}
-
-    {{ form_start(sortieForm) }}
+<div id="lieuForm" style="display: none" class="form-group form-control h-50 m-md-2">
+    <h6>Ajouter un lieu</h6>
+    {{ form_start(lieuForm) }}
     {{ form_widget(lieuForm, {'attr' : { 'display' : 'none'}}) }}
-    {{ form_end(sortieForm) }}
-
+    {{ form_end(lieuForm) }}
+</div>
     {#{'attr' : { 'onchange' : 'onLieuSelected(this.value)'}}#}
+</div>
 </div>
 {% endblock %}
 

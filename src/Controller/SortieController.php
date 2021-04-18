@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\LieuFormType;
@@ -24,6 +25,9 @@ class SortieController extends AbstractController
 {
     /**
      * @Route("/sortie", name="sortie")
+     * @param Request $request
+     * @param SortieRepository $sortieRepository
+     * @return Response
      */
     public function index(Request $request, SortieRepository $sortieRepository): Response
     {
@@ -55,7 +59,9 @@ class SortieController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @param EtatRepository $etatRepository
-     * @param $userRepository
+     * @param UserRepository $userRepository
+     * @param LieuRepository $lieuRepository
+     * @param Lieu|null $lieu
      * @return Response
      */
     public function create(EntityManagerInterface $entityManager,
@@ -67,6 +73,7 @@ class SortieController extends AbstractController
     ): Response
     {
         $sortie = new Sortie();
+        $etat = new Etat();
         /*        $sortie->setDateDebut(new \DateTime('now'));*/
 
 
@@ -105,18 +112,25 @@ class SortieController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
+            // set de l'état en fonction du bouton choisi (enregistrer ou publier)
             if ($sortieForm->get('save')->isClicked()) {
                 dump('save is clicked');
+                $etat = $etatRepository->find(1); // état = créée
             }
             if ($sortieForm->get('saveAndPublish')->isClicked()) {
                 dump('saveAndPublish is clicked');
+                $etat = $etatRepository->find(2); // état = publiée
+
             }
-            //TODO conditions sur l'état : bouton "enregistrer" => etat_id = 1, si bouton "publier" => etat_id = 2
-            $etat = $etatRepository->find(1);
+            // récupération et injection du nom de l'organisateur
             $user = $userRepository->find($this->getUser());
-            $sortie->setEtat($etat);
             $sortie->setOrganisateur($user);
+            //récupération et injection de son campus
             $sortie->setCampus($this->getUser()->getCampus());
+
+            // injection de l'état défini plus haut
+            $sortie->setEtat($etat);
+
             $entityManager->persist($sortie);
             $entityManager->flush();
 
@@ -149,9 +163,24 @@ class SortieController extends AbstractController
             'commentaires' => $commentaires,
         ]);
     }
-    public function setLieuForm(EntityManagerInterface $entityManager,
-                                Request $request,
-                                LieuRepository $lieuRepository) {
+
+    /**
+     * @Route("/sortie/{id}/edit", name="sortie_edit", requirements={"id"="\d+"})
+     */
+    public function edit(Sortie $sortie,
+                           SortieRepository $sortieRepository,
+                           Request $request,
+                           LieuRepository $lieuRepository,
+                           EntityManagerInterface $entityManager
+
+                    )
+    {
+//        $sortie = $sortieRepository->find($id);
+        dump($sortie);
+        $editForm = $this->createForm(SortieFormType::class, $sortie);
+        $editForm->handleRequest($request);
+
+        //----------- FORMULAIRE DE CREATION DE LIEU -----------
         $lieu = new Lieu();
 
         $lieuForm = $this->createForm(LieuFormType::class, $lieu);
@@ -164,12 +193,25 @@ class SortieController extends AbstractController
 
             $nouveauLieu = $lieuRepository->find($lieu->getId());
 
-            return $this->redirectToRoute('sortie_create', ['nouveauLieu' => $nouveauLieu]);
+            $sortie->setLieu($nouveauLieu);
+        }
+        //----------- FIN DU FORMULAIRE DE CREATION DE LIEU ---------------------
+
+        // TODO gérer les états (bouton publier)
+
+        $editForm = $this->createForm(SortieFormType::class, $sortie);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid())
+        {
+            $entityManager->flush();
+
+            $this->addFlash('succes', 'Votre sortie a bien été mise à jour !');
+            return $this->redirectToRoute('main'); //TODO
         }
 
-        return $this->redirectToRoute('sortie_create', [
-            'LieuForm' => $lieuForm->createView(),
-        ]);
+        return $this->render('sortie/edit.html.twig', ['sortieForm' => $editForm->createView(), 'lieuForm' => $lieuForm->createView(), $sortie]);
     }
+
 
 }

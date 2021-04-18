@@ -9,13 +9,16 @@ use App\Entity\Sortie;
 use App\Entity\Ville;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -27,21 +30,49 @@ class SortieFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom', TextType::class, ['label' => 'Nom de la sortie'])
+            ->add('nom', TextType::class, [
+                'label' => 'Nom de la sortie',
+                'attr' => ['class' => 'form-control'],
+                'label_attr' => ['class' => 'form-label'],
+            ])
+
             ->add('dateDebut', DateTimeType::class, [
-                'label' => 'Date et heure de début',
+                'date_label' => 'Choisir une date de début',
+                'time_label' => 'Choisir une heure de début',
                 'html5' => true,
-                'widget' => 'choice',
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text',
+//                'date_format' => 'dd/MM/yyyy'
+//                'widget' => 'choice',
                 ])
-            ->add('duree', IntegerType::class, ['label' => 'Durée'])
+
+            ->add('duree', IntegerType::class, [
+                'label' => 'Durée',
+                'attr' => ['min' => 1, 'max' => 1000],
+                'invalid_message' => 'le nombre doit être positif et entier'
+                ])
+
             ->add('dateCloture', DateTimeType::class, [
-                'label' => 'Date et heure de fin',
+                'date_label' => 'Choisir une date de fin',
+                'time_label' => 'Choisir une heure de fin',
                 'html5' => true,
-                'widget' => 'choice',
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text',
                 ])
-            ->add('nbreInscriptionMax')
+
+            ->add('nbreInscriptionMax', IntegerType::class, [
+                'attr' => ['min' => 1, 'max' => 100],
+                'invalid_message' => 'le nombre doit être positif et entier'
+
+                ])
+
             ->add('description')
-            ->add('urlImage')
+
+            ->add('urlImage', UrlType::class, [
+                'invalid_message' => "url incorrect",
+                'trim' => true,
+            ])
+
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
                 'placeholder' => 'Sélectionner un lieu',
@@ -59,6 +90,19 @@ class SortieFormType extends AbstractType
             ])
 
         ;
+/* Cette méthode n'est pas nécessaire si l'input des dates est en html,
+ le choix de la date est automatiquement positionné à now */
+//        $builder->get('dateDebut')->addModelTransformer(new CallbackTransformer(
+//            function ($value) {
+//                if (!$value) {
+//                    return new \DateTime('now +1 month');
+//                }
+//                return $value;
+//            },
+//            function ($value) {
+//                return $value;
+//            }
+//        ));
 
         $builder->get('lieu')->addEventListener(
             FormEvents::POST_SUBMIT,
