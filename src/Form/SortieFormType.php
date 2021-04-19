@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -26,31 +27,57 @@ class SortieFormType extends AbstractType
             ->add('nom', TextType::class, [
                 'label' => 'Nom de la sortie',
                 'required' => true,
+                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
+                'label_attr' => ['class' => 'col-sm-4 col-form-label'],
+                'attr' => ['class' => 'm-2 col-sm-4'],
             ])
             ->add('dateDebut', DateTimeType::class, [
                 'label' => 'Date et heure de début',
                 'html5' => true,
                 'widget' => 'single_text',
                 'required' => true,
+                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
+                'label_attr' => ['class' => 'col-sm-4 col-form-label'],
+                'attr' => ['class' => 'm-2 col-sm-3'],
             ])
-            ->add('duree', IntegerType::class, [
-                'label' => 'Durée',
-                'required' => true,
-                ])
             ->add('dateCloture', DateType::class, [
-                'label' => 'Date cloture inscription',
+                'label' => 'Date de clôture des inscriptions',
                 'html5' => true,
                 'widget' => 'single_text',
-                'required' => false,
+                'required' => true,
+                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
+                'label_attr' => ['class' => 'col-sm-4 col-form-label'],
+                'attr' => ['class' => 'm-2 col-sm-3'],
+
+            ])
+            ->add('duree', IntegerType::class, [
+                'label' => 'Durée (en minutes)',
+                'required' => true,
+                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
+                'label_attr' => ['class' => 'col-sm-4 col-form-label'],
+                'attr' => ['class' => 'm-2 col-sm-1'],
             ])
             ->add('nbreInscriptionMax', null, [
+                'label' => "Nombre max d'inscriptions",
                 'required' => true,
+                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
+                'label_attr' => ['class' => 'col-sm-4 col-form-label'],
+                'attr' => ['class' => 'm-2 col-sm-1'],
+
             ])
-            ->add('description')
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'row_attr' => ['class' => 'col-sm-8 form-group-row'],
+                'label_attr' => ['class' => 'col-sm-4 col-form-label mb-0'],
+                'attr' => ['class' => 'mb-1 col-sm-10',
+                    'rows' => '4'],
+            ])
             ->add('image', FileType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Image'
+                'label' => 'Image',
+                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
+                'label_attr' => ['class' => 'col-sm-1 col-form-label'],
             ])
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
@@ -58,31 +85,32 @@ class SortieFormType extends AbstractType
                 'mapped' => false,
                 'required' => true,
                 'auto_initialize' => false,
+                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
+                'label_attr' => ['class' => 'col-sm-1 col-form-label'],
+                'attr' => ['class' => 'm-2 col-sm-4'],
             ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
-                'placeholder' => 'Choisissez une ville',
+                'placeholder' => "Choisissez d'abord une ville",
                 'mapped' => true,
                 'required' => true,
+                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
+                'label_attr' => ['class' => 'col-sm-1 col-form-label'],
+                'attr' => ['class' => 'm-2 col-sm-7'],
+            ]);
 
-//                'disabled' => true,
-//                'choices' => []
-            ])
-//            ->add('etatcheckbox', CheckboxType::class, [
-//                'label' => 'Publier la sortie',
-//                'required' => false,
-//                'mapped' => false,
-//            ])
-        ;
 
+        // permet d'afficher la ville dans le formulaire de modification d'une sortie
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
-            $ville = $event->getData()->getLieu()->getVille();
-            $form = $event->getForm();
-            if ($ville) {
-                $form->get('ville')->setData($ville);
-                dump('SortieFormType_eventListener'.$ville);
+            if ($event->getData()->getLieu() !== null) {
+                $ville = $event->getData()->getLieu()->getVille();
+                $form = $event->getForm();
+                if ($ville) {
+                    $form->get('ville')->setData($ville);
+                    dump('SortieFormType_eventListener' . $ville);
 
+                }
             }
         });
     }
@@ -111,7 +139,7 @@ class SortieFormType extends AbstractType
 //                }
 //            );
 
-        //            ->add('lieuForm', LieuFormType::class, [
+    //            ->add('lieuForm', LieuFormType::class, [
 //                'mapped' => false,
 //                'label' => 'Créer un lieu',
 //                'attr' => ['style' => 'display:none'],
@@ -121,7 +149,6 @@ class SortieFormType extends AbstractType
 //            ->add('cancel', ResetType::class, [
 //                'label' => 'Effacer'
 //            ])
-
 
 
 //    private function addLieuField(FormInterface $form, ?Lieu $lieu)
@@ -171,9 +198,6 @@ class SortieFormType extends AbstractType
                     'class' => Campus::class,
                     'choice_label' => 'nom'
                 ]);*/
-
-
-
 
 
 //

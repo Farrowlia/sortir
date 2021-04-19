@@ -1,72 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block styleSheets %}<link rel="stylesheet" href="{{ asset('css/marie-laure.css') }}">{% endblock %}
+{% block styleSheets %}
+    <link rel="stylesheet" href="{{ asset('css/marie-laure.css') }}">{% endblock %}
 {% block title %}Créer une nouvelle sortie | Sortir.com{% endblock %}
 
 {% block body %}
-    <div class="container">
-        {{ form_start(sortieForm, {'attr': {'id': 'formSortie'}}) }}
-        <div class="form-group">
-            {{ form_row(sortieForm.nom) }}
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                {{ form_row(sortieForm.dateDebut) }}
-            </div>
-            <div class="form-group col-md-3">
-                {{ form_row(sortieForm.dateCloture) }}
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col">
-                {{ form_row(sortieForm.nbreInscriptionMax) }}
-            </div>
-            <div class="col">
-                {{ form_row(sortieForm.duree) }}
-            </div>
-        </div>
+    <div class="container ">
+        {{ form_start(sortieForm, {'attr': {'id': 'formSortie', 'class': 'form-horizontal'}}) }}
+
+        {{ form_row(sortieForm.nom) }}
+
+        {{ form_row(sortieForm.dateDebut) }}
+        {{ form_row(sortieForm.dateCloture) }}
+        {{ form_row(sortieForm.duree) }}
+
+
+        {{ form_row(sortieForm.nbreInscriptionMax) }}
         {{ form_row(sortieForm.description) }}
         {{ form_row(sortieForm.image) }}
-        {{ form_row(sortieForm.ville)}}
-        <div class="row">
-            <div class="col-5">
-                {{ form_row(sortieForm.lieu, {'attr': {'disabled': true}}) }}
-            </div>
-{#     BOUTON D'AFFICHAGE DU FORMULAIRE DE CREATION DE LIEU       #}
-            <div class="col">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blocModal">
-                    Ajouter un lieu
-                </button>
-            </div>
+        {{ form_row(sortieForm.ville) }}
 
+        {{ form_row(sortieForm.lieu, {'attr': {'disabled': true}}) }}
+
+        {# BOUTON D'AFFICHAGE DU FORMULAIRE DE CREATION DE LIEU #}
+        <div class="">
+            <button type="button" class="btn btn-outline-primary m-2" data-bs-toggle="modal" data-bs-target="#blocModal">
+                Ajouter un lieu
+            </button>
         </div>
+
         <div class="row">
             <div class="col" id="contentDetailLieu">
-{#                ici s'affiche le lieu quand il est sélectionné #}
-{#                IMPORTANT de laisser cette div vide #}
+                {# ici s'affiche le lieu quand il est sélectionné #}
+                {# IMPORTANT de laisser cette div vide #}
             </div>
         </div>
 
 
-
-
-{#        <div class="form-row">#}
-{#            <div class="col">#}
-{#                <input class="btn btn-success" type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="+">#}
-{#            </div>#}
-{#        </div>#}
-
-
-
-
-
-
-{#        <input type="button" id="btnCancelLieu" onclick="cacherLieuForm()" value="Annuler nouveau lieu">#}
-
-{#        {{ form_row(sortieForm.save) }}#}
-{#        {{ form_row(sortieForm.saveAndPublish) }}#}
-{#        <input type="button" value="Enregistrer">#}
-        <div class="col">
+        <div class="col m-2">
             Publier la sortie : <input type="checkbox" name="etatcheckbox">
         </div>
 
@@ -76,43 +47,45 @@
                 <a type="button" class="btn btn-primary" href="{{ path('main') }}">Annuler</a>
             </div>
         </div>
+    {{ form_end(sortieForm) }}
+    </div>
 
 
 
-        {{ form_end(sortieForm) }}
-
-{#   FORMULAIRE DE CREATION DE LIEU     #}
-        <div class="form-row">
-            <div class="col">
-                <div class="modal fade" id="blocModal" tabindex="-1" aria-labelledby="blocModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            {{ form_start(lieuForm, {'attr': {'id': 'formLieu'}}) }}
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="blocModalLabel">Nouveau lieu</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                {{ form_widget(lieuForm) }}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                <button type="submit" id="saveLieu" class="btn btn-primary">Enregistrer</button>
-                            </div>
-                            {{ form_end(lieuForm) }}
+    {# FORMULAIRE DE CREATION DE LIEU #}
+    <div class="form-row">
+        <div class="col">
+            <div class="modal fade" id="blocModal" tabindex="-1" aria-labelledby="blocModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        {{ form_start(lieuForm, {'attr': {'id': 'formLieu'}}) }}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="blocModalLabel">Nouveau lieu</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                         </div>
+                        <div class="modal-body">
+                            {{ form_widget(lieuForm) }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" id="saveLieu" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                        {{ form_end(lieuForm) }}
                     </div>
                 </div>
             </div>
         </div>
-        {#   FIN DU FORMULAIRE DE CREATION DE LIEU     #}
+    </div>
+    {# FIN DU FORMULAIRE DE CREATION DE LIEU #}
 
 
-        {#    {{ form_start(sortieForm) }}#}
-        {#    {{ form_widget(lieuForm, {'attr' : { 'display' : 'none'}}) }}#}
-        {#    {{ form_end(sortieForm) }}#}
+    {# {{ form_start(sortieForm) }} #}
+    {# {{ form_widget(lieuForm, {'attr' : { 'display' : 'none'}}) }} #}
+    {# {{ form_end(sortieForm) }} #}
 
-        {#{'attr' : { 'onchange' : 'onLieuSelected(this.value)'}}#}
+    {# {'attr' : { 'onchange' : 'onLieuSelected(this.value)'}} #}
     </div>
 {% endblock %}
 
@@ -124,10 +97,10 @@
         requeteAjaxGet('#sortie_form_ville', "change", '#sortie_form_lieu', false);
         requeteAjaxGet('#sortie_form_lieu', "change", '#contentDetailLieu', false);
     </script>
-    <script>
-        $('saveLieu')._hideModal();
-        requeteAjaxGet('#saveLieu', "click", '#sortie_form_lieu', false);
-    </script>
+    {# <script> #}
+    {# $('saveLieu')._hideModal(); #}
+    {# requeteAjaxGet('#saveLieu', "click", '#sortie_form_lieu', false); #}
+    {# </script> #}
 
 {% endblock %}
 
