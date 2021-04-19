@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% block styleSheets %}<link rel="stylesheet" href="{{ asset('css/anne.css') }}">{% endblock %}
 {% block title %}Gérer les villes{% endblock %}
 
 {% block body %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <section class="container-fluid">
+{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>#}
+    <div class="container-fluid">
         <h2 class="div1">Gérer les villes</h2>
 
         <div class="div2 row justify-content-start">
@@ -27,18 +28,17 @@
         </ul>
 
         {% for ville in villes %}
-                <form method="post" id="formVille{{ ville.id }}">
-                    <ul class="list-group list-group-horizontal row justify-content-center">
+           <form id="formVille{{ ville.id }}">
+                <ul class="list-group list-group-horizontal row justify-content-center">
                     <li class="list-group-item col-3" id="afficherNomVille{{ ville.id }}">{{ ville.nom }}</li>
                     <li class="list-group-item col-2" id="afficherCPville{{ ville.id }}">{{ ville.codePostal }}</li>
                     <li class="list-group-item col-2" id="modifier{{ ville.id }}"><button  onclick="modifierVille({{ ville.id }})">Modifier</button></li>
                     <li class="list-group-item col-2" id="supprimer{{ ville.id }}"><button >Supprimer</button></li>
-            </ul>
-                </form>
-            {% endfor %}
+                </ul>
+           </form>
+        {% endfor %}
+    </div>
 
-
-    </section>
-
-<script src="{{ asset('js/ville.js') }}"></script>
 {% endblock %}
+
+{% block javascripts %}<script src="{{ asset('js/ville.js') }}"></script>{% endblock %}

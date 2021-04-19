@@ -7,6 +7,7 @@ use App\Form\VilleFormType;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,6 +39,20 @@ class VilleController extends AbstractController
 
             //TODO voir l'ajout d'une popup de confirmation ou message flash
         }
+
+        if ($request->get('ajax')){
+
+            $villeUpdate = $villeRepository->find($request->get('id'));
+            $villeUpdate->setNom($request->get("nom"));
+            $villeUpdate->setCodePostal($request->get("codePostal"));
+            $entityManager->flush();
+
+            return new JsonResponse([
+                'content' => $this->renderView('admin/content/_villes.html.twig', compact('villeUpdate'))
+            ]);
+        }
+
+
         return $this->render('admin/gererLesVilles.html.twig', [
             'villeForm' => $villeForm->createView(),
             'villes' => $tableauVilles

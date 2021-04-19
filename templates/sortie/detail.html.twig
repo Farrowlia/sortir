@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
+{% block styleSheets %}<link rel="stylesheet" href="{{ asset('css/dimitri.css') }}">{% endblock %}
 {% block title %}{{ sortie.nom }}{% endblock %}
 
 {% block body %}
@@ -25,17 +26,24 @@
                     </div>
                 </div>
                 <br>
-                <form id="formAjax">
-                    <label for="inputText">Texte</label>
-                    <input type="text" name="inputText" id="inputText">
-                    <input type="hidden" name="inputHidden" value="JeSuisInputHidden">
-                    <input type="button" id="buttonAjax">Envoyer
-                </form>
+                <div class="row">
+                    <div class="col">
+                        <form id="formAjax">
+                            <label for="inputText">Votre message</label>
+                            <textarea type="textarea" name="inputCommentaireTexte" id="inputText"></textarea>
+                            <input type="button" id="buttonAjax" value="Envoyer">
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
 {% endblock %}
 
-{% block javascripts %}<script src="{{ asset('js/bruno.js') }}"></script>{% endblock %}
+{% block javascripts %}
+    <script>
+        requeteAjaxFormulaire('#formAjax', '#formAjax input[type="button"]', "click", '#contentCommentaire', false);
+    </script>
+{% endblock %}
 
