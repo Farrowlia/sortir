@@ -19,19 +19,6 @@ class VilleRepository extends ServiceEntityRepository
         parent::__construct($registry, Ville::class);
     }
 
-    /**
-     * @return Ville|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function findOneVille(): ?Ville
-    {
-        //TODO vérifier le nom du champs de saisie
 
-        $queryBuilder = $this->createQueryBuilder('v');
-        $queryBuilder ->andWhere('v.nom = nomVille');
-        $query = $queryBuilder->getQuery();
-
-        return $query -> getResult();
-        }
 
 }

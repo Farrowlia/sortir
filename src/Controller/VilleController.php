@@ -40,7 +40,7 @@ class VilleController extends AbstractController
             //TODO voir l'ajout d'une popup de confirmation ou message flash
         }
 
-        if ($request->get('ajax')){
+        if ($request->get('codePostal')) {
 
             $villeUpdate = $villeRepository->find($request->get('id'));
             $villeUpdate->setNom($request->get("nom"));
@@ -52,11 +52,36 @@ class VilleController extends AbstractController
             ]);
         }
 
+        if ($request->get('rechVille')) {
+
+            $motRecherche = $request->get('rechVille');
+            $result = $villeRepository->findBy(array("nom" => $motRecherche), array("nom" => "ASC"), null, 0);
+
+            return new JsonResponse([
+                'content' => $this->renderView('admin/content/_villeSearch.html.twig', compact('result'))
+            ]);
+        }
 
         return $this->render('admin/gererLesVilles.html.twig', [
             'villeForm' => $villeForm->createView(),
             'villes' => $tableauVilles
         ]);
+    }
+
+    /**
+     * @Route("/admin/villes/delete/{id}", name="ville_delete")
+     */
+    public function delete(int $id, VilleRepository $villeRepository): Response
+    {
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $ville = $villeRepository->find($id);
+        $entityManager->remove($ville);
+        $entityManager->flush();
+
+        $this->addFlash('message', 'Ville supprimée avec succès');
+        return $this->redirectToRoute('villes');
+
     }
 
 }
