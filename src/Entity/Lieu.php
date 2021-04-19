@@ -33,11 +33,21 @@ class Lieu
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\Range(
+     *     min=-90,
+     *     max=90,
+     *     notInRangeMessage="La latitude doit être comprise entre {{min}} et {{max}}."
+     * )
      */
     private $latitude;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\Range(
+     *     min = -180,
+     *     max = 180,
+     *     notInRangeMessage="La longitude doit être comprise entre {{ min }} et {{ max }}."
+     * )
      */
     private $longitude;
 
@@ -152,6 +162,6 @@ class Lieu
         return $this;
     }
     public function __toString():string{
-        return $this->nom.','.$this->getRue();
+        return $this->nom.', '.$this->getRue();
     }
 }
