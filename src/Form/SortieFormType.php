@@ -27,57 +27,57 @@ class SortieFormType extends AbstractType
             ->add('nom', TextType::class, [
                 'label' => 'Nom de la sortie',
                 'required' => true,
-                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
-                'label_attr' => ['class' => 'col-sm-4 col-form-label'],
-                'attr' => ['class' => 'm-2 col-sm-4'],
+                'row_attr' => ['class' => 'form-group-row'],
+                'label_attr' => ['class' => 'col-4 col-form-label'],
+                'attr' => ['class' => 'col-6'],
             ])
             ->add('dateDebut', DateTimeType::class, [
                 'label' => 'Date et heure de début',
                 'html5' => true,
                 'widget' => 'single_text',
                 'required' => true,
-                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
-                'label_attr' => ['class' => 'col-sm-4 col-form-label'],
-                'attr' => ['class' => 'm-2 col-sm-3'],
+                'row_attr' => ['class' => 'form-group-row'],
+                'label_attr' => ['class' => 'col-4 col-form-label'],
+                'attr' => ['class' => 'col-3'],
             ])
             ->add('dateCloture', DateType::class, [
                 'label' => 'Date de clôture des inscriptions',
                 'html5' => true,
                 'widget' => 'single_text',
                 'required' => true,
-                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
-                'label_attr' => ['class' => 'col-sm-4 col-form-label'],
-                'attr' => ['class' => 'm-2 col-sm-3'],
+                'row_attr' => ['class' => 'form-group-row'],
+                'label_attr' => ['class' => 'col-4 col-form-label'],
+                'attr' => ['class' => 'col-2'],
 
             ])
             ->add('duree', IntegerType::class, [
                 'label' => 'Durée (en minutes)',
                 'required' => true,
-                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
-                'label_attr' => ['class' => 'col-sm-4 col-form-label'],
-                'attr' => ['class' => 'm-2 col-sm-1'],
+                'row_attr' => ['class' => 'form-group-row'],
+                'label_attr' => ['class' => 'col-4 col-form-label'],
+                'attr' => ['class' => 'col-1'],
             ])
             ->add('nbreInscriptionMax', null, [
-                'label' => "Nombre max d'inscriptions",
+                'label' => "Max de participants",
                 'required' => true,
-                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
-                'label_attr' => ['class' => 'col-sm-4 col-form-label'],
-                'attr' => ['class' => 'm-2 col-sm-1'],
+                'row_attr' => ['class' => 'form-group-row'],
+                'label_attr' => ['class' => 'col-4 col-form-label'],
+                'attr' => ['class' => 'col-1'],
 
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
-                'row_attr' => ['class' => 'col-sm-8 form-group-row'],
-                'label_attr' => ['class' => 'col-sm-4 col-form-label mb-0'],
-                'attr' => ['class' => 'mb-1 col-sm-10',
+                'row_attr' => ['class' => 'form-group-row'],
+                'label_attr' => ['class' => 'col-4 col-form-label'],
+                'attr' => ['class' => 'mb-1 col-10',
                     'rows' => '4'],
             ])
             ->add('image', FileType::class, [
                 'mapped' => false,
                 'required' => false,
                 'label' => 'Image',
-                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
-                'label_attr' => ['class' => 'col-sm-1 col-form-label'],
+                'row_attr' => ['class' => 'form-group-row'],
+                'label_attr' => ['class' => 'col-2 col-form-label'],
             ])
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
@@ -85,9 +85,9 @@ class SortieFormType extends AbstractType
                 'mapped' => false,
                 'required' => true,
                 'auto_initialize' => false,
-                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
-                'label_attr' => ['class' => 'col-sm-1 col-form-label'],
-                'attr' => ['class' => 'm-2 col-sm-4'],
+                'row_attr' => ['class' => 'form-group-row'],
+                'label_attr' => ['class' => 'col-2 col-form-label'],
+                'attr' => ['class' => 'col-5'],
             ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
@@ -95,9 +95,9 @@ class SortieFormType extends AbstractType
                 'placeholder' => "Choisissez d'abord une ville",
                 'mapped' => true,
                 'required' => true,
-                'row_attr' => ['class' => 'col-sm-10 form-group-row'],
-                'label_attr' => ['class' => 'col-sm-1 col-form-label'],
-                'attr' => ['class' => 'm-2 col-sm-7'],
+                'row_attr' => ['class' => 'form-group-row'],
+                'label_attr' => ['class' => 'col-2 col-form-label'],
+                'attr' => ['class' => 'col-8'],
             ]);
 
 
