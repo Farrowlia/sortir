@@ -1,0 +1,12 @@
+{% for ville in result %}
+    <form id="formVille{{ ville.id }}">
+        <ul class="list-group list-group-horizontal row justify-content-center">
+            <li class="list-group-item col-2" id="afficherNomVille{{ ville.id }}">{{ ville.nom }}</li>
+            <li class="list-group-item col-2" id="afficherCPville{{ ville.id }}">{{ ville.codePostal }}</li>
+            <li class="list-group-item col-1" id="modifier{{ ville.id }}"><button class="btn btn-outline-secondary" onclick="modifierVille({{ ville.id }})">Modifier</button></li>
+            <li class="list-group-item col-1" id="delete{{ ville.id }}">
+                <a class="btn btn-outline-secondary" href="{{ path('ville_delete', {'id': ville.id}) }}">Supprimer</a>
+            </li>
+        </ul>
+    </form>
+{% endfor %}

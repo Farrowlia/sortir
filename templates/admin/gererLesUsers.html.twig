@@ -4,38 +4,37 @@
 {% block title %}Gérer les utilisateurs{% endblock %}
 
 {% block body %}
-<section>
+<div class="container-fluid">
     <h2 class="div1">Gérer les utilisateurs</h2>
 
-    <div class="div2">
-
-        <label for="Le nom contient"></label>
-        <input type="text" id="nomUtilisateur" alt="nom de l'utilisateur">
-        <button>Rechercher</button>
+    <div class="div2 row">
+        <input class="inputRechercherUtilisateur form-control col sm-3" type="text" id="nomUtilisateur" alt="nom de l'utilisateur" placeholder="Filtrer par nom">
+        <button class="btnRechercherUtilisateur btn btn-light col sm-2">Rechercher</button>
     </div>
 
-    <table class="list_users">
-        <thead>
-        <tr>
-            <th>Pseudo</th>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Email</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-{#        {% for campus in tableauCampus %}#}
-{#            <tr>#}
-{#                <td>{{ user.pseudo }}</td>#}
-{#                <td>{{ user.nom }}</td>#}
-{#                <td>{{ user.prenom }}</td>#}
-{#                <td>{{ user.email }}</td>#}
-{#                <td>Supprimer - Désactiver</td>#}
-{#            </tr>#}
+{#    {{ form_start(campusForm) }}#}
+{#    {{ form_end(campusForm) }} #}
+
+    <ul class="list-group list-group-horizontal row justify-content-center">
+        <li class="list-group-item col-1">Nom</li>
+        <li class="list-group-item col-1">Prénom</li>
+        <li class="list-group-item col-1"> Pseudo</li>
+        <li class="list-group-item col-2">Email</li>
+        <li class="list-group-item col-2">Actions</li>
+    </ul>
+
+{#    {% for user in tableauUser %}#}
+{#        <form id="formUtilisateurs{{ user.id }}">#}
+{#            <ul class="list-group list-group-horizontal row justify-content-center">#}
+{#                <li class="list-group-item col-1" id="afficherNomUtilisateur{{ user.id }}">{{ user.nom }}</li>#}
+{#                <li class="list-group-item col-1" id="afficherPrenomUtilisateur{{ user.id }}">{{ user.prenom }}</li>#}
+{#                <li class="list-group-item col-1" id="afficherPseudoUtilisateur{{ user.id }}">{{ user.pseudo }}</li>#}
+{#                <li class="list-group-item col-2" id="afficherEmailUtilisateur{{ user.id }}">{{ user.email }}</li>#}
+{#                <li class="list-group-item col-1" id="modifier{{ user.id }}"><button onclick="modifierVille({{ user.id }})">Modifier</button></li>#}
+{#                <li class="list-group-item col-1" id="supprimer{{ user.id }}"><button>Supprimer</button></li>#}
+{#            </ul>#}
+{#        </form>#}
 {#        {% endfor %}#}
-        </tbody>
-    </table>
-</section>
+</div>
 
 {% endblock %}
