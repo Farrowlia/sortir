@@ -201,6 +201,46 @@ class SortieController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/sortie/{id}/inscription", name="sortie_inscription", requirements={"id"="\d+"})
+     */
+    public function inscriptionSortie(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $sortie = $sortieRepository->find($id);
+        $user = $userRepository->find($this->getUser());
+        $sortie->addParticipant($user);
+
+        $entityManager->flush();
+
+        $sortie = $sortieRepository->find($id);
+        $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
+
+        return $this->render('sortie/detail.html.twig', [
+            'sortie' => $sortie,
+            'commentaires' => $commentaires,
+        ]);
+    }
+
+    /**
+     * @Route("/sortie/{id}/desinscription", name="sortie_inscription", requirements={"id"="\d+"})
+     */
+    public function desinscriptionSortie(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $sortie = $sortieRepository->find($id);
+        $user = $userRepository->find($this->getUser());
+        $sortie->addParticipant($user);
+
+        $entityManager->flush();
+
+        $sortie = $sortieRepository->find($id);
+        $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
+
+        return $this->render('sortie/detail.html.twig', [
+            'sortie' => $sortie,
+            'commentaires' => $commentaires,
+        ]);
+    }
+
     public function setLieuForm(EntityManagerInterface $entityManager,
                                 Request $request,
                                 LieuRepository $lieuRepository) {
