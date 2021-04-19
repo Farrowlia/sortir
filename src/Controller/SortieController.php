@@ -334,6 +334,7 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('main');
     }
 
+    /**
      * Méthode non utilisée pour créer un formulaire de création de lieu
      * @param Request $request
      * @param LieuRepository $lieuRepository
