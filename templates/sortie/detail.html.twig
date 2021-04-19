@@ -17,12 +17,21 @@
                 <p>Rue: {{ sortie.lieu.rue }}</p>
                 <p>Ville: {{ sortie.lieu.ville }}</p>
                 <p>Organisateur :{{ sortie.organisateur.pseudo }}</p>
-                <p>Campus ENI: {{ sortie.campus.nom }}</p>
+                <p>Etat : {{ sortie.etat.libelle }}</p>
+                <p>Campus ENI : {{ sortie.campus.nom }}</p>
                 <br>
                 <br>
                 <div class="row">
                     <div class="col" id="contentCommentaire">
                         {% include "sortie/content/_commentaires.html.twig" %}
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <a class="btn btn-primary" href="{{ path('sortie_inscription', {'id': sortie.id}) }}">S'inscrire à la sortie</a>
+                        <a class="btn btn-primary" href="{{ path('sortie_desinscription', {'id': sortie.id}) }}">Se désinscrire de la sortie</a>
+                        <a class="btn btn-danger" href="{{ path('sortie_annuler', {'id': sortie.id}) }}">Annuler la sortie</a>
                     </div>
                 </div>
                 <br>
