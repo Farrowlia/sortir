@@ -22,8 +22,8 @@ class Sortie
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Assert\LessThan(
-     *     "Le nom est trop long",
+     * @Assert\GreaterThan (
+     *     message="Le nom est trop long",
      *     value="50")
      *
      */
@@ -31,9 +31,6 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime()
-     * @Assert\Expression("this.getDateDebut() < ",
-     *      message="La date de fin doit être prévue après la date de début")
      */
     private $dateDebut;
 
@@ -49,9 +46,8 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime()
-     * @Assert\Expression("value >= this.getDateDebut()",
-     *     message="La date de fin doit être prévue après la date de début")
+     * @Assert\Expression("value < this.getDateDebut()",
+     *     message="La date de clôture doit être prévue avant la date de début")
      */
     private $dateCloture;
 
@@ -66,7 +62,7 @@ class Sortie
      * @Assert\LessThan(
      *     "Le texte de description est trop long",
      *     value=250)
-     *@Assert\GreaterThan(
+     *@Assert\LessThan (
      *     message="Le texte de description mériterait d'être un peu plus long",
      *     value=10)
      *
