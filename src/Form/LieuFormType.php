@@ -34,13 +34,10 @@ class LieuFormType extends AbstractType
             ])
             ->add('latitude')
             ->add('longitude')
-            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
-            ->add('reset', ResetType::class, [
-                'label' => 'Annuler',
-                'attr' => [
-                    'onclick' => 'cacherLieuForm()'
-                ]
-            ])
+//            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
+//            ->add('reset', ResetType::class, [
+//                'label' => 'Annuler'
+//            ])
 
         ;
     }

@@ -37,19 +37,20 @@ function onLieuSelected(id) {
         // )
 
 }
-$(document).on('change', '#sortie_form_lieu', function () {
-        let $field = $(this);
-        let $lieuField = $('#sortie_form_lieu');
-        let $form = $field.closest('sortie_form_lieuForm');
-        let data = {}
-        data[$lieuField.attr('name')] = $lieuField.val()
-        data[$field.attr('name')] = $field.val()
-        console.log(data)
-        $.post($form.attr('action'), data).then(function (data) {
-                console.log(data)
-        })
 
-})
+// $(document).on('change', '#sortie_form_lieu', function () {
+//         let $field = $(this);
+//         let $lieuField = $('#sortie_form_lieu');
+//         let $form = $field.closest('sortie_form_lieuForm');
+//         let data = {}
+//         data[$lieuField.attr('name')] = $lieuField.val()
+//         data[$field.attr('name')] = $field.val()
+//         console.log(data)
+//         $.post($form.attr('action'), data).then(function (data) {
+//                 console.log(data)
+//         })
+//
+// })
 
 
 
