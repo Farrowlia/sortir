@@ -9,6 +9,7 @@
 
     <h1>Register</h1>
 
+    <h4>Inscription manuel</h4>
     {{ form_start(registrationForm) }}
 {#        {{ form_row(registrationForm.email) }}#}
 {#        {{ form_row(registrationForm.plainPassword, {#}
@@ -18,7 +19,15 @@
 
     {{ form_widget(registrationForm) }}
 
-        <button type="submit" class="btn">S'inscrire</button>
+        <button type="submit" class="btn btn-primary">S'inscrire</button>
     {{ form_end(registrationForm) }}
+
+    <br>
+
+    <h4>Inscriptions via fichier</h4>
+    {{ form_start(fileCsvUploadForm) }}
+    {{ form_widget(fileCsvUploadForm) }}
+    <button type="submit" class="btn btn-primary">Envoyer</button>
+    {{ form_end(fileCsvUploadForm) }}
 
 {% endblock %}

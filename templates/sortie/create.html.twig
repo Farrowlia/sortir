@@ -1,57 +1,119 @@
 {% extends 'base.html.twig' %}
 
 {% block styleSheets %}<link rel="stylesheet" href="{{ asset('css/marie-laure.css') }}">{% endblock %}
+{% block title %}Créer une nouvelle sortie | Sortir.com{% endblock %}
 
 {% block body %}
-<div class="container">
-            {{ form_start(sortieForm)  }}
-    <div class="form-group">
+    <div class="container">
+        {{ form_start(sortieForm, {'attr': {'id': 'formSortie'}}) }}
+        <div class="form-group">
             {{ form_row(sortieForm.nom) }}
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                {{ form_row(sortieForm.dateDebut) }}
+            </div>
+            <div class="form-group col-md-3">
+                {{ form_row(sortieForm.dateCloture) }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                {{ form_row(sortieForm.nbreInscriptionMax) }}
+            </div>
+            <div class="col">
+                {{ form_row(sortieForm.duree) }}
+            </div>
+        </div>
+        {{ form_row(sortieForm.description) }}
+        {{ form_row(sortieForm.image) }}
+        {{ form_row(sortieForm.ville) }}
+        <div class="row">
+            <div class="col-5">
+                {{ form_row(sortieForm.lieu, {'attr': {'disabled': true}}) }}
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blocModal">
+                    Ajouter un lieu
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" id="contentDetailLieu">
+{#                IMPORTANT de laisser cette div vide#}
+            </div>
+        </div>
+
+
+
+
+{#        <div class="form-row">#}
+{#            <div class="col">#}
+{#                <input class="btn btn-success" type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="+">#}
+{#            </div>#}
+{#        </div>#}
+
+
+
+
+
+
+{#        <input type="button" id="btnCancelLieu" onclick="cacherLieuForm()" value="Annuler nouveau lieu">#}
+
+{#        {{ form_row(sortieForm.save) }}#}
+{#        {{ form_row(sortieForm.saveAndPublish) }}#}
+{#        <input type="button" value="Enregistrer">#}
+
+        <div class="row">
+            <div class="col">
+                <button type="submit" class="btn btn-success">Enregister</button>
+                <a type="button" class="btn btn-primary" href="{{ path('main') }}">Annuler</a>
+            </div>
+        </div>
+
+
+
+        {{ form_end(sortieForm) }}
+
+        <div class="form-row">
+            <div class="col">
+                <div class="modal fade" id="blocModal" tabindex="-1" aria-labelledby="blocModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            {{ form_start(lieuForm, {'attr': {'id': 'formLieu'}}) }}
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="blocModalLabel">Nouveau lieu</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{ form_widget(lieuForm) }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            </div>
+                            {{ form_end(lieuForm) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {#    {{ form_start(sortieForm) }}#}
+        {#    {{ form_widget(lieuForm, {'attr' : { 'display' : 'none'}}) }}#}
+        {#    {{ form_end(sortieForm) }}#}
+
+        {#{'attr' : { 'onchange' : 'onLieuSelected(this.value)'}}#}
     </div>
-    <div class="form-row">
-        <div class="form-group col-md-3">
-    {{ form_row(sortieForm.dateDebut) }}
-        </div>
-        <div class="form-group col-md-3">
-    {{ form_row(sortieForm.dateCloture) }}
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="col">
-    {{ form_row(sortieForm.nbreInscriptionMax) }}
-        </div>
-        <div class="col">
-    {{ form_row(sortieForm.duree) }}
-        </div>
-    </div>
-    {{ form_row(sortieForm.description) }}
-
-    {{ form_row(sortieForm.urlImage) }}
-    <div class="form-row">
-        <div class="col">
-        {{ form_row(sortieForm.lieu) }}
-        </div>
-        <div class="col">
-        <input class="btn btn-success" type="button" id="btnNewLieu" onclick="afficherLieuForm()" value="+">
-        </div>
-    </div>
-    <input type="button" id="btnCancelLieu" onclick="cacherLieuForm()" value="Annuler nouveau lieu">
-
-    {{ form_row(sortieForm.save) }}
-    {{ form_row(sortieForm.saveAndPublish) }}
-    <a href="{{ path('main') }}">{{ form_row(sortieForm.cancel) }}</a>
-
-    {{ form_end(sortieForm) }}
-
-    {{ form_start(sortieForm) }}
-    {{ form_widget(lieuForm, {'attr' : { 'display' : 'none'}}) }}
-    {{ form_end(sortieForm) }}
-
-    {#{'attr' : { 'onchange' : 'onLieuSelected(this.value)'}}#}
-</div>
 {% endblock %}
 
-{% block title %}
-Créer une nouvelle sortie | Sortir.com
+{% block javascripts %}
+    <script>
+        document.querySelector('#sortie_form_ville').addEventListener("change", () => {
+            document.querySelector('#sortie_form_lieu').disabled = false;
+        });
+        requeteAjaxGet('#sortie_form_ville', "change", '#sortie_form_lieu', false);
+        requeteAjaxGet('#sortie_form_lieu', "change", '#contentDetailLieu', false);
+    </script>
 {% endblock %}
 
