@@ -207,10 +207,11 @@ class SortieController extends AbstractController
     public function inscriptionSortie(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $sortie = $sortieRepository->find($id);
-        $user = $userRepository->find($this->getUser());
-        $sortie->addParticipant($user);
-
-        $entityManager->flush();
+        if (!in_array($sortie, $sortie->getParticipants())) {
+            $user = $userRepository->find($this->getUser());
+            $sortie->addParticipant($user);
+            $entityManager->flush();
+        }
 
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
@@ -222,15 +223,16 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/sortie/{id}/desinscription", name="sortie_inscription", requirements={"id"="\d+"})
+     * @Route("/sortie/{id}/desinscription", name="sortie_desinscription", requirements={"id"="\d+"})
      */
     public function desinscriptionSortie(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $sortie = $sortieRepository->find($id);
-        $user = $userRepository->find($this->getUser());
-        $sortie->addParticipant($user);
-
-        $entityManager->flush();
+        if (in_array($sortie, $sortie->getParticipants())) {
+            $user = $userRepository->find($this->getUser());
+            $sortie->removeParticipant($user);
+            $entityManager->flush();
+        }
 
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
