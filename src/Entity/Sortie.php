@@ -22,6 +22,10 @@ class Sortie
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\GreaterThan (
+     *     message="Le nom est trop long",
+     *     value="50")
+     *
      */
     private $nom;
 
@@ -31,22 +35,37 @@ class Sortie
     private $dateDebut;
 
     /**
+     * @Assert\Positive()
+     * @Assert\GreaterThan(
+     *     message="Choisir une durée minimale de 15 minutes",
+     *     value=15
+     * )
      * @ORM\Column(type="integer")
      */
     private $duree;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\Expression("value < this.getDateDebut()",
+     *     message="La date de clôture doit être prévue avant la date de début")
      */
     private $dateCloture;
 
     /**
+     * @Assert\Positive()
      * @ORM\Column(type="integer")
      */
     private $nbreInscriptionMax;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\LessThan(
+     *     "Le texte de description est trop long",
+     *     value=250)
+     *@Assert\LessThan (
+     *     message="Le texte de description mériterait d'être un peu plus long",
+     *     value=10)
+     *
      */
     private $description;
 

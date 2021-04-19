@@ -7,12 +7,15 @@ use App\Entity\Sortie;
 use App\Entity\Ville;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SortieFormType extends AbstractType
@@ -22,17 +25,17 @@ class SortieFormType extends AbstractType
         $builder
             ->add('nom', TextType::class, [
                 'label' => 'Nom de la sortie',
-                'required' => false,
+                'required' => true,
             ])
             ->add('dateDebut', DateTimeType::class, [
                 'label' => 'Date et heure de début',
                 'html5' => true,
                 'widget' => 'single_text',
-                'required' => false,
+                'required' => true,
             ])
             ->add('duree', IntegerType::class, [
                 'label' => 'Durée',
-                'required' => false,
+                'required' => true,
                 ])
             ->add('dateCloture', DateType::class, [
                 'label' => 'Date cloture inscription',
@@ -41,7 +44,7 @@ class SortieFormType extends AbstractType
                 'required' => false,
             ])
             ->add('nbreInscriptionMax', null, [
-                'required' => false,
+                'required' => true,
             ])
             ->add('description')
             ->add('image', FileType::class, [
@@ -51,20 +54,37 @@ class SortieFormType extends AbstractType
             ])
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
-                'choice_label' => 'nom',
                 'placeholder' => 'Choisir une ville',
                 'mapped' => false,
-                'required' => false,
+                'required' => true,
+                'auto_initialize' => false,
             ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
                 'placeholder' => 'Choisissez une ville',
                 'mapped' => true,
-                'required' => false,
+                'required' => true,
+
 //                'disabled' => true,
 //                'choices' => []
-            ]);
+            ])
+//            ->add('etatcheckbox', CheckboxType::class, [
+//                'label' => 'Publier la sortie',
+//                'required' => false,
+//                'mapped' => false,
+//            ])
+        ;
+
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
+            $ville = $event->getData()->getLieu()->getVille();
+            $form = $event->getForm();
+            if ($ville) {
+                $form->get('ville')->setData($ville);
+                dump('SortieFormType_eventListener'.$ville);
+
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
