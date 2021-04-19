@@ -69,7 +69,7 @@ class Sortie
     private $etat;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sorties")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sorties", orphanRemoval=true)
      */
     private $participants;
 

@@ -30,7 +30,7 @@ class Campus
     private $sorties;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="campus")
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="campus", orphanRemoval=true)
      */
     private $users;
 

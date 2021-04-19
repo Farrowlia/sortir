@@ -12,13 +12,11 @@ body {
 }
 
 .div2 {
-    margin-top: 50px;
-    margin-bottom: 20px;
+ margin: 50px;
 }
 
 .div3 {
-    margin-top: 20px;
-    margin-bottom: 50px;
+  margin: 50px;
 }
 
 
@@ -37,9 +35,6 @@ h3 {
     font-size: 20px;
 }
 
-/*input {*/
-/*    margin-right: 30px;*/
-/*    border-bottom: 2px solid #07899D;*/
-
-/*}*/
-
+.form-control {
+    width: 200px;
+}
