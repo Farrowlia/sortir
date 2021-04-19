@@ -5,8 +5,10 @@
 {% block title %}Créer une nouvelle sortie | Sortir.com{% endblock %}
 
 {% block body %}
-    <div class="container ">
-        {{ form_start(sortieForm, {'attr': {'id': 'formSortie', 'class': 'form-horizontal'}}) }}
+    <div class="container-sm bg-white p-5 w-75 my-3">
+        <h2 class="text-center mb-5">Créer une sortie</h2>
+
+        {{ form_start(sortieForm, {'attr': {'id': 'formSortie', 'class': 'form-horizontal m-auto'}}) }}
 
         {{ form_row(sortieForm.nom) }}
 
@@ -19,14 +21,29 @@
         {{ form_row(sortieForm.description) }}
         {{ form_row(sortieForm.image) }}
         {{ form_row(sortieForm.ville) }}
-
         {{ form_row(sortieForm.lieu, {'attr': {'disabled': true}}) }}
 
-        {# BOUTON D'AFFICHAGE DU FORMULAIRE DE CREATION DE LIEU #}
-        <div class="">
-            <button type="button" class="btn btn-outline-primary m-2" data-bs-toggle="modal" data-bs-target="#blocModal">
-                Ajouter un lieu
-            </button>
+
+                {# BOUTON D'AFFICHAGE DU FORMULAIRE DE CREATION DE LIEU #}
+        <div class="form-group-row">
+        <button type="button" class="btn btn-outline-primary mb-2 btn-sm" data-bs-toggle="modal"
+                data-bs-target="#blocModal">
+            Ajouter un lieu
+        </button>
+        </div>
+
+
+        <div class="form-group-row">
+            <div class="form-check form-switch col my-3">
+                <label for="etatcheckbox" class="form-check-label">Publier la sortie</label>
+                <input class="form-check-input" type="checkbox" name="etatcheckbox" id="etatcheckbox">
+            </div>
+{#            <div class="col">#}
+{#                <button type="button" class="btn btn-outline-primary m-2 btn-sm float-end" data-bs-toggle="modal"#}
+{#                        data-bs-target="#blocModal">#}
+{#                    Ajouter un lieu#}
+{#                </button>#}
+{#            </div>#}
         </div>
 
         <div class="row">
@@ -37,17 +54,13 @@
         </div>
 
 
-        <div class="col m-2">
-            Publier la sortie : <input type="checkbox" name="etatcheckbox">
-        </div>
-
         <div class="row">
             <div class="col">
                 <button type="submit" class="btn btn-success">Enregister</button>
                 <a type="button" class="btn btn-primary" href="{{ path('main') }}">Annuler</a>
             </div>
         </div>
-    {{ form_end(sortieForm) }}
+        {{ form_end(sortieForm) }}
     </div>
 
 
