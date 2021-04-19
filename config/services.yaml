@@ -6,6 +6,7 @@
 parameters:
     image_user_directory: '%kernel.project_dir%/public/images/users'
     image_sortie_directory: '%kernel.project_dir%/public/images/sorties'
+    fichierCSV_directory: '%kernel.project_dir%/public/documents/fichierCSV'
 
 services:
     # default configuration for services in *this* file

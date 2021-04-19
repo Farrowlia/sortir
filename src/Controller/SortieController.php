@@ -95,17 +95,25 @@ class SortieController extends AbstractController
 //            dump($lieuSelected);
 //            return new JsonResponse($lieuSelected);
 //        }
-        if ($request->get('ajax') && $request->get('selectVille')){
+        if ($request->get('ajax') && isset($request->get('sortie_form')['ville'])){
 
-            $tableauLieu = $lieuRepository->findBy(array('ville' => $request->get('selectVille')), array('nom' => 'ASC'), null, 0);
+            $tableauLieu = $lieuRepository->findBy(array('ville' => $request->get('sortie_form')['ville']), array('nom' => 'ASC'), null, 0);
 
             return new JsonResponse([
                 'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
         }
 
-        // ATTENTION la validation doit être fait à la main
+        if ($request->get('ajax') && isset($request->get('sortie_form')['lieu'])){
+
+            $lieu = $lieuRepository->find($request->get('sortie_form')['lieu']);
+
+            return new JsonResponse([
+                'content' => $this->renderView('sortie/content/_detailLieu.html.twig', compact('lieu'))]);
+        }
+
         if ($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
+            dd('test');
 //            if ($sortieForm->get('save')->isClicked()) {
 //                dump('save is clicked');
 //            }
@@ -119,8 +127,8 @@ class SortieController extends AbstractController
             $sortie->setOrganisateur($user);
             $sortie->setCampus($user->getCampus());
 
-            $lieu = $lieuRepository->find($request->get('selectLieu'));
-            $sortie->setLieu($lieu);
+//            $lieu = $lieuRepository->find($request->get('selectLieu'));
+//            $sortie->setLieu($lieu);
 
             if ($sortieForm->get('image')->getData()) {
                 if ($sortie->getUrlImage()) {
@@ -140,8 +148,23 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('main'); //TODO
         }
 
+        $lieu = new Lieu();
+
+        $lieuForm = $this->createForm(LieuFormType::class, $lieu);
+        $lieuForm->handleRequest($request);
+
+        if ($lieuForm->isSubmitted() && $lieuForm->isValid())
+        {
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+
+            $this->addFlash('succes', 'Votre lieu a bien été créée !');
+            return $this->redirectToRoute('sortie_create');
+        }
+
         return $this->render('sortie/create.html.twig', [
             'sortieForm' => $sortieForm->createView(),
+            'lieuForm' => $lieuForm->createView(),
             'tableauVille' => $tableauVille
         ]);
     }

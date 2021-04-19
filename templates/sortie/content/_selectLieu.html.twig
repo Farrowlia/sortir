@@ -1,8 +1,6 @@
 
-<label for="selectLieu"></label>
-<select name="selectLieu" id="selectLieu">
-    <option value="">--Choisir un lieu--</option>
-    {% for lieu in tableauLieu %}
-        <option value={{ lieu.id }}>{{ lieu.nom }}</option>
-    {% endfor %}
-</select>
+<option value="">Choisir un lieu</option>
+{% for lieu in tableauLieu %}
+    <option value={{ lieu.id }}>{{ lieu.nom }}</option>
+{% endfor %}
+

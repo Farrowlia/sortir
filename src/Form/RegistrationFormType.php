@@ -45,6 +45,10 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('Campus', EntityType::class, [
+                'class' => Campus::class,
+                'choice_label' => 'nom'
+            ])
             ->add('plainPassword', PasswordType::class, [
                 // Mapped à false permet d'encoder le password dans le controller avant l'enregistrement dans l'user
                 'mapped' => false,
@@ -59,10 +63,6 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])
-            ->add('Campus', EntityType::class, [
-                'class' => Campus::class,
-                'choice_label' => 'nom'
             ])
         ;
     }
