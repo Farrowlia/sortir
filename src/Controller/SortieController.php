@@ -13,17 +13,28 @@ use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
+use App\Security\EmailVerifier;
 use App\Services\SearchSortie;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Message;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SortieController extends AbstractController
 {
+    private $emailVerifier;
+
+    public function __construct(EmailVerifier $emailVerifier)
+    {
+        $this->emailVerifier = $emailVerifier;
+    }
+
     /**
      * @Route("/sortie", name="sortie")
      */
@@ -256,6 +267,71 @@ class SortieController extends AbstractController
             'sortie' => $sortie,
             'commentaires' => $commentaires,
         ]);
+    }
+
+    /**
+     * @Route("/sortie/{id}/inscription", name="sortie_inscription", requirements={"id"="\d+"})
+     */
+    public function inscriptionSortie(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $sortie = $sortieRepository->find($id);
+        $user = $userRepository->find($this->getUser());
+        $sortie->addParticipant($user);
+        $entityManager->flush();
+
+        $sortie = $sortieRepository->find($id);
+        $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
+
+        return $this->render('sortie/detail.html.twig', [
+            'sortie' => $sortie,
+            'commentaires' => $commentaires,
+        ]);
+    }
+
+    /**
+     * @Route("/sortie/{id}/desinscription", name="sortie_desinscription", requirements={"id"="\d+"})
+     */
+    public function desinscriptionSortie(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $sortie = $sortieRepository->find($id);
+        $user = $userRepository->find($this->getUser());
+        $sortie->removeParticipant($user);
+        $entityManager->flush();
+
+        $sortie = $sortieRepository->find($id);
+        $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
+
+        return $this->render('sortie/detail.html.twig', [
+            'sortie' => $sortie,
+            'commentaires' => $commentaires,
+        ]);
+    }
+
+    /**
+     * @Route("/sortie/{id}/annuler", name="sortie_annuler", requirements={"id"="\d+"})
+     */
+    public function annulerSortie(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request, EtatRepository $etatRepository): Response
+    {
+        $sortie = $sortieRepository->find($id);
+        $user = $userRepository->find($this->getUser());
+        $raisonAnnulation = 'Je ne suis plus intéressé par cette sortie';
+
+        if ($sortie->getOrganisateur() === $user || $user->getAdministrateur()) {
+            // Passage à l'état : annulee(id=6)
+            $etat = $etatRepository->find(6);
+            $sortie->setEtat($etat);
+
+            $participants = $sortie->getParticipants();
+            foreach ($participants as $participant) {
+                $this->emailVerifier->sendEmailAnnulationSortie($participant, $user, $sortie, $raisonAnnulation);
+                $sortie->removeParticipant($participant);
+            }
+
+            $entityManager->flush();
+            $this->addFlash('succes', 'La sortie a bien été annulée !');
+        }
+
+        return $this->redirectToRoute('main');
     }
 
     /**
