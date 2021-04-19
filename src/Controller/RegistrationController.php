@@ -104,17 +104,17 @@ class RegistrationController extends AbstractController
                     $user->setActif(true);
                     $user->setIsVerified(true);
                     $passwordEnClair = $buffer[2] . '2021';
-                    $user->setPassword($passwordEncoder->encodePassword($user,$buffer[2] . '2021'));
+                    $user->setPassword($passwordEncoder->encodePassword($user, $passwordEnClair));
 
                     $entityManager->persist($user);
 
-//                    $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user, $passwordEnClair,
-//                        (new TemplatedEmail())
-//                            ->from(new Address('no-reply@sortir.com', 'Sortir.com'))
-//                            ->to($user->getEmail())
-//                            ->subject('Salut le nouveau, viens vite nous rejoindre')
-//                            ->htmlTemplate('registration/confirmation_email.html.twig')
-//                    );
+                    $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user, $passwordEnClair,
+                        (new TemplatedEmail())
+                            ->from(new Address('no-reply@sortir.com', 'Sortir.com'))
+                            ->to($user->getEmail())
+                            ->subject('Salut le nouveau, viens vite nous rejoindre')
+                            ->htmlTemplate('registration/confirmation_email.html.twig')
+                    );
                 }
                 fclose($handle);
             }
