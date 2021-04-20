@@ -46,19 +46,36 @@
                         </div>
                         <div class="specifies">
                             <div class="row">
-                                <div class="col"><h5>{{ sortie.nom }}</h5></div>
-                                <div class="col text-end"><h5>{{ sortie.dateDebut | date('d/m/Y') }}</h5></div>
-                            </div>
-                            <div class="row">
-                                <div class="col"><h6>{{ sortie.organisateur.pseudo }}</h6></div>
-                                <div class="col-3"><h6 class="text-end">{{ sortie.dateDebut | date('h:m') }}</h6></div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5>{{ sortie.nom }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>{{ sortie.organisateur.pseudo }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="text-end">{{ sortie.dateDebut | date('d/m/Y') }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6 class="text-end"> à {{ sortie.dateDebut | date('h:m') }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row pt-2 pb-2">
                                 <div class="col">
                                     <ul>
-                                        <li>Date cloture : {{ sortie.dateCloture | date('d/m/Y') }}</li>
-                                        <li>Inscrit : {{ sortie.nbreInscriptionMax }}</li>
-                                        <li>Etat : {{ sortie.etat.libelle }}</li>
+                                        <li>Cloture inscriptions : {{ sortie.dateCloture | date('d/m/Y') }}</li>
+                                        <li>Inscrit : {{ sortie.participants | length }}/{{ sortie.nbreInscriptionMax }}</li>
                                     </ul>
                                 </div>
                             </div>

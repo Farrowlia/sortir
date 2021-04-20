@@ -47,7 +47,7 @@ class EmailVerifier
         $this->mailer->send($email);
     }
 
-    public function sendEmailAnnulationSortie(User $user, User $userAOrigineDeAnnulation, Sortie $sortie, string $raisonAnnulation): void
+    public function sendEmailAnnulationSortie(User $user, User $userAOrigineDeAnnulation, Sortie $sortie): void
     {
 
         $email = (new TemplatedEmail())
@@ -60,7 +60,6 @@ class EmailVerifier
         $context['sortie'] = $sortie;
         $context['userAOrigineDeAnnulation'] = $userAOrigineDeAnnulation;
         $context['user'] = $user;
-        $context['raisonAnnulation'] = $raisonAnnulation;
 
         $email->context($context);
 

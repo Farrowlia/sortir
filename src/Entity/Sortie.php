@@ -91,7 +91,7 @@ class Sortie
     private $etat;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sorties", orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sorties")
      */
     private $participants;
 
@@ -111,6 +111,11 @@ class Sortie
      * @ORM\OneToMany(targetEntity=CommentaireSortie::class, mappedBy="sortie", orphanRemoval=true)
      */
     private $commentaireSorties;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $detailAnnulation;
 
     public function __construct()
     {
@@ -315,4 +320,15 @@ class Sortie
 //        }
 //        return 'etat != 2';
 //    }
+    public function getDetailAnnulation(): ?string
+    {
+        return $this->detailAnnulation;
+    }
+
+    public function setDetailAnnulation(?string $detailAnnulation): self
+    {
+        $this->detailAnnulation = $detailAnnulation;
+
+        return $this;
+    }
 }

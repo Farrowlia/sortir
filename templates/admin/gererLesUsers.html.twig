@@ -4,37 +4,56 @@
 {% block title %}Gérer les utilisateurs{% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-    <h2 class="div1">Gérer les utilisateurs</h2>
+    <div class="container-fluid">
+        <h2 class="div1">Gérer les utilisateurs</h2>
 
-    <div class="div2 row">
-        <input class="inputRechercherUtilisateur form-control col sm-3" type="text" id="nomUtilisateur" alt="nom de l'utilisateur" placeholder="Filtrer par nom">
-        <button class="btnRechercherUtilisateur btn btn-light col sm-2">Rechercher</button>
+        <form class="div2 row g-3 justify-content-center" id="formSearch">
+            <input class="inputRechercherUtilisateur form-control col-sm-3" type="text" id="rechUser" name="rechUser" alt="nom de l'utilisateur" placeholder="Filtrer par nom">
+            <button class="btnRechercherUtilisateur btn btn-light col-sm-2" type="submit" id="rechButton">
+                <i class="bi bi-search"></i> Rechercher
+            </button>
+        </form>
+
+        <div class="div3 d-flex justify-content-center">
+            <a href="{{ path('app_register') }}" title="Ajouter un utilisateur" alt="Ajouter un utilisateur">
+                <button class="btn btn-light">
+                    <i class="bi bi-person-plus"></i> Ajouter un utilisateur
+                </button>
+            </a>
+        </div>
     </div>
-
-{#    {{ form_start(campusForm) }}#}
-{#    {{ form_end(campusForm) }} #}
 
     <ul class="list-group list-group-horizontal row justify-content-center">
         <li class="list-group-item col-1">Nom</li>
         <li class="list-group-item col-1">Prénom</li>
-        <li class="list-group-item col-1"> Pseudo</li>
-        <li class="list-group-item col-2">Email</li>
-        <li class="list-group-item col-2">Actions</li>
+        <li class="list-group-item col-2"> Pseudo</li>
+        <li class="list-group-item col-3">Email</li>
+        <li class="list-group-item col-1"></li>
     </ul>
 
-{#    {% for user in tableauUser %}#}
-{#        <form id="formUtilisateurs{{ user.id }}">#}
-{#            <ul class="list-group list-group-horizontal row justify-content-center">#}
-{#                <li class="list-group-item col-1" id="afficherNomUtilisateur{{ user.id }}">{{ user.nom }}</li>#}
-{#                <li class="list-group-item col-1" id="afficherPrenomUtilisateur{{ user.id }}">{{ user.prenom }}</li>#}
-{#                <li class="list-group-item col-1" id="afficherPseudoUtilisateur{{ user.id }}">{{ user.pseudo }}</li>#}
-{#                <li class="list-group-item col-2" id="afficherEmailUtilisateur{{ user.id }}">{{ user.email }}</li>#}
-{#                <li class="list-group-item col-1" id="modifier{{ user.id }}"><button onclick="modifierVille({{ user.id }})">Modifier</button></li>#}
-{#                <li class="list-group-item col-1" id="supprimer{{ user.id }}"><button>Supprimer</button></li>#}
-{#            </ul>#}
-{#        </form>#}
-{#        {% endfor %}#}
+    <div id="searchResult">
+    {% for user in users %}
+        <form id="formUtilisateurs{{ user.id }}">
+            <ul class="list-group list-group-horizontal row justify-content-center">
+                <li class="list-group-item col-1" id="afficherNomUtilisateur{{ user.id }}">{{ user.nom }}</li>
+                <li class="list-group-item col-1" id="afficherPrenomUtilisateur{{ user.id }}">{{ user.prenom }}</li>
+                <li class="list-group-item col-2" id="afficherPseudoUtilisateur{{ user.id }}">{{ user.pseudo }}</li>
+                <li class="list-group-item col-3" id="afficherEmailUtilisateur{{ user.id }}">{{ user.email }}</li>
+                <li class="list-group-item col-1">
+                    <a href="{{ path('user', {'id' : user.id}) }}" title="Voir le profil" alt="Profil de l'utilisateur">
+                        <i class="bi bi-file-earmark-person btn btn-outline-secondary"></i>
+                    </a>
+                </li>
+            </ul>
+        </form>
+        {% endfor %}
+    </div>
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        requeteAjaxFormulaire('#formSearch', '#rechButton', "click", '#searchResult', false);
+    </script>
 {% endblock %}
