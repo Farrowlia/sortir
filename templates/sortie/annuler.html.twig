@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annuler la sortie{% endblock %}
+
+{% block styleSheets %}{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                {{ form_start(raisonAnnulationForm) }}
+                {{ form_widget(raisonAnnulationForm) }}
+                <button type="submit">Confirmer l'annulation</button>
+                {{ form_end(raisonAnnulationForm) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

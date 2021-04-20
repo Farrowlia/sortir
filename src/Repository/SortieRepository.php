@@ -61,10 +61,14 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('q', "%{$searchSortie->q}%");
         }
 
+        if (empty($searchSortie->archive)) {
+            $query = $query
+                ->andWhere('s.etat = 2');
+        }
+
         if (!empty($searchSortie->archive)) {
             $query = $query
-                ->andWhere('s.dateDebut < :today')
-                ->setParameter('today', date("Y-m-d H:i:s"));
+                ->andWhere('s.etat = 5');
         }
 
         if (!empty($searchSortie->campus)) {

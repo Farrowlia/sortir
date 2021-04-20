@@ -70,7 +70,7 @@ class User implements UserInterface
     private $actif;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Sortie::class, mappedBy="participants", orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity=Sortie::class, mappedBy="participants")
      */
     private $sorties;
 

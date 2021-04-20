@@ -39,7 +39,7 @@ App\Entity\Ville:
 
 
 App\Entity\Lieu:
-  lieu_{1..30}:
+  lieu_{1..60}:
     nom: '<sentence(2, true)>'
     rue: '<streetAddress()>'
     latitude: '<latitude(42, 50)>'
@@ -62,7 +62,7 @@ App\Entity\User:
     isVerified: '<numberBetween(1, 1)>'
     urlImage: '<avatar()>'
     campus: '@campus_*'
-  user_{2..100}:
+  user_{2..200}:
     email: '<email()>'
     roles: ['ROLE_USER']
     password: '<shuffle($)>argon2id<shuffle($)>v=19<shuffle($)>m=65536,t=4,p=1<shuffle($)>UmNWZ2g3WlYzalY5SnJLdw<shuffle($)>LGI3TbsTkH7bWtFbBoOoIdXMA87Z3OFuM2fw+5o86Tc'
@@ -78,17 +78,17 @@ App\Entity\User:
 
 
 App\Entity\Sortie:
-  sortie_{1..100}:
-    nom: '<sentence(4, true)>'
+  sortie_{1..400}:
+    nom: '<sentence(3, true)>'
     dateDebut: '<dateTimeBetween("-100 days", "+100 days")>'
     duree: '<numberBetween(20, 500)>'
-    dateCloture: '<dateTimeBetween("-10 days", "+10 days")>'
+    dateCloture: '<dateTimeInInterval($dateDebut, "-10 days")>'
     nbreInscriptionMax: '<numberBetween(2, 20)>'
     description: '<paragraph(3, true)>'
     urlImage: 'http://picsum.photos/id/<numberBetween(1,1000)>/400/400'
     lieu: '@lieu_*'
     etat: '@etat_*'
-#    participant: '<numberBetween(1, $nbreInscriptionMax)>x @user_*'
+    participants: '<numberBetween(0, $nbreInscriptionMax)>x @user_*'
     organisateur: '@user_*'
     campus: '@campus_*'
 
