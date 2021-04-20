@@ -2,22 +2,36 @@
                 src="{{ asset('images/prop_icone_sortir.jpg') }}" alt="Sortir.com" style="height: 30px"> SORTIR.COM</a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-{#            <li {% if app.request.get('_route') == 'main' %} class="nav-item active" {% else %} class="nav-item" {% endif %}> <a class="nav-link" href="{{ path('main') }}">SORTIE</a></li>#}
+            {#            <li {% if app.request.get('_route') == 'main' %} class="nav-item active" {% else %} class="nav-item" {% endif %}> <a class="nav-link" href="{{ path('main') }}">SORTIE</a></li>#}
         </ul>
     </div>
     <div>
         {% if app.user %}
+            <a type="button" class="btn btn-danger" href="{{ path('sortie_create') }}">Créer une sortie</a>
+
             {% if app.user.roles == ["ROLE_ADMIN"] %}
-                Connecté en tant qu'admin
-                <a type="button" class="btn btn-outline-primary" href="{{ path('villes') }}">Villes</a>
-                <a type="button" class="btn btn-outline-primary" href="{{ path('campus') }}">Campus</a>
-                <a type="button" class="btn btn-outline-primary" href="{{ path('gestionUsers') }}">Utilisateurs</a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Gestion Admin
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a type="button" class="dropdown-item btn btn-outline-primary" href="{{ path('villes') }}">Villes</a></li>
+                        <li><a type="button" class="dropdown-item btn btn-outline-primary" href="{{ path('campus') }}">Campus</a></li>
+                        <li><a type="button" class="dropdown-item btn btn-outline-primary" href="{{ path('gestionUsers') }}">Utilisateurs</a></li>
+                    </ul>
+                </div>
             {% endif %}
-            <a type="button" class="btn btn-outline-primary" href="{{ path('sortie_create') }}">Créer une sortie</a>
-            <a type="button" class="btn btn-outline-primary" href="{{ path('user') }}">Mon profil</a>
-            <a type="button" class="btn btn-outline-primary" href="{{ path('app_logout') }}">Déconnexion</a>
-        {% else %}
-            <a type="button" class="btn btn-outline-primary" href="{{ path('app_login') }}">Connexion</a>
+
+            <div class="btn-group px-5">
+                <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ app.user.prenom | capitalize }}
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a type="button" class="dropdown-item btn btn-outline-primary" href="{{ path('user') }}">Mon profil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a type="button" class="dropdown-item btn btn-outline-primary" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                </ul>
+            </div>
         {% endif %}
     </div>
 </nav>
