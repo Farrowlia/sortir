@@ -7,20 +7,23 @@
 
         <h2 class="div1">Gérer les villes</h2>
 
-        <form class="div2 d-flex justify-content-evenly" id="formSearch">
-            <input class="inputRechercherVille form-control col-4" type="text" id="rechVille" name="rechVille" alt="nom de la ville" placeholder="Filtrer par ville">
-            <button class="btnRechercherVille btn btn-light col-3" type="submit" id="rechButton">Rechercher</button>
+        <form class="div2 row g-3 justify-content-center" id="formSearch">
+            <input class="inputRechercherVille form-control col-sm-3" type="text" id="rechVille" name="rechVille" alt="nom de la ville" placeholder="Filtrer par ville">
+            <button class="btnRechercherVille btn btn-light col-sm-2" type="submit" id="rechButton">
+                <i class="bi bi-search"></i> Rechercher
+            </button>
         </form>
 
         {{ form_start(villeForm) }}
-            <div class="div3 d-flex justify-content-evenly">
-                <input class="form-control col-4" placeholder="Ajouter une ville ..." {{ form_widget(villeForm.nom) }} {{ form_errors(villeForm.nom) }}>
-                <input class="form-control col-3" placeholder="Ajouter un code postal ..." {{ form_widget(villeForm.codePostal) }} {{ form_errors(villeForm.codePostal) }}>
-                <button type="submit" class="btnAJouterVille btn btn-light col-3" alt="ajouter une ville">Ajouter</button>
+            <div class="div3 row g-3 justify-content-center">
+                <input class="form-control col-sm-3" placeholder="Ajouter une ville ..." {{ form_widget(villeForm.nom) }} {{ form_errors(villeForm.nom) }}>
+                <input class="form-control col-sm-2" placeholder="Ajouter un code postal ..." {{ form_widget(villeForm.codePostal) }} {{ form_errors(villeForm.codePostal) }}>
+                <button type="submit" class="btnAJouterVille btn btn-light col-sm-2" alt="ajouter une ville">
+                    <i class="bi bi-plus-circle"></i> Ajouter
+                </button>
             </div>
         {{ form_end(villeForm) }}
 
-    <div class="container-fluid">
         <ul class="list-group list-group-horizontal row justify-content-center">
             <li class="list-group-item col-2">Ville</li>
             <li class="list-group-item col-2">Code postal</li>
@@ -33,15 +36,20 @@
                 <ul class="list-group list-group-horizontal row justify-content-center">
                     <li class="list-group-item col-2" id="afficherNomVille{{ ville.id }}">{{ ville.nom }}</li>
                     <li class="list-group-item col-2" id="afficherCPville{{ ville.id }}">{{ ville.codePostal }}</li>
-                    <li class="list-group-item col-1" id="modifier{{ ville.id }}"><button class="btn btn-outline-secondary" onclick="modifierVille({{ ville.id }})">Modifier</button></li>
+                    <li class="list-group-item col-1" id="modifier{{ ville.id }}">
+                        <button class="btn btn-outline-secondary" title="Modifier" alt="Modifier la ville" onclick="modifierVille({{ ville.id }})">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </li>
                     <li class="list-group-item col-1" id="delete{{ ville.id }}">
-                        <a class="btn btn-outline-secondary" href="{{ path('ville_delete', {'id': ville.id}) }}">Supprimer</a>
+                        <a class="btn btn-outline-secondary" href="{{ path('ville_delete', {'id': ville.id}) }}" title="Supprimer" alt="Supprimer la ville">
+                            <i class="bi bi-trash"></i>
+                        </a>
                     </li>
                 </ul>
            </form>
         {% endfor %}
         </div>
-    </div>
 
 {% endblock %}
 

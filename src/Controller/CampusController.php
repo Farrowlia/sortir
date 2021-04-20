@@ -23,12 +23,15 @@ class CampusController extends AbstractController
         CampusRepository $campusRepository
     ): Response
     {
+        //Affichage de la liste des campus
         $tableauCampus = $campusRepository->findAll();
 
+        //Affichage du formulaire pour la création d'un campus
         $campus = new Campus();
         $campusForm = $this->createForm(CampusFormType::class, $campus);
         $campusForm = $campusForm->handleRequest($request);
 
+        //Si le formulaire est soumis et valide, le nouveau campus est ajouté en BDD
         if ($campusForm->isSubmitted() && $campusForm->isValid()) {
 
             $entityManager->persist($campus);
@@ -36,11 +39,10 @@ class CampusController extends AbstractController
 
             $this->addFlash('success', 'Le campus a été ajouté !');
             return $this->redirectToRoute('campus');
-
-            //TODO voir l'ajout d'une popup de confirmation ou message flash
         }
 
-        if ($request->get('ajax')) {
+        //Si requête ajax 'nom' reçue, modification d'un campus
+        if ($request->get('nom')) {
 
             $campusUpdate = $campusRepository->find($request->get('id'));
             $campusUpdate->setNom($request->get("nom"));
@@ -48,7 +50,17 @@ class CampusController extends AbstractController
 
             return new JsonResponse([
                 'content' => $this->renderView('admin/content/_campus.html.twig', compact('campusUpdate'))
+            ]);
+        }
 
+        //Si requête 'rechCampus' reçue, affichage de la recherche
+        if ($request->get('rechCampus')) {
+
+            $motRecherche = $request->get('rechCampus');
+            $result = $campusRepository->findBy(array("nom" => $motRecherche), array("nom" => "ASC"), null, 0);
+
+            return new JsonResponse ([
+                'content' => $this->renderView('admin/content/_campusSearch.html.twig', compact('result'))
             ]);
         }
 
@@ -59,6 +71,7 @@ class CampusController extends AbstractController
     }
 
     /**
+     * Supression d'un campus en BDD
      * @Route("/admin/campus/delete/{id}", name="campus_delete")
      */
     public function delete(int $id, CampusRepository $campusRepository): Response {
