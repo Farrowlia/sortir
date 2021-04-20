@@ -1,0 +1,17 @@
+{% for campus in result %}
+    <form id="formCampus{{ campus.id }}">
+        <ul class="list-group list-group-horizontal row justify-content-center">
+            <li class="list-group-item col-2" id="afficherNomCampus{{ campus.id }}">{{ campus.nom }}</li>
+            <li class="list-group-item col-1" id="modifier{{ campus.id }}">
+                <button class="btn btn-outline-secondary" title="Modifier" alt="modifier le site" onclick="modifierCampus({{ campus.id }})">
+                    <i class="bi bi-pencil"></i>
+                </button>
+            </li>
+            <li class="list-group-item col-1" id="supprimer{{ campus.id }}" title="Supprimer" alt="Supprimer le site">
+                <a class="btn btn-outline-secondary" href="{{ path('campus_delete', {'id' : campus.id}) }}">
+                    <i class="bi bi-trash"></i>
+                </a>
+            </li>
+        </ul>
+    </form>
+{% endfor %}

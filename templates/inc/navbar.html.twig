@@ -10,7 +10,7 @@
             {% if app.user.roles == ["ROLE_ADMIN"] %}
                 <a type="button" class="btn btn-outline-primary" href="{{ path('villes') }}">Villes</a>
                 <a type="button" class="btn btn-outline-primary" href="{{ path('campus') }}">Campus</a>
-                <a type="button" class="btn btn-outline-primary" href="{{ path('admin') }}">Utilisateurs</a>
+                <a type="button" class="btn btn-outline-primary" href="{{ path('gestionUsers') }}">Utilisateurs</a>
             {% endif %}
             <a type="button" class="btn btn-outline-primary" href="{{ path('sortie_create') }}">Créer une sortie</a>
             <a type="button" class="btn btn-outline-primary" href="{{ path('user') }}">Mon profil</a>
