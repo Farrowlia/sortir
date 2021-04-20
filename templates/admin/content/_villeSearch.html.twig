@@ -3,9 +3,15 @@
         <ul class="list-group list-group-horizontal row justify-content-center">
             <li class="list-group-item col-2" id="afficherNomVille{{ ville.id }}">{{ ville.nom }}</li>
             <li class="list-group-item col-2" id="afficherCPville{{ ville.id }}">{{ ville.codePostal }}</li>
-            <li class="list-group-item col-1" id="modifier{{ ville.id }}"><button class="btn btn-outline-secondary" onclick="modifierVille({{ ville.id }})">Modifier</button></li>
+            <li class="list-group-item col-1" id="modifier{{ ville.id }}">
+                <button class="btn btn-outline-secondary" title="Modifier" alt="modifier la ville" onclick="modifierVille({{ ville.id }})">
+                    <i class="bi bi-pencil"></i>
+                </button>
+            </li>
             <li class="list-group-item col-1" id="delete{{ ville.id }}">
-                <a class="btn btn-outline-secondary" href="{{ path('ville_delete', {'id': ville.id}) }}">Supprimer</a>
+                <a class="btn btn-outline-secondary" href="{{ path('ville_delete', {'id': ville.id}) }}">
+                    <i class="bi bi-trash"></i>
+                </a>
             </li>
         </ul>
     </form>

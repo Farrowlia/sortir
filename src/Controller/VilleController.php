@@ -23,12 +23,15 @@ class VilleController extends AbstractController
         VilleRepository $villeRepository
     ): Response
     {
+        //Affichage de la liste des villes
         $tableauVilles = $villeRepository->findAll();
 
+        //Affichage du formulaire pour la création d'une ville
         $ville = new Ville();
         $villeForm = $this->createForm(VilleFormType::class, $ville);
         $villeForm = $villeForm->handleRequest($request);
 
+        //Si le formulaire est soumis et valide, la nouvelle ville est ajoutée en BDD
         if ($villeForm->isSubmitted() && $villeForm->isValid()) {
 
             $entityManager->persist($ville);
@@ -36,10 +39,9 @@ class VilleController extends AbstractController
 
             $this->addFlash('success', 'La ville a été ajoutée !');
             return $this->redirectToRoute('villes');
-
-            //TODO voir l'ajout d'une popup de confirmation ou message flash
         }
 
+        //Si requête ajax 'codePostal' reçue, modification d'une ville
         if ($request->get('codePostal')) {
 
             $villeUpdate = $villeRepository->find($request->get('id'));
@@ -52,6 +54,7 @@ class VilleController extends AbstractController
             ]);
         }
 
+        //Si requête ajax 'rechVille' reçue, affichage de la recherche
         if ($request->get('rechVille')) {
 
             $motRecherche = $request->get('rechVille');
@@ -69,6 +72,7 @@ class VilleController extends AbstractController
     }
 
     /**
+     * Suppression d'une ville en BDD
      * @Route("/admin/villes/delete/{id}", name="ville_delete")
      */
     public function delete(int $id, VilleRepository $villeRepository): Response

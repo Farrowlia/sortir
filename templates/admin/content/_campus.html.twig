@@ -1,5 +1,13 @@
 <ul class="list-group list-group-horizontal row justify-content-center">
     <li class="list-group-item col-2" id="afficherNomCampus{{ campusUpdate.id }}">{{ campusUpdate.nom }}</li>
-    <li class="list-group-item col-1" id="modifier{{ campusUpdate.id }}"><button class="btn btn-outline-secondary" onclick="modifierCampus({{ campusUpdate.id }})">Modifier</button></li>
-    <li class="list-group-item col-1" id="supprimer{{ campusUpdate.id }}"><button class="btn btn-outline-secondary">Supprimer</button></li>
+    <li class="list-group-item col-1" id="modifier{{ campusUpdate.id }}">
+        <button class="btn btn-outline-secondary" title="Modifier" alt="modifier le site" onclick="modifierCampus({{ campusUpdate.id }})">
+            <i class="bi bi-pencil"></i>
+        </button>
+    </li>
+    <li class="list-group-item col-1" id="supprimer{{ campusUpdate.id }}" title="Supprimer" alt="Supprimer le site">
+        <button class="btn btn-outline-secondary">
+            <i class="bi bi-trash"></i>
+        </button>
+    </li>
 </ul>

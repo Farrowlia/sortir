@@ -12,17 +12,11 @@ body {
 }
 
 .div2 {
- margin: 50px;
+ margin: 40px;
 }
 
 .div3 {
-  margin: 50px;
-}
-
-
-.list_campus, list_users {
-    background-color: #F8F9FA;
-    border-radius: 5px;
+  margin: 40px;
 }
 
 h2 {
@@ -37,4 +31,14 @@ h3 {
 
 .form-control {
     width: 200px;
+    margin-right: 10px;
 }
+
+#rechVille {
+    margin-right: 20px;
+}
+
+.inputRechercherCampus {
+    margin-right: 20px;
+}
+
