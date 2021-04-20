@@ -6,7 +6,7 @@
 
 {% block body %}
     <div class="container-sm bg-white p-5 w-75 my-3">
-        <h2 class="text-center mb-5">Modifier ma sortie</h2>
+        <h1 class="text-center mb-5" style="font-family: 'Permanent Marker', sans-serif">Modifier ma sortie</h1>
 
         {{ form_start(sortieForm, {'attr': {'id': 'formSortie', 'class': 'form-horizontal m-auto'}}) }}
 
@@ -32,11 +32,11 @@
             </button>
         </div>
 
-
+{#        <div>etat {{ sortie.etat.id }}</div>#}
         <div class="form-group-row">
             <div class="form-check form-switch col my-3">
                 <label for="etatcheckbox" class="form-check-label">Publier la sortie</label>
-                <input class="form-check-input" type="checkbox" name="etatcheckbox" id="etatcheckbox">
+                <input class="form-check-input" type="checkbox" name="etatcheckbox" id="etatcheckbox" {{ sortie.etat.id >= 2 ? 'checked' : ''  }}>
             </div>
             {#            <div class="col">#}
             {#                <button type="button" class="btn btn-outline-primary m-2 btn-sm float-end" data-bs-toggle="modal"#}
@@ -56,8 +56,13 @@
 
         <div class="row">
             <div class="col">
-                <button type="submit" class="btn btn-success">Enregister</button>
-                <a type="button" class="btn btn-primary" href="{{ path('main') }}">Annuler</a>
+                <button type="submit" name="save" class="btn btn-success">Enregister</button>
+            </div>
+            <div class="col">
+                <button type="submit" name="delete" class="btn btn-danger">Supprimer la sortie</button>
+            </div>
+            <div class="col">
+                <button type="submit" name="cancel" class="btn btn-danger">Annuler la sortie</button>
             </div>
         </div>
         {{ form_end(sortieForm) }}
@@ -108,7 +113,7 @@
             document.querySelector('#sortie_form_lieu').disabled = false;
         });
         requeteAjaxGet('#sortie_form_ville', "change", '#sortie_form_lieu', false);
-        requeteAjaxGet('#sortie_form_lieu', "change", '#contentDetailLieu', false);
+        // requeteAjaxGet('#sortie_form_lieu', "change", '#contentDetailLieu', false);
     </script>
     {# <script> #}
     {# $('saveLieu')._hideModal(); #}

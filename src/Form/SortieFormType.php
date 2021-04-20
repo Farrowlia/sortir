@@ -29,7 +29,7 @@ class SortieFormType extends AbstractType
                 'required' => true,
                 'row_attr' => ['class' => 'form-group-row'],
                 'label_attr' => ['class' => 'col-4 col-form-label'],
-                'attr' => ['class' => 'col-6'],
+                'attr' => ['class' => 'col-6 rounded'],
             ])
             ->add('dateDebut', DateTimeType::class, [
                 'label' => 'Date et heure de début',
@@ -38,7 +38,7 @@ class SortieFormType extends AbstractType
                 'required' => true,
                 'row_attr' => ['class' => 'form-group-row'],
                 'label_attr' => ['class' => 'col-4 col-form-label'],
-                'attr' => ['class' => 'col-3'],
+                'attr' => ['class' => 'col-3 rounded'],
             ])
             ->add('dateCloture', DateType::class, [
                 'label' => 'Date de clôture des inscriptions',
@@ -47,7 +47,7 @@ class SortieFormType extends AbstractType
                 'required' => true,
                 'row_attr' => ['class' => 'form-group-row'],
                 'label_attr' => ['class' => 'col-4 col-form-label'],
-                'attr' => ['class' => 'col-2'],
+                'attr' => ['class' => 'col-3 rounded'],
 
             ])
             ->add('duree', IntegerType::class, [
@@ -55,21 +55,21 @@ class SortieFormType extends AbstractType
                 'required' => true,
                 'row_attr' => ['class' => 'form-group-row'],
                 'label_attr' => ['class' => 'col-4 col-form-label'],
-                'attr' => ['class' => 'col-1'],
+                'attr' => ['class' => 'col-1  rounded'],
             ])
             ->add('nbreInscriptionMax', null, [
                 'label' => "Max de participants",
                 'required' => true,
                 'row_attr' => ['class' => 'form-group-row'],
                 'label_attr' => ['class' => 'col-4 col-form-label'],
-                'attr' => ['class' => 'col-1'],
+                'attr' => ['class' => 'col-1 rounded'],
 
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
                 'row_attr' => ['class' => 'form-group-row'],
                 'label_attr' => ['class' => 'col-4 col-form-label'],
-                'attr' => ['class' => 'mb-1 col-10',
+                'attr' => ['class' => 'mb-1 col-10 rounded',
                     'rows' => '4'],
             ])
             ->add('image', FileType::class, [
@@ -78,6 +78,7 @@ class SortieFormType extends AbstractType
                 'label' => 'Image',
                 'row_attr' => ['class' => 'form-group-row'],
                 'label_attr' => ['class' => 'col-2 col-form-label'],
+                'attr' => ['class' => 'rounded'],
             ])
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
@@ -87,7 +88,7 @@ class SortieFormType extends AbstractType
                 'auto_initialize' => false,
                 'row_attr' => ['class' => 'form-group-row'],
                 'label_attr' => ['class' => 'col-2 col-form-label'],
-                'attr' => ['class' => 'col-5'],
+                'attr' => ['class' => 'col-5 rounded'],
             ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
@@ -97,7 +98,7 @@ class SortieFormType extends AbstractType
                 'required' => true,
                 'row_attr' => ['class' => 'form-group-row'],
                 'label_attr' => ['class' => 'col-2 col-form-label'],
-                'attr' => ['class' => 'col-8'],
+                'attr' => ['class' => 'col-8 rounded'],
             ]);
 
 

@@ -6,52 +6,39 @@
 
 {% block body %}
     <div class="container-sm bg-white p-5 w-75 my-3">
-        <h2 class="text-center mb-5">Créer une sortie</h2>
+        <h1 class="text-center mb-5" style="font-family: 'Permanent Marker', sans-serif">Créer une sortie</h1>
 
         {{ form_start(sortieForm, {'attr': {'id': 'formSortie', 'class': 'form-horizontal m-auto'}}) }}
 
-        {{ form_row(sortieForm.nom) }}
+         {{ form_row(sortieForm.nom) }}
 
-        {{ form_row(sortieForm.dateDebut) }}
-        {{ form_row(sortieForm.dateCloture) }}
-        {{ form_row(sortieForm.duree) }}
+         {{ form_row(sortieForm.dateDebut) }}
+         {{ form_row(sortieForm.dateCloture) }}
+
+         {{ form_row(sortieForm.duree) }}
+         {{ form_row(sortieForm.nbreInscriptionMax) }}
+         {{ form_row(sortieForm.description) }}
+         {{ form_row(sortieForm.image) }}
+         {{ form_row(sortieForm.ville) }}
+         {{ form_row(sortieForm.lieu, {'attr': {'disabled': true}}) }}
 
 
-        {{ form_row(sortieForm.nbreInscriptionMax) }}
-        {{ form_row(sortieForm.description) }}
-        {{ form_row(sortieForm.image) }}
-        {{ form_row(sortieForm.ville) }}
-        {{ form_row(sortieForm.lieu, {'attr': {'disabled': true}}) }}
-
-
-                {# BOUTON D'AFFICHAGE DU FORMULAIRE DE CREATION DE LIEU #}
+        {# BOUTON D'AFFICHAGE DU FORMULAIRE DE CREATION DE LIEU #}
         <div class="form-group-row">
-        <button type="button" class="btn btn-outline-primary mb-2 btn-sm" data-bs-toggle="modal"
-                data-bs-target="#blocModal">
-            Ajouter un lieu
-        </button>
+            <button type="button" class="btn btn-outline-primary mb-2 btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#blocModal">
+                Ajouter un lieu
+            </button>
         </div>
 
 
         <div class="form-group-row">
             <div class="form-check form-switch col my-3">
                 <label for="etatcheckbox" class="form-check-label">Publier la sortie</label>
-                <input class="form-check-input" type="checkbox" name="etatcheckbox" id="etatcheckbox">
+                <input class="form-check-input" type="checkbox" name="etatcheckbox" id="etatcheckbox" >
             </div>
-{#            <div class="col">#}
-{#                <button type="button" class="btn btn-outline-primary m-2 btn-sm float-end" data-bs-toggle="modal"#}
-{#                        data-bs-target="#blocModal">#}
-{#                    Ajouter un lieu#}
-{#                </button>#}
-{#            </div>#}
         </div>
 
-        <div class="row">
-            <div class="col" id="contentDetailLieu">
-                {# ici s'affiche le lieu quand il est sélectionné #}
-                {# IMPORTANT de laisser cette div vide #}
-            </div>
-        </div>
 
 
         <div class="row">
@@ -108,7 +95,7 @@
             document.querySelector('#sortie_form_lieu').disabled = false;
         });
         requeteAjaxGet('#sortie_form_ville', "change", '#sortie_form_lieu', false);
-        requeteAjaxGet('#sortie_form_lieu', "change", '#contentDetailLieu', false);
+        // requeteAjaxGet('#sortie_form_lieu', "change", '#contentDetailLieu', false);
     </script>
     {# <script> #}
     {# $('saveLieu')._hideModal(); #}

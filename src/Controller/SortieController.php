@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\CommentaireSortie;
+use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\User;
 use App\Form\LieuFormType;
 use App\Form\SearchSortieFormType;
 use App\Form\SortieFormType;
@@ -30,9 +32,11 @@ class SortieController extends AbstractController
 {
     private $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(SortieRepository $sortieRepository,
+                                EmailVerifier $emailVerifier)
     {
         $this->emailVerifier = $emailVerifier;
+//        $sortieRepository->etatsUpdate();
     }
 
     /**
@@ -72,55 +76,9 @@ class SortieController extends AbstractController
     {
         $sortie = new Sortie();
         $tableauVille = $villeRepository->findAll();
-        /*        $sortie->setDateDebut(new \DateTime('now'));*/
-
-
-
-
-        //----------- FORMULAIRE DE CREATION DE LIEU -----------
-
-        $lieu = new Lieu();
-
-        $lieuForm = $this->createForm(LieuFormType::class, $lieu);
-        $lieuForm->handleRequest($request);
-
-        if ($lieuForm->isSubmitted() && $lieuForm->isValid())
-        {
-            $entityManager->persist($lieu);
-            $entityManager->flush();
-
-//              PAS POSSIBLE POUR L'INSTANT
-//            // récupération dans la BDD du lieu tout juste créé
-//            $nouveauLieu = $lieuRepository->find($lieu->getId());
-//            //$sortie->setLieu($nouveauLieu);
-
-        }
-        //----------- FIN DU FORMULAIRE DE CREATION DE LIEU ---------------------
-
         $sortieForm = $this->createForm(SortieFormType::class, $sortie);
         $sortieForm->handleRequest($request);
-
-
-        // -------------------- REQUETES AJAX POUR AFFICHER SELECT LIEU ET DETAIL LIEU
-        if ($request->get('ajax') && isset($request->get('sortie_form')['ville'])){
-
-            $tableauLieu = $lieuRepository->findBy(array('ville' => $request->get('sortie_form')['ville']), array('nom' => 'ASC'), null, 0);
-
-            return new JsonResponse([
-                'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
-        }
-
-        if ($request->get('ajax') && isset($request->get('sortie_form')['lieu'])){
-
-            $lieu = $lieuRepository->find($request->get('sortie_form')['lieu']);
-
-            return new JsonResponse([
-                'content' => $this->renderView('sortie/content/_detailLieu.html.twig', compact('lieu'))]);
-        }
-        //---------------------------------------------------------------------------------------
-
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid())
-        {
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             // vérif si "publier la sortie" est coché
             dump($request->get('etatcheckbox'));
             if ($request->get('etatcheckbox') !== null) {
@@ -140,11 +98,6 @@ class SortieController extends AbstractController
 
             // récupération de l'image
             if ($sortieForm->get('image')->getData()) {
-                //ces 2 lignes concernent la mise à jour de l'image
-//                if ($sortie->getUrlImage()) {
-//                    unlink($this->getParameter('image_sortie_directory') . '/' . $sortie->getUrlImage());
-//                }
-
                 $image = $sortieForm->get('image')->getData();
                 $urlImage = md5(uniqid()) . '.' . $image->guessExtension();
                 $image->move($this->getParameter('image_sortie_directory'), $urlImage);
@@ -159,8 +112,43 @@ class SortieController extends AbstractController
                 "id" => $sortie->getId()]);
         }
 
+        //----------- FORMULAIRE DE CREATION DE LIEU (POP-UP) -----------
 
+        $lieu = new Lieu();
 
+        $lieuForm = $this->createForm(LieuFormType::class, $lieu);
+        $lieuForm->handleRequest($request);
+
+        if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+
+//              PAS POSSIBLE POUR L'INSTANT
+//            // récupération dans la BDD du lieu tout juste créé
+//            $nouveauLieu = $lieuRepository->find($lieu->getId());
+//            //$sortie->setLieu($nouveauLieu);
+
+        }
+
+        // -------------------- REQUETES AJAX POUR AFFICHER SELECT LIEU (ET DETAIL LIEU)
+        if ($request->get('ajax') && isset($request->get('sortie_form')['ville'])) {
+
+            $tableauLieu = $lieuRepository->findBy(array('ville' => $request->get('sortie_form')['ville']), array('nom' => 'ASC'), null, 0);
+
+            return new JsonResponse([
+                'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
+        }
+
+//        if ($request->get('ajax') && isset($request->get('sortie_form')['lieu'])) {
+//
+//            $lieu = $lieuRepository->find($request->get('sortie_form')['lieu']);
+//
+//            return new JsonResponse([
+//                'content' => $this->renderView('sortie/content/_detailLieu.html.twig', compact('lieu'))]);
+//        }
+        //---------------------------------------------------------------------------------------
+
+        // envoi du formulaire en HTML
         return $this->render('sortie/create.html.twig', [
             'sortieForm' => $sortieForm->createView(),
             'lieuForm' => $lieuForm->createView(),
@@ -175,64 +163,97 @@ class SortieController extends AbstractController
     public function edit(Sortie $sortie,
                          SortieRepository $sortieRepository,
                          Request $request,
+                         EtatRepository $etatRepository,
                          LieuRepository $lieuRepository,
-                         EntityManagerInterface $entityManager
-
-    )
+                         UserRepository $userRepository,
+                         EntityManagerInterface $entityManager)
     {
-//        $sortie = $sortieRepository->find($id);
 
-        $editForm = $this->createForm(SortieFormType::class, $sortie);
-        $editForm->handleRequest($request);
+        $user = $userRepository->find($this->getUser());
 
-//        $ville = $sortie->getLieu()->getVille();
-//        dump('controller sortie_edit = '.$ville->getId());
-//        $editForm->get('ville')->setData($ville->getId());
+        if ($sortie->getOrganisateur()->getId() === $user->getId() || $user->getAdministrateur()) {
 
-        //----------- FORMULAIRE DE CREATION DE LIEU -----------
+            //----------- FORMULAIRE DE LA SORTIE -----------
 
-        $lieu = new Lieu();
+            $editForm = $this->createForm(SortieFormType::class, $sortie);
 
-        $lieuForm = $this->createForm(LieuFormType::class, $lieu);
-        $lieuForm->handleRequest($request);
+            $editForm->handleRequest($request);
 
-        if ($lieuForm->isSubmitted() && $lieuForm->isValid())
-        {
-            $entityManager->persist($lieu);
-            $entityManager->flush();
+            if ($editForm->isSubmitted() && $editForm->isValid()) {
+                if ($editForm->get('cancel')->isClicked()) {
+                    // clic sur le bouton Annuler
+                    $etat = $etatRepository->find(6);
+                    $sortie->setEtat($etat);
 
+                    $this->addFlash('succes', 'Votre sortie a bien été annulée !');
+                    return $this->redirectToRoute('main');
+
+                } elseif ($editForm->get('delete')->isClicked()) {
+                    // clic sur le bouton Supprimer
+                    $entityManager->remove($sortie);
+
+                    $this->addFlash('succes', 'Votre sortie a bien été supprimée !');
+                    return $this->redirectToRoute('main');
+
+                } else {
+                    // clic sur le bouton Enregistrer
+                    // vérif si "publier la sortie" est coché
+                    if ($request->get('etatcheckbox') !== null) {
+                        $etat = $etatRepository->find(2); // état = publiée
+                    } else {
+                        $etat = $etatRepository->find(1); // état = créée
+                    }
+                    $sortie->setEtat($etat);
+                    $entityManager->flush();
+
+                    $this->addFlash('succes', 'Votre sortie a bien été mise à jour !');
+                    return $this->redirectToRoute('sortie_detail', [$sortie->getId()]);
+                }
+            }
+
+            // --------------- ENREGISTRER NOUVELLE IMAGE -----------------
+            if ($editForm->get('image')->getData()) {
+                //ces 2 lignes concernent la mise à jour de l'image
+                if ($sortie->getUrlImage()) {
+                    unlink($this->getParameter('image_sortie_directory') . '/' . $sortie->getUrlImage());
+                }
+
+                $image = $editForm->get('image')->getData();
+                $urlImage = md5(uniqid()) . '.' . $image->guessExtension();
+                $image->move($this->getParameter('image_sortie_directory'), $urlImage);
+                $sortie->setUrlImage($urlImage);
+            }
+
+            //----------- FORMULAIRE DE CREATION DE LIEU (POP-UP) -----------
+
+            $lieu = new Lieu();
+
+            $lieuForm = $this->createForm(LieuFormType::class, $lieu);
+            $lieuForm->handleRequest($request);
+
+            if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
+                $entityManager->persist($lieu);
+                $entityManager->flush();
+
+            }
+
+            // -------------------- REQUETES AJAX POUR AFFICHER SELECT LIEU ------------------------------
+            if ($request->get('ajax') && isset($request->get('sortie_form')['ville'])) {
+
+                $tableauLieu = $lieuRepository->findBy(array('ville' => $request->get('sortie_form')['ville']), array('nom' => 'ASC'), null, 0);
+
+                return new JsonResponse([
+                    'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
+            }
+
+            //---------------------------------------------------------------------------------------
+
+            // envoi du formulaire en HTML
+            return $this->render('sortie/edit.html.twig', ['sortieForm' => $editForm->createView(), 'lieuForm' => $lieuForm->createView(), 'sortie' => $sortie]);
         }
-        //----------- FIN DU FORMULAIRE DE CREATION DE LIEU ---------------------
-
-        $editForm = $this->createForm(SortieFormType::class, $sortie);
-        $editForm->handleRequest($request);
-
-        // -------------------- REQUETES AJAX POUR AFFICHER SELECT LIEU ET DETAIL LIEU ------------------------------
-        if ($request->get('ajax') && isset($request->get('sortie_form')['ville'])){
-
-            $tableauLieu = $lieuRepository->findBy(array('ville' => $request->get('sortie_form')['ville']), array('nom' => 'ASC'), null, 0);
-
-            return new JsonResponse([
-                'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
-        }
-
-        if ($request->get('ajax') && isset($request->get('sortie_form')['lieu'])){
-
-            $lieu = $lieuRepository->find($request->get('sortie_form')['lieu']);
-
-            return new JsonResponse([
-                'content' => $this->renderView('sortie/content/_detailLieu.html.twig', compact('lieu'))]);
-        }
-        //---------------------------------------------------------------------------------------
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $entityManager->flush();
-
-            $this->addFlash('succes', 'Votre sortie a bien été mise à jour !');
-            return $this->redirectToRoute('main'); //TODO
-        }
-
-        return $this->render('sortie/edit.html.twig', ['sortieForm' => $editForm->createView(), 'lieuForm' => $lieuForm->createView(),'sortie' => $sortie]);
+        // si l'utilisateur n'est pas l'organisateur :
+        $this->addFlash('warn', "Tu dois être l'organisateur pour modifier cette sortie");
+        return $this->redirectToRoute('main');
     }
 
 
@@ -244,9 +265,9 @@ class SortieController extends AbstractController
     {
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
-            dump('test back', $request->get('ajax'));
+        dump('test back', $request->get('ajax'));
 
-        if ($request->get('ajax')){
+        if ($request->get('ajax')) {
 
             $newCommentaires = new CommentaireSortie();
             $newCommentaires->setSortie($sortie);
@@ -342,14 +363,14 @@ class SortieController extends AbstractController
      */
     public function setLieuForm(EntityManagerInterface $entityManager,
                                 Request $request,
-                                LieuRepository $lieuRepository) {
+                                LieuRepository $lieuRepository)
+    {
         $lieu = new Lieu();
 
         $lieuForm = $this->createForm(LieuFormType::class, $lieu);
         $lieuForm->handleRequest($request);
 
-        if ($lieuForm->isSubmitted() && $lieuForm->isValid())
-        {
+        if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
             $entityManager->persist($lieu);
             $entityManager->flush();
 
@@ -361,6 +382,21 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('sortie_create', [
             'LieuForm' => $lieuForm->createView(),
         ]);
+    }
+
+    /**
+     * @Route("sortie/test", name="sortie_test")
+     * @return Response
+     */
+    public function test(SortieRepository $sortieRepository, EtatRepository $etatRepository)
+    {
+        $etat2 = $etatRepository->find(2);
+        $etat3 = $etatRepository->find(3);
+
+        $tableauSortiesEtat2 = $sortieRepository->findByEtat($etat2);
+        $sortieRepository->etatsUpdate($etat2, $etat3);
+        $tableauSortiesEtat2bis = $sortieRepository->findByEtat($etat2);
+        return $this->render('sortie/testQueries.html.twig', ['tableauSorties' => $tableauSortiesEtat2, 'tableauSorties2' => $tableauSortiesEtat2bis]);
     }
 
 }

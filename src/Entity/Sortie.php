@@ -31,6 +31,7 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $dateDebut;
 
@@ -48,11 +49,13 @@ class Sortie
      * @ORM\Column(type="datetime")
      * @Assert\Expression("value < this.getDateDebut()",
      *     message="La date de clôture doit être prévue avant la date de début")
+     *@Assert\GreaterThanOrEqual ("today")
+     *
      */
     private $dateCloture;
 
     /**
-     * @Assert\Positive()
+     * @Assert\Positive(message="Choisis un nombre positif")
      * @ORM\Column(type="integer")
      */
     private $nbreInscriptionMax;
@@ -305,4 +308,11 @@ class Sortie
 
         return $this;
     }
+
+//    public function testEventListener() {
+//        if ($this->dateCloture >= new \DateTime()) {
+//            return $this->etat = new Etat();
+//        }
+//        return 'etat != 2';
+//    }
 }

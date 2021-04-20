@@ -8,6 +8,7 @@
     <div>
         {% if app.user %}
             {% if app.user.roles == ["ROLE_ADMIN"] %}
+                Connecté en tant qu'admin
                 <a type="button" class="btn btn-outline-primary" href="{{ path('villes') }}">Villes</a>
                 <a type="button" class="btn btn-outline-primary" href="{{ path('campus') }}">Campus</a>
                 <a type="button" class="btn btn-outline-primary" href="{{ path('admin') }}">Utilisateurs</a>

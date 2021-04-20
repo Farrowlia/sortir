@@ -2,10 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Services\SearchSortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -87,4 +90,32 @@ class SortieRepository extends ServiceEntityRepository
 
         return $query;
     }
+
+    public function etatsUpdate(Etat $etat1, Etat $etat2) {
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->update()
+            ->andWhere('s.dateCloture > :today')
+            ->andWhere('s.etat = :etat')
+            ->setParameter('etat', $etat1)
+            ->setParameter('today', new \DateTimeImmutable(), Types::DATE_IMMUTABLE)
+            ->set('s.etat', ':etat2')
+            ->setParameter('etat2', $etat2);
+        $queryBuilder->getQuery()->execute();
+    }
+
+    public function findByEtat(Etat $etat) {
+        $queryBuilder = $this->createQueryBuilder('sortie')
+            ->andWhere('sortie.etat = :etat')
+            ->andWhere('sortie.dateCloture > :today');
+
+        return $queryBuilder->setParameter('etat', $etat)
+            ->setParameter('today', new \DateTimeImmutable(), Types::DATE_IMMUTABLE)
+            ->getQuery()
+            ->getResult();
+
+    }
+//    public function etatsTri() {
+//    $this->findBy();
+//        return new Paginator($query);
+//    }
 }
