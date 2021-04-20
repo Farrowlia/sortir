@@ -6,6 +6,7 @@ use App\Entity\CommentaireSortie;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\LieuFormType;
+use App\Form\RaisonAnnulationFormType;
 use App\Form\SearchSortieFormType;
 use App\Form\SortieFormType;
 use App\Repository\CommentaireSortieRepository;
@@ -14,6 +15,7 @@ use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use App\Security\EmailVerifier;
+use App\Services\RaisonAnnulation;
 use App\Services\SearchSortie;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -244,7 +246,6 @@ class SortieController extends AbstractController
     {
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
-            dump('test back', $request->get('ajax'));
 
         if ($request->get('ajax')){
 
@@ -274,10 +275,22 @@ class SortieController extends AbstractController
      */
     public function inscriptionSortie(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
+
         $sortie = $sortieRepository->find($id);
-        $user = $userRepository->find($this->getUser());
-        $sortie->addParticipant($user);
-        $entityManager->flush();
+        if (count($sortie->getParticipants()) < $sortie->getNbreInscriptionMax()) {
+            if ($sortie->getDateCloture() > new \DateTime()) {
+                $user = $userRepository->find($this->getUser());
+                $sortie->addParticipant($user);
+                $entityManager->flush();
+                $this->addFlash('success', 'Votre inscription a bien été enregistré !');
+            }
+            else {
+                $this->addFlash('danger', 'La date limite pour s\'inscrire est dépassée. Vous ne pouvez pas vous y inscrire !');
+            }
+        }
+        else {
+            $this->addFlash('danger', 'La sortie est complète. Vous ne pouvez pas vous y inscrire !');
+        }
 
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
@@ -293,10 +306,17 @@ class SortieController extends AbstractController
      */
     public function desinscriptionSortie(int $id, SortieRepository $sortieRepository, CommentaireSortieRepository $commentaireSortieRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
+
         $sortie = $sortieRepository->find($id);
-        $user = $userRepository->find($this->getUser());
-        $sortie->removeParticipant($user);
-        $entityManager->flush();
+        if ($sortie->getDateDebut() > new \DateTime()) {
+            $user = $userRepository->find($this->getUser());
+            $sortie->removeParticipant($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre désinscription a bien été enregistré !');
+        }
+        else {
+            $this->addFlash('danger', 'La sortie est terminée. Vous ne pouvez pas vous y désinscrire !');
+        }
 
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
@@ -314,24 +334,37 @@ class SortieController extends AbstractController
     {
         $sortie = $sortieRepository->find($id);
         $user = $userRepository->find($this->getUser());
-        $raisonAnnulation = 'Je ne suis plus intéressé par cette sortie';
+
+        $raisonAnnulation = new RaisonAnnulation();
+        $raisonAnnulationForm = $this->createForm(RaisonAnnulationFormType::class, $raisonAnnulation);
+        $raisonAnnulationForm->handleRequest($request);
 
         if ($sortie->getOrganisateur() === $user || $user->getAdministrateur()) {
-            // Passage à l'état : annulee(id=6)
-            $etat = $etatRepository->find(6);
-            $sortie->setEtat($etat);
+            if ($raisonAnnulationForm->isSubmitted() && $raisonAnnulationForm->isValid()) {
+                // Passage à l'état : annulee(id=6)
+                $etat = $etatRepository->find(6);
+                $sortie->setEtat($etat);
+                $sortie->setDetailAnnulation($raisonAnnulationForm->get('raisonAnnulation')->getData());
 
-            $participants = $sortie->getParticipants();
-            foreach ($participants as $participant) {
-                $this->emailVerifier->sendEmailAnnulationSortie($participant, $user, $sortie, $raisonAnnulation);
-                $sortie->removeParticipant($participant);
+                // Envoi d'un email à chaque participant pour les avertir de l'annulation
+                $participants = $sortie->getParticipants();
+                foreach ($participants as $participant) {
+                    $this->emailVerifier->sendEmailAnnulationSortie($participant, $user, $sortie);
+                    $sortie->removeParticipant($participant);
+                }
+
+                $entityManager->flush();
+                $this->addFlash('success', 'La sortie a bien été annulée !');
+                return $this->redirectToRoute('main');
             }
-
-            $entityManager->flush();
-            $this->addFlash('succes', 'La sortie a bien été annulée !');
+        }
+        else {
+            return $this->redirectToRoute('main');
         }
 
-        return $this->redirectToRoute('main');
+        return $this->render('sortie/annuler.html.twig', [
+            'raisonAnnulationForm' => $raisonAnnulationForm->createView(),
+        ]);
     }
 
     /**
