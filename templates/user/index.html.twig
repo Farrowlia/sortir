@@ -5,29 +5,167 @@
 
 {% block body %}
 
-    <div class="container">
-        <div class="row">
-            <div class="col-2">
-                {% if user.urlImage %}
-                    {% if 'http' in user.urlImage %}
-                        <img src="{{ user.urlImage }}" alt="image user">
-                    {% else %}
-                        <img src="{{ 'images/users/' ~ user.urlImage }}" alt="image user">
-                    {% endif %}
-                {% else %}
-                    <img src="{{ 'images/users/imageUserParDefault.png' }}" alt="image user" width="100%">
-                {% endif %}
-            </div>
-            <div class="col">
-                <p>Nom : {{ user.nom }}</p>
-                <p>Prénom : {{ user.prenom }}</p>
-                <p>Téléphone : {{ user.telephone }}</p>
-                <p>Email : {{ user.email }}</p>
-                <p>Pseudo : {{ user.pseudo }}</p>
-                <p>Campus : {{ user.campus.nom }}</p>
+    <div class="container pt-3 pb-5">
+        <div class="main-body">
+
+            <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                {% if user.urlImage %}
+                                    {% if 'http' in user.urlImage %}
+                                        <img src="{{ user.urlImage }}" alt="image user" class="rounded-circle" width="150"">
+                                    {% else %}
+                                        <img src="{{ 'images/users/' ~ user.urlImage }}" alt="image user" class="rounded-circle" width="150"">
+                                    {% endif %}
+                                {% else %}
+                                    <img src="{{ 'images/users/imageUserParDefault.png' }}" alt="image user" class="rounded-circle" width="150">
+                                {% endif %}
+                                <div class="mt-3">
+                                    <h4>{{ user.prenom }} {{ user.nom }}</h4>
+                                    <a class="btn btn-outline-primary btn-sm mt-3" href="{{ path('user_modifier') }}">Modifier le profil</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><i class="bi bi-person mx-2"></i>Pseudo</h6>
+                                <span class="text-secondary">{{ user.pseudo }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><i class="bi bi-mailbox mx-2"></i>Email</h6>
+                                <span class="text-secondary">{{ user.email }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><i class="bi bi-telephone mx-2"></i>Téléphone</h6>
+                                <span class="text-secondary">{{ user.telephone }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><i class="bi bi-shop mx-2"></i>Campus</h6>
+                                <span class="text-secondary">{{ user.campus.nom }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row justify-content-center">
+                                <div class="col-10 holder">
+                                    {{ form_start(searchSortieUserFormType, {'attr': {'id': 'formAjax'}}) }}
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ form_row(searchSortieUserFormType.sortieQueJorganise, {'attr': {'class': 'form-check-input'}}) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ form_row(searchSortieUserFormType.sortieAuquelJeParticipe, {'attr': {'class': 'form-check-input'}}) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ form_row(searchSortieUserFormType.archive, {'attr': {'class': 'form-check-input'}}) }}
+                                        </div>
+                                    </div>
+                                    {{ form_end(searchSortieUserFormType) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gutters-sm">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">mes</i>Sorties</h5>
+                                    <div class="row">
+                                        {% for sortie in tableauSorties %}
+                                            <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
+                                                <div class="sortieBox">
+                                                    <div class="imgbox">
+                                                        {% if sortie.urlImage %}
+                                                            {% if 'http' in sortie.urlImage %}
+                                                                <img src="{{ sortie.urlImage }}" alt="image sortie">
+                                                            {% else %}
+                                                                <img src="{{ 'images/sorties/' ~ sortie.urlImage }}" alt="image sortie">
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <img src="{{ 'images/sorties/imageSortieParDefault.png' }}" alt="image sortie">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="specifies">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <h5>{{ sortie.nom }}</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <h6>{{ sortie.organisateur.pseudo }}</h6>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <h5 class="text-end">{{ sortie.dateDebut | date('d/m/Y') }}</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <h6 class="text-end"> à {{ sortie.dateDebut | date('h:m') }}</h6>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row pt-2 pb-2">
+                                                            <div class="col">
+                                                                <ul>
+                                                                    <li>Cloture inscriptions : {{ sortie.dateCloture | date('d/m/Y') }}</li>
+                                                                    {#                                                                    <li>Participants : {{ sortie.participants | length }}/{{ sortie.nbreInscriptionMax }}</li>#}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row pb-2">
+                                                            <div class="col"><a href="{{ path('sortie_detail', {'id': sortie.id}) }}" class="btn btn-primary">Afficher</a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="row justify-content-center pt-5">
+                                                <div class="col text-center"><i class="bi bi-emoji-frown"></i>&nbsp;Aucun résultat</div>
+                                            </div>
+                                            <div class="row justify-content-center p-3">
+                                                <div class="col text-center"><a type="button" class="btn btn btn-danger" href="{{ path('sortie_create') }}">Créer une sortie</a></div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            {{ knp_pagination_render(tableauSorties) }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <a href="{{ path('user_modifier') }}">Modifier le profil</a>
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.querySelectorAll('#formAjax input[type="checkbox"]').forEach(input => {
+            input.addEventListener("click", () => {
+                document.forms['formAjax'].submit();
+            });
+        });
+    </script>
 {% endblock %}

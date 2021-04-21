@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Form\LieuFormType;
 use App\Form\RaisonAnnulationFormType;
 use App\Form\SearchSortieFormType;
+use App\Form\SearchSortieUserFormType;
 use App\Form\SortieFormType;
 use App\Repository\CommentaireSortieRepository;
 use App\Repository\EtatRepository;
@@ -19,6 +20,7 @@ use App\Repository\VilleRepository;
 use App\Security\EmailVerifier;
 use App\Services\RaisonAnnulation;
 use App\Services\SearchSortie;
+use App\Services\SearchSortieUser;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -287,8 +289,9 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/detail.html.twig', [
             'sortie' => $sortie,
+            'tableauParticipants' => $sortie->getParticipants(),
             'commentaires' => $commentaires,
-            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month')
+            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
         ]);
     }
 
@@ -319,7 +322,9 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/detail.html.twig', [
             'sortie' => $sortie,
+            'tableauParticipants' => $sortie->getParticipants(),
             'commentaires' => $commentaires,
+            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
         ]);
     }
 
@@ -345,7 +350,9 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/detail.html.twig', [
             'sortie' => $sortie,
+            'tableauParticipants' => $sortie->getParticipants(),
             'commentaires' => $commentaires,
+            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
         ]);
     }
 

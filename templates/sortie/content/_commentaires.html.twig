@@ -1,5 +1,17 @@
-<p>Liste des commentaires</p>
 {% for commentaire in commentaires %}
-    <p>Posté par {{ commentaire.auteur.pseudo }} le {{ commentaire.date | date('d/m/Y à h:m') }}</p>
-    <p>Texte: {{ commentaire.texte }}</p>
+    <div class="row">
+        <div class="comment mt-4 text-justify float-left">
+            {% if commentaire.auteur.urlImage %}
+                {% if 'http' in commentaire.auteur.urlImage %}
+                    <img src="{{ commentaire.auteur.urlImage }}" alt="" class="rounded-circle">
+                {% else %}
+                    <img src="{{ 'images/users/' ~ commentaire.auteur.urlImage }}" alt="" class="rounded-circle">
+                {% endif %}
+            {% else %}
+                <img src="{{ 'images/users/imageUserParDefault.png' }}" alt="" class="rounded-circle">
+            {% endif %}
+            <h4>{{ commentaire.auteur.pseudo }}</h4> <span>- le {{ commentaire.date | date('d/m/Y à h:m') }}</span> <br>
+            <p>{{ commentaire.texte }}</p>
+        </div>
+    </div>
 {% endfor %}
