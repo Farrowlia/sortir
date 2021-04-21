@@ -71,7 +71,7 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Erreur d\'identification. Merci de vérifier votre email et votre mot de passe.');
+            throw new CustomUserMessageAuthenticationException('EXXrreur d\'identification. Merci de vérifier votre email et votre mot de passe.');
         }
 
         return $user;

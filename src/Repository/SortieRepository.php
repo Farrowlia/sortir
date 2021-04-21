@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Etat;
 use App\Entity\Sortie;
+use App\Entity\User;
 use App\Services\SearchSortie;
+use App\Services\SearchSortieUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -33,6 +35,12 @@ class SortieRepository extends ServiceEntityRepository
     {
         $query = $this->getSearchQuery($searchSortie)->getQuery();
         return $this->paginator->paginate($query, $searchSortie->page, 12);
+    }
+
+    public function findSearchUser(SearchSortieUser $searchSortieUser, User $user)
+    {
+        $query = $this->getSearchQueryUser($searchSortieUser, $user)->getQuery();
+        return $this->paginator->paginate($query, $searchSortieUser->page, 12);
     }
 
     private function getSearchQuery(SearchSortie $searchSortie): QueryBuilder
@@ -86,6 +94,45 @@ class SortieRepository extends ServiceEntityRepository
         return $query;
     }
 
+    private function getSearchQueryUser(SearchSortieUser $searchSortieUser, User $user): QueryBuilder
+    {
+        $query = $this
+            ->createQueryBuilder('s')
+            ->select('c', 's', 'o', 'u')
+            ->join('s.participants', 'u')
+            ->join('s.organisateur', 'o')
+            ->join('s.etat', 'e')
+            ->join('s.campus', 'c');
+
+        if (!empty($searchSortieUser->sortieQueJorganise)) {
+            $query = $query
+                ->orWhere('o = :idUser')
+                ->setParameter('idUser', $user->getId());
+        }
+
+        if (!empty($searchSortieUser->sortieAuquelJeParticipe)) {
+            $query = $query
+                ->orWhere('u = :idUser')
+                ->setParameter('idUser', $user->getId());
+        }
+
+        if (empty($searchSortieUser->archive)) {
+            $query = $query
+                ->andWhere('s.etat = 2');
+        }
+
+        if (!empty($searchSortieUser->archive)) {
+            $query = $query
+                ->andWhere('s.etat = 5')
+                ->andWhere('s.dateDebut < :today')
+                ->andWhere('s.dateDebut > :filtre1MonthArchive')
+                ->setParameter('today', new \DateTime())
+                ->setParameter('filtre1MonthArchive', date_modify(new \DateTime(), '-1 month'));
+        }
+
+        return $query;
+    }
+
     public function etatsUpdate(Etat $etat1, Etat $etat2) {
         $queryBuilder = $this->createQueryBuilder('s');
         $queryBuilder->update()
@@ -109,4 +156,6 @@ class SortieRepository extends ServiceEntityRepository
             ->getResult();
 
     }
+
+
 }
