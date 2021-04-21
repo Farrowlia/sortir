@@ -56,7 +56,7 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/index.html.twig', [
             'searchSortieFormType' => $searchSortieFormType->createView(),
-            'tableauSorties' => $tableauSorties
+            'tableauSorties' => $tableauSorties,
         ]);
     }
 
@@ -288,6 +288,7 @@ class SortieController extends AbstractController
         return $this->render('sortie/detail.html.twig', [
             'sortie' => $sortie,
             'commentaires' => $commentaires,
+            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month')
         ]);
     }
 
