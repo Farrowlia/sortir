@@ -5,39 +5,54 @@
 
 {% block body %}
 
-    <div class="container">
-        <div class="row p-5">
-            <div class="col">
-                <p>Nom: {{ sortie.nom }}</p>
-                <p>Date sortie: {{ sortie.dateDebut | date('d/m/Y à h:m') }}</p>
-                <p>Durée: {{ sortie.duree }} min</p>
-                <p>Date cloture: {{ sortie.dateCloture | date('d/m/Y') }}</p>
-                <p>Inscription: {{ sortie.nbreInscriptionMax }}</p>
-                <p>Description: {{ sortie.description }}</p>
-                <p>Rue: {{ sortie.lieu.rue }}</p>
-                <p>Ville: {{ sortie.lieu.ville }}</p>
-                <p>Organisateur :{{ sortie.organisateur.pseudo }}</p>
-                <p>Campus ENI: {{ sortie.campus.nom }}</p>
-                <br>
-                <br>
-                <div class="row">
-                    <div class="col" id="contentCommentaire">
-                        {% include "sortie/content/_commentaires.html.twig" %}
+    {% if sortie.dateDebut > todayMoinsOneMonth %}
+
+        <div class="container">
+            <div class="row p-5">
+                <div class="col">
+                    <p>Nom: {{ sortie.nom }}</p>
+                    <p>Date sortie: {{ sortie.dateDebut | date('d/m/Y à h:m') }}</p>
+                    <p>Durée: {{ sortie.duree }} min</p>
+                    <p>Date cloture: {{ sortie.dateCloture | date('d/m/Y') }}</p>
+                    <p>Inscription: {{ sortie.nbreInscriptionMax }}</p>
+                    <p>Description: {{ sortie.description }}</p>
+                    <p>Rue: {{ sortie.lieu.rue }}</p>
+                    <p>Ville: {{ sortie.lieu.ville }}</p>
+                    <p>Organisateur :{{ sortie.organisateur.pseudo }}</p>
+                    <p>Etat : {{ sortie.etat.libelle }}</p>
+                    <p>Campus ENI : {{ sortie.campus.nom }}</p>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col" id="contentCommentaire">
+                            {% include "sortie/content/_commentaires.html.twig" %}
+                        </div>
                     </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col">
-                        <form id="formAjax">
-                            <label for="inputText">Votre message</label>
-                            <textarea type="textarea" name="inputCommentaireTexte" id="inputText"></textarea>
-                            <input type="button" id="buttonAjax" value="Envoyer">
-                        </form>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <a class="btn btn-primary" href="{{ path('sortie_inscription', {'id': sortie.id}) }}">S'inscrire à la sortie</a>
+                            <a class="btn btn-primary" href="{{ path('sortie_desinscription', {'id': sortie.id}) }}">Se désinscrire de la sortie</a>
+                            <a class="btn btn-danger" href="{{ path('sortie_annuler', {'id': sortie.id}) }}">Annuler la sortie</a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <form id="formAjax">
+                                <label for="inputText">Votre message</label>
+                                <textarea type="textarea" name="inputCommentaireTexte" id="inputText"></textarea>
+                                <input type="button" id="buttonAjax" value="Envoyer">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+    {% else %}
+        <p>Cette sortie n'est plus disponible</p>
+    {% endif %}
 
 {% endblock %}
 

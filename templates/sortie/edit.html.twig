@@ -2,25 +2,26 @@
 
 {% block styleSheets %}
     <link rel="stylesheet" href="{{ asset('css/marie-laure.css') }}">{% endblock %}
-{% block title %}Créer une nouvelle sortie | Sortir.com{% endblock %}
+{% block title %}Modifier ma sortie | Sortir.com{% endblock %}
 
 {% block body %}
     <div class="container-sm bg-white p-5 w-75 my-3">
-        <h1 class="text-center mb-5" style="font-family: 'Permanent Marker', sans-serif">Créer une sortie</h1>
+        <h1 class="text-center mb-5" style="font-family: 'Permanent Marker', sans-serif">Modifier ma sortie</h1>
 
         {{ form_start(sortieForm, {'attr': {'id': 'formSortie', 'class': 'form-horizontal m-auto'}}) }}
 
-         {{ form_row(sortieForm.nom) }}
+        {{ form_row(sortieForm.nom) }}
 
-         {{ form_row(sortieForm.dateDebut) }}
-         {{ form_row(sortieForm.dateCloture) }}
+        {{ form_row(sortieForm.dateDebut) }}
+        {{ form_row(sortieForm.dateCloture) }}
+        {{ form_row(sortieForm.duree) }}
 
-         {{ form_row(sortieForm.duree) }}
-         {{ form_row(sortieForm.nbreInscriptionMax) }}
-         {{ form_row(sortieForm.description) }}
-         {{ form_row(sortieForm.image) }}
-         {{ form_row(sortieForm.ville) }}
-         {{ form_row(sortieForm.lieu, {'attr': {'disabled': true}}) }}
+
+        {{ form_row(sortieForm.nbreInscriptionMax) }}
+        {{ form_row(sortieForm.description) }}
+        {{ form_row(sortieForm.image) }}
+        {{ form_row(sortieForm.ville) }}
+        {{ form_row(sortieForm.lieu, {'attr': {'disabled': true}}) }}
 
 
         {# BOUTON D'AFFICHAGE DU FORMULAIRE DE CREATION DE LIEU #}
@@ -31,20 +32,37 @@
             </button>
         </div>
 
-
+{#        <div>etat {{ sortie.etat.id }}</div>#}
         <div class="form-group-row">
             <div class="form-check form-switch col my-3">
                 <label for="etatcheckbox" class="form-check-label">Publier la sortie</label>
-                <input class="form-check-input" type="checkbox" name="etatcheckbox" id="etatcheckbox" >
+                <input class="form-check-input" type="checkbox" name="etatcheckbox" id="etatcheckbox" {{ sortie.etat.id >= 2 ? 'checked' : ''  }}>
+            </div>
+            {#            <div class="col">#}
+            {#                <button type="button" class="btn btn-outline-primary m-2 btn-sm float-end" data-bs-toggle="modal"#}
+            {#                        data-bs-target="#blocModal">#}
+            {#                    Ajouter un lieu#}
+            {#                </button>#}
+            {#            </div>#}
+        </div>
+
+        <div class="row">
+            <div class="col" id="contentDetailLieu">
+                {# ici s'affiche le lieu quand il est sélectionné #}
+                {# IMPORTANT de laisser cette div vide #}
             </div>
         </div>
 
 
-
         <div class="row">
             <div class="col">
-                <button type="submit" class="btn btn-success">Enregister</button>
-                <a type="button" class="btn btn-primary" href="{{ path('main') }}">Annuler</a>
+                <button type="submit" name="save" class="btn btn-success">Enregister</button>
+            </div>
+            <div class="col">
+                <button type="submit" name="delete" class="btn btn-danger">Supprimer la sortie</button>
+            </div>
+            <div class="col">
+                <button type="submit" name="cancel" class="btn btn-danger">Annuler la sortie</button>
             </div>
         </div>
         {{ form_end(sortieForm) }}

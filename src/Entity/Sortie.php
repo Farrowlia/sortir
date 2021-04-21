@@ -22,31 +22,53 @@ class Sortie
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\GreaterThan (
+     *     message="Le nom est trop long",
+     *     value="50")
+     *
      */
     private $nom;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $dateDebut;
 
     /**
+     * @Assert\Positive()
+     * @Assert\GreaterThan(
+     *     message="Choisir une durée minimale de 15 minutes",
+     *     value=15
+     * )
      * @ORM\Column(type="integer")
      */
     private $duree;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\Expression("value < this.getDateDebut()",
+     *     message="La date de clôture doit être prévue avant la date de début")
+     *@Assert\GreaterThanOrEqual ("today")
+     *
      */
     private $dateCloture;
 
     /**
+     * @Assert\Positive(message="Choisis un nombre positif")
      * @ORM\Column(type="integer")
      */
     private $nbreInscriptionMax;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\LessThan(
+     *     "Le texte de description est trop long",
+     *     value=250)
+     *@Assert\LessThan (
+     *     message="Le texte de description mériterait d'être un peu plus long",
+     *     value=10)
+     *
      */
     private $description;
 
@@ -89,6 +111,11 @@ class Sortie
      * @ORM\OneToMany(targetEntity=CommentaireSortie::class, mappedBy="sortie", orphanRemoval=true)
      */
     private $commentaireSorties;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $detailAnnulation;
 
     public function __construct()
     {
@@ -283,6 +310,24 @@ class Sortie
                 $commentaireSorty->setSortie(null);
             }
         }
+
+        return $this;
+    }
+
+//    public function testEventListener() {
+//        if ($this->dateCloture >= new \DateTime()) {
+//            return $this->etat = new Etat();
+//        }
+//        return 'etat != 2';
+//    }
+    public function getDetailAnnulation(): ?string
+    {
+        return $this->detailAnnulation;
+    }
+
+    public function setDetailAnnulation(?string $detailAnnulation): self
+    {
+        $this->detailAnnulation = $detailAnnulation;
 
         return $this;
     }

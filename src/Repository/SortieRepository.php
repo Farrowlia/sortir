@@ -2,10 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Services\SearchSortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -32,19 +35,6 @@ class SortieRepository extends ServiceEntityRepository
         return $this->paginator->paginate($query, $searchSortie->page, 12);
     }
 
-//    /**
-//     * Récupère le prix minimum et maximum correspondant à une recherche
-//     * @return integer[]
-//     */
-//    public function findMinMax(SearchSortie $searchSortie): array
-//    {
-//        $results = $this->getSearchQuery($searchSortie)
-//            ->select('MIN(p.price) as min', 'MAX(p.price) as max')
-//            ->getQuery()
-//            ->getScalarResult();
-//        return [(int)$results[0]['min'], (int)$results[0]['max']];
-//    }
-
     private function getSearchQuery(SearchSortie $searchSortie): QueryBuilder
     {
         $query = $this
@@ -61,10 +51,18 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('q', "%{$searchSortie->q}%");
         }
 
+        if (empty($searchSortie->archive)) {
+            $query = $query
+                ->andWhere('s.etat = 2');
+        }
+
         if (!empty($searchSortie->archive)) {
             $query = $query
+                ->andWhere('s.etat = 5')
                 ->andWhere('s.dateDebut < :today')
-                ->setParameter('today', date("Y-m-d H:i:s"));
+                ->andWhere('s.dateDebut > :filtre1MonthArchive')
+                ->setParameter('today', new \DateTime())
+                ->setParameter('filtre1MonthArchive', date_modify(new \DateTime(), '-1 month'));
         }
 
         if (!empty($searchSortie->campus)) {
@@ -86,5 +84,29 @@ class SortieRepository extends ServiceEntityRepository
         }
 
         return $query;
+    }
+
+    public function etatsUpdate(Etat $etat1, Etat $etat2) {
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->update()
+            ->andWhere('s.dateCloture > :today')
+            ->andWhere('s.etat = :etat')
+            ->setParameter('etat', $etat1)
+            ->setParameter('today', new \DateTimeImmutable(), Types::DATE_IMMUTABLE)
+            ->set('s.etat', ':etat2')
+            ->setParameter('etat2', $etat2);
+        $queryBuilder->getQuery()->execute();
+    }
+
+    public function findByEtat(Etat $etat) {
+        $queryBuilder = $this->createQueryBuilder('sortie')
+            ->andWhere('sortie.etat = :etat')
+            ->andWhere('sortie.dateCloture > :today');
+
+        return $queryBuilder->setParameter('etat', $etat)
+            ->setParameter('today', new \DateTimeImmutable(), Types::DATE_IMMUTABLE)
+            ->getQuery()
+            ->getResult();
+
     }
 }

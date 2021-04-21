@@ -4,41 +4,59 @@
 {% block title %}Gérer les villes{% endblock %}
 
 {% block body %}
-{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>#}
-    <div class="container-fluid">
+
         <h2 class="div1">Gérer les villes</h2>
 
-        <div class="div2 row justify-content-start">
-            <input class="inputRechercherVille form-control col sm-3" type="text" id="nomVille" alt="nom de la ville" placeholder="Filtrer par ville">
-            <button class="btnRechercherVille btn btn-light col sm-2">Rechercher</button>
-        </div>
+        <form class="div2 row g-3 justify-content-center" id="formSearch">
+            <input class="inputRechercherVille form-control col-sm-3" type="text" id="rechVille" name="rechVille" alt="nom de la ville" placeholder="Filtrer par ville">
+            <button class="btnRechercherVille btn btn-light col-sm-2" type="submit" id="rechButton">
+                <i class="bi bi-search"></i> Rechercher
+            </button>
+        </form>
 
         {{ form_start(villeForm) }}
-            <div class="div3 row justify-content-start">
-                <input class="form-control col sm-3" placeholder="Ajouter une ville ..." {{ form_widget(villeForm.nom) }} {{ form_errors(villeForm.nom) }}>
-                <input class="form-control col sm-2" placeholder="Ajouter un code postal ..." {{ form_widget(villeForm.codePostal) }} {{ form_errors(villeForm.codePostal) }}>
-                <button type="submit" class="btnAJouterVille btn btn-light col sm-2" alt="ajouter">Ajouter</button>
+            <div class="div3 row g-3 justify-content-center">
+                <input class="form-control col-sm-3" placeholder="Ajouter une ville ..." {{ form_widget(villeForm.nom) }} {{ form_errors(villeForm.nom) }}>
+                <input class="form-control col-sm-2" placeholder="Ajouter un code postal ..." {{ form_widget(villeForm.codePostal) }} {{ form_errors(villeForm.codePostal) }}>
+                <button type="submit" class="btnAJouterVille btn btn-light col-sm-2" alt="ajouter une ville">
+                    <i class="bi bi-plus-circle"></i> Ajouter
+                </button>
             </div>
         {{ form_end(villeForm) }}
 
         <ul class="list-group list-group-horizontal row justify-content-center">
-            <li class="list-group-item col-3">Ville</li>
+            <li class="list-group-item col-2">Ville</li>
             <li class="list-group-item col-2">Code postal</li>
-            <li class="list-group-item col-4">Actions</li>
+            <li class="list-group-item col-2">Actions</li>
         </ul>
 
+        <div id="searchResult">
         {% for ville in villes %}
            <form id="formVille{{ ville.id }}">
                 <ul class="list-group list-group-horizontal row justify-content-center">
-                    <li class="list-group-item col-3" id="afficherNomVille{{ ville.id }}">{{ ville.nom }}</li>
+                    <li class="list-group-item col-2" id="afficherNomVille{{ ville.id }}">{{ ville.nom }}</li>
                     <li class="list-group-item col-2" id="afficherCPville{{ ville.id }}">{{ ville.codePostal }}</li>
-                    <li class="list-group-item col-2" id="modifier{{ ville.id }}"><button  onclick="modifierVille({{ ville.id }})">Modifier</button></li>
-                    <li class="list-group-item col-2" id="supprimer{{ ville.id }}"><button >Supprimer</button></li>
+                    <li class="list-group-item col-1" id="modifier{{ ville.id }}">
+                        <button class="btn btn-outline-secondary" title="Modifier" alt="Modifier la ville" onclick="modifierVille({{ ville.id }})">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </li>
+                    <li class="list-group-item col-1" id="delete{{ ville.id }}">
+                        <a class="btn btn-outline-secondary" href="{{ path('ville_delete', {'id': ville.id}) }}" title="Supprimer" alt="Supprimer la ville">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </li>
                 </ul>
            </form>
         {% endfor %}
-    </div>
+        </div>
 
 {% endblock %}
 
-{% block javascripts %}<script src="{{ asset('js/ville.js') }}"></script>{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/ville.js') }}"></script>
+    <script>
+        requeteAjaxFormulaire('#formSearch', '#rechButton', "click", '#searchResult', false);
+    </script>
+{% endblock %}
+

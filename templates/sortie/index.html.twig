@@ -5,33 +5,42 @@
 
 {% block body %}
 
-    <div class="container">
+    <div class="container pt-3 pb-5">
         <div class="row p-3">
             <div class="col">
                 <h1 class="text-center">Les sorties</h1>
             </div>
         </div>
+
         {{ form_start(searchSortieFormType) }}
-        <div class="row justify-content-center">
-            <div class="col-4">
-                {{ form_row(searchSortieFormType.q) }}
-                {{ form_row(searchSortieFormType.campus) }}
-            </div>
-            <div class="col-4">
-                {{ form_row(searchSortieFormType.dateMin) }}
-                {{ form_row(searchSortieFormType.dateMax) }}
-                {{ form_row(searchSortieFormType.archive) }}
+        <div class="row justify-content-center p-2">
+            <div class="col-lg-6 col-md-9 col-sm-12">
+                {{ form_row(searchSortieFormType.q, {'attr': {'class': 'w-100'}}) }}
             </div>
         </div>
         <div class="row justify-content-center p-2">
-            <div class="col-3">
-                <button type="submit" class="btn btn-primary w-100">Rechercher</button>
+            <div class="col-lg-6 col-md-9 col-sm-12">
+                <div class="row pt-2 pb-2 px-5">
+                    <div class="col-lg-6 col-md-9 col-sm-12">{{ form_row(searchSortieFormType.campus, {'attr': {'class': 'form-select form-select-sm'}}) }}</div>
+                    <div class="col-lg-6 col-md-9 col-sm-12">{{ form_row(searchSortieFormType.archive, {'attr': {'class': 'form-check-input'}}) }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12">{{ form_row(searchSortieFormType.dateMin) }}</div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">{{ form_row(searchSortieFormType.dateMax) }}</div>
+                </div>
             </div>
         </div>
+        <div class="row justify-content-center pt-2 pb-1">
+            <div class="col-lg-4 col-md-8"><button type="submit" class="btn btn-primary w-100">Rechercher</button> </div>
+        </div>
+        <div class="row justify-content-center pb-4">
+            <div class="col-lg-4 col-md-8">{{ form_row(searchSortieFormType.reset, {'attr': {'class': 'btn btn-outline-primary w-100'}}) }}</div>
+        </div>
         {{ form_end(searchSortieFormType) }}
+
         <div class="row">
             {% for sortie in tableauSorties %}
-                <div class="col-3 mb-3">
+                <div class="col-lg-3 col-mb-3 col-sm-6 mb-3">
                     <div class="sortieBox">
                         <div class="imgbox">
                             {% if sortie.urlImage %}
@@ -46,19 +55,36 @@
                         </div>
                         <div class="specifies">
                             <div class="row">
-                                <div class="col"><h5>{{ sortie.nom }}</h5></div>
-                                <div class="col text-end"><h5>{{ sortie.dateDebut | date('d/m/Y') }}</h5></div>
-                            </div>
-                            <div class="row">
-                                <div class="col"><h6>{{ sortie.organisateur.pseudo }}</h6></div>
-                                <div class="col-3"><h6 class="text-end">{{ sortie.dateDebut | date('h:m') }}</h6></div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5>{{ sortie.nom }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>{{ sortie.organisateur.pseudo }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="text-end">{{ sortie.dateDebut | date('d/m/Y') }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6 class="text-end"> à {{ sortie.dateDebut | date('h:m') }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row pt-2 pb-2">
                                 <div class="col">
                                     <ul>
-                                        <li>Date cloture : {{ sortie.dateCloture | date('d/m/Y') }}</li>
-                                        <li>Inscrit : {{ sortie.nbreInscriptionMax }}</li>
-                                        <li>Etat : {{ sortie.etat.libelle }}</li>
+                                        <li>Cloture inscriptions : {{ sortie.dateCloture | date('d/m/Y') }}</li>
+                                        <li>Participants : {{ sortie.participants | length }}/{{ sortie.nbreInscriptionMax }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -69,18 +95,16 @@
                     </div>
                 </div>
             {% else %}
-                <div class="row">
-                    <div class="col"><i class="bi bi-emoji-frown"></i> Il n'y pas de sortie à venir</div>
+                <div class="row justify-content-center pt-5">
+                    <div class="col text-center"><i class="bi bi-emoji-frown"></i>&nbsp;Aucun résultat</div>
                 </div>
-                <div class="row p-3">
-                    <div class="col"><a type="button" class="btn btn-outline-primary" href="{{ path('sortie_create') }}">Créer une sortie</a></div>
+                <div class="row justify-content-center p-3">
+                    <div class="col text-center"><a type="button" class="btn btn btn-danger" href="{{ path('sortie_create') }}">Créer une sortie</a></div>
                 </div>
             {% endfor %}
         </div>
         <div class="row">
-            <div class="col">
-                {{ knp_pagination_render(tableauSorties) }}
-            </div>
+            {{ knp_pagination_render(tableauSorties) }}
         </div>
     </div>
 

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block styleSheets %}
+
+{% endblock %}
+
+{% block body %}
+    {% for sortie in tableauSorties %}
+        {% if sortie is empty %}
+        <div>pas de sortie</div>
+        {% else %}
+        <div>
+        {{ sortie.nom }}
+        etat id : {{ sortie.etat.id }}
+        Date cloture: {{ sortie.dateCloture | date('d/m/Y') }}
+        </div>
+        {% endif %}
+    {% endfor %}
+
+        {% if tableauSorties2 is empty %}
+        <div>pas de sortie</div>
+        {% else %}
+    {% for sortie in tableauSorties2 %}
+        <div>
+        {{ sortie.nom }}
+        etat id : {{ sortie.etat.id }}
+        Date cloture: {{ sortie.dateCloture | date('d/m/Y') }}
+        </div>
+    {% endfor %}
+        {% endif %}
+{% endblock %}
+
