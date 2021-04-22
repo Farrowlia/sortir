@@ -97,8 +97,9 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('gestionUsers');
         }
 
-        return $this->render('user/modifier.html.twig', [
-            'userForm' => $userForm->createView()
+        return $this->render('admin/adminUserModifier.html.twig', [
+            'userForm' => $userForm->createView(),
+            'user' => $user,
         ]);
     }
 
@@ -113,7 +114,23 @@ class AdminController extends AbstractController
         $user->setActif(0);
         $entityManager->flush();
 
-        $this->addFlash('message', 'Utilisateur désactivé avec succès');
+        $this->addFlash('success', 'Utilisateur désactivé avec succès');
+        return $this->redirectToRoute('gestionUsers');
+
+    }
+
+    /**
+     * Rendre un utilisateur actif
+     * @Route("admin/user/{id}/enable", name="admin_user_enable")
+     */
+    public function enable(int $id, UserRepository $userRepository) {
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $userRepository->find($id);
+        $user->setActif(1);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Utilisateur activé avec succès');
         return $this->redirectToRoute('gestionUsers');
 
     }
@@ -129,7 +146,7 @@ class AdminController extends AbstractController
         $entityManager->remove($user);
         $entityManager->flush();
 
-        $this->addFlash('message', 'Utilisateur supprimé avec succès');
+        $this->addFlash('success', 'Utilisateur supprimé avec succès');
         return $this->redirectToRoute('gestionUsers');
 
     }

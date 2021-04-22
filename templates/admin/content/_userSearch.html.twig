@@ -1,12 +1,12 @@
 {% for user in result %}
     <form id="formUtilisateurs{{ user.id }}">
         <ul class="list-group list-group-horizontal row justify-content-center">
-            <li class="list-group-item col-1" id="afficherNomUtilisateur{{ user.id }}">{{ user.nom }}</li>
-            <li class="list-group-item col-1" id="afficherPrenomUtilisateur{{ user.id }}">{{ user.prenom }}</li>
-            <li class="list-group-item col-2" id="afficherPseudoUtilisateur{{ user.id }}">{{ user.pseudo }}</li>
-            <li class="list-group-item col-3" id="afficherEmailUtilisateur{{ user.id }}">{{ user.email }}</li>
-            <li class="list-group-item col-1">
-                <a href="{{ path('user', {'id' : user.id}) }}" title="Voir le profil" alt="Profil de l'utilisateur">
+            <li class="list-group-item col-lg-1 col-md-2" id="afficherNomUtilisateur{{ user.id }}">{{ user.nom }}</li>
+            <li class="list-group-item col-lg-1 col-md-2" id="afficherPrenomUtilisateur{{ user.id }}">{{ user.prenom }}</li>
+            <li class="list-group-item col-lg-2 col-md-4" id="afficherPseudoUtilisateur{{ user.id }}">{{ user.pseudo }}</li>
+            <li class="list-group-item col-lg-2 col-md-4" id="afficherEmailUtilisateur{{ user.id }}">{{ user.email }}</li>
+            <li class="list-group-item col-lg-1 col-md-2">
+                <a href="{{ path('admin_user_modifier', {'id' : user.id}) }}" title="Voir le profil" alt="Profil de l'utilisateur">
                     <i class="bi bi-file-earmark-person btn btn-outline-secondary"></i>
                 </a>
             </li>

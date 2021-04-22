@@ -23,10 +23,6 @@
 !/vendor/symfony/error-handler/
 /vendor/symfony/error-handler/*
 !/vendor/symfony/error-handler/Resources
-/vendor/symfony/error-handler/Resources/*
-!/vendor/symfony/error-handler/Resources/views
-/vendor/symfony/error-handler/Resources/views/*
-!/vendor/symfony/error-handler/Resources/views/error.html.php
 ###< exclure la page error ###
 #vendor/symfony/error-handler/Resources/view
 ###< symfony/framework-bundle ###

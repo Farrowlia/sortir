@@ -4,48 +4,53 @@
 {% block title %}Gérer les campus{% endblock %}
 
 {% block body %}
-        <h2 class="div1">Gérer les campus</h2>
+    <section class="section">
+        <h2 class="div1">Gestion des campus</h2>
 
         <form class="div2 row g-3 justify-content-center" id="formSearch">
             <input class="inputRechercherCampus form-control col-sm-3" type="text" id="rechCampus" name="rechCampus" alt="nom du campus" placeholder="Filtrer par site">
             <button class="btnRechercherCampus btn btn-light col-sm-2" type="submit" id="rechButton">
                 <i class="bi bi-search"></i> Rechercher
             </button>
+            <a href="{{ path('campus')}}" class="btn btn-secondary col-sm-1">
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </a>
         </form>
 
         {{ form_start(campusForm) }}
-            <div class="div3 row g-3 justify-content-center">
-                <input class="form-control col-sm-3" type="text" placeholder="Ajouter un campus ..." {{ form_widget(campusForm.nom) }} {{ form_errors(campusForm.nom) }}>
-                <button type="submit" class="btnAjouterCampus btn btn-light col-sm-2" alt="ajouter">
-                    <i class="bi bi-plus-circle"></i> Ajouter
-                </button>
-            </div>
+        <div class="div3 row g-3 justify-content-center">
+            <input class="form-control col-sm-3" type="text" placeholder="Ajouter un campus ..." {{ form_widget(campusForm.nom) }} {{ form_errors(campusForm.nom) }}>
+            <button type="submit" class="btnAjouterCampus btn btn-light col-sm-2" alt="ajouter">
+                <i class="bi bi-plus-circle"></i> Ajouter
+            </button>
+        </div>
         {{ form_end(campusForm) }}
 
         <ul class="list-group list-group-horizontal row justify-content-center">
-            <li class="list-group-item col-2">Campus</li>
-            <li class="list-group-item col-2">Actions</li>
+            <li class="list-group-item col-lg-2 col-md-4">Campus</li>
+            <li class="list-group-item col-lg-2 col-md-4">Actions</li>
         </ul>
-    <div class="row">
-        <div id="searchResult" class="col">
-        {% for campus in tableauCampus %}
-            <form id="formCampus{{ campus.id }}">
-                <ul class="list-group list-group-horizontal row justify-content-center">
-                    <li class="list-group-item col-lg-2 col-md-4" id="afficherNomCampus{{ campus.id }}">{{ campus.nom }}</li>
-                    <li class="list-group-item col-lg-2" id="modifier{{ campus.id }}">
-                        <button class="btn btn-outline-secondary" title="Modifier" alt="modifier le site" onclick="modifierCampus({{ campus.id }})">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                    </li>
-                    <li class="list-group-item col-lg-2" id="supprimer{{ campus.id }}">
-                        <a class="btn btn-outline-secondary" href="{{ path('campus_delete', {'id' : campus.id}) }}" title="Supprimer" alt="Supprimer le site">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                </ul>
-            </form>
-        {% endfor %}
+        <div class="row">
+            <div id="searchResult" class="col">
+                {% for campus in tableauCampus %}
+                    <form id="formCampus{{ campus.id }}">
+                        <ul class="list-group list-group-horizontal row justify-content-center">
+                            <li class="list-group-item col-lg-2 col-md-4" id="afficherNomCampus{{ campus.id }}">{{ campus.nom }}</li>
+                            <li class="list-group-item col-lg-1 col-md-2" id="modifier{{ campus.id }}">
+                                <button class="btn btn-outline-secondary" title="Modifier" alt="modifier le site" onclick="modifierCampus({{ campus.id }}, '{{ campus.nom }}')">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </li>
+                            <li class="list-group-item col-lg-1 col-md-2" id="supprimer{{ campus.id }}">
+                                <a class="btn btn-outline-secondary" href="{{ path('campus_delete', {'id' : campus.id}) }}" title="Supprimer" alt="Supprimer le site">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                        </ul>
+                    </form>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    </section>
 {% endblock %}
 
 {% block javascripts %}

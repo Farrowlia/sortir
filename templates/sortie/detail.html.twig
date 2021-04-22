@@ -4,106 +4,140 @@
     <link rel="stylesheet" href="{{ asset('css/dimitri.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bruno.css') }}">
 {% endblock %}
+
 {% block title %}{{ sortie.nom }}{% endblock %}
+
+{% block extraStyles %}
+    body {
+    background-image: url("{{ sortie.urlImage}}");
+    }
+{% endblock %}
 
 {% block body %}
 
     {% if sortie.dateDebut > todayMoinsOneMonth %}
 
-        <div class="container">
-            <div class="row p-5">
-                <div class="col">
-                    <p>Nom: {{ sortie.nom }}</p>
-                    <p>Date sortie: {{ sortie.dateDebut | date('d/m/Y à h:m') }}</p>
-                    <p>Durée: {{ sortie.duree }} min</p>
-                    <p>Date cloture: {{ sortie.dateCloture | date('d/m/Y') }}</p>
-                    <p>Participants: {{ tableauParticipants |length }}/{{ sortie.nbreInscriptionMax }}</p>
-                    <div class="row">
-                        {% for participant in tableauParticipants %}
-                            <div class="col-2">
-                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal{{ participant.id }}">{{ participant.pseudo }}</button>
-                                <div class="modal fade" id="exampleModal{{ participant.id }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ participant.id }}" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel{{ participant.id }}">{{ participant.pseudo }}</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="row image-modal">
-                                                <div class="col-6 modal-body">
-                                                    {% if participant.urlImage %}
-                                                        {% if 'http' in participant.urlImage %}
-                                                            <img src="{{ participant.urlImage }}" alt="">
-                                                        {% else %}
-                                                            <img src="{{ 'images/users/' ~ participant.urlImage }}" alt="">
-                                                        {% endif %}
+        <div class="h1">
+            {{ sortie.nom }}
+        </div>
+        <div class="section">
+            <div class="article">
+                <p>Description: {{ sortie.description }}</p>
+                <p>Durée de la sortie: {{ sortie.duree }} min</p>
+                <p>Organisateur: {{ sortie.organisateur.pseudo }}</p>
+                <p>Date cloture de l'inscription: {{ sortie.dateCloture | date('d/m/Y') }}
+                <p>Participants: {{ tableauParticipants |length }}/{{ sortie.nbreInscriptionMax }}</p>
+                <div class="row">
+                    {% for participant in tableauParticipants %}
+                        <div class="col-3">
+                            <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal{{ participant.id }}">{{ participant.pseudo }}</button>
+                            <div class="modal fade" id="exampleModal{{ participant.id }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ participant.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel{{ participant.id }}">{{ participant.pseudo }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="row image-modal">
+                                            <div class="col-6 modal-body">
+                                                {% if participant.urlImage %}
+                                                    {% if 'http' in participant.urlImage %}
+                                                        <img src="{{ participant.urlImage }}" alt="">
                                                     {% else %}
-                                                        <img src="{{ 'images/users/imageUserParDefault.png' }}" alt="">
+                                                        <img src="{{ 'images/users/' ~ participant.urlImage }}" alt="">
                                                     {% endif %}
-                                                </div>
-                                                <div class="col-6 modal-body">
-                                                    <p>{{ participant.nom }}</p>
-                                                    <p>{{ participant.prenom }}</p>
-                                                    <p>{{ participant.email }}</p>
-                                                </div>
+                                                {% else %}
+                                                    <img src="{{ 'images/users/imageUserParDefault.png' }}" alt="">
+                                                {% endif %}
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                            <div class="col-6 modal-body">
+                                                <p>{{ participant.nom }}</p>
+                                                <p>{{ participant.prenom }}</p>
+                                                <p>{{ participant.email }}</p>
                                             </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                    </div>
-                    <p>Description: {{ sortie.description }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="icon">
+                <h3>Infos Utiles</h3>
+
+                <div class="icon1">
+                    <p>Campus-ENI: {{ sortie.organisateur.campus.nom }}</p>
+                    <img src="{{ asset('images/divers/university-campus.png') }}" alt="">
+                </div>
+
+                <div class="icon2">
+                    <p>Date sortie: {{ sortie.dateDebut | date('d/m/Y') }}</p>
+                    <img src="{{ asset('images/divers/date.png') }}" alt="">
+                </div>
+
+                <div class="icon3">
                     <p>Rue: {{ sortie.lieu.rue }}</p>
+                    <img src="{{ asset('images/divers/vue-sur-la-rue.png') }}" alt="">
+                </div>
+
+                <div class="icon4">
                     <p>Ville: {{ sortie.lieu.ville }}</p>
-                    <p>Organisateur :{{ sortie.organisateur.pseudo }}</p>
-                    <p>Etat : {{ sortie.etat.libelle }}</p>
-                    <p>Campus ENI : {{ sortie.campus.nom }}</p>
-                    <br>
-                    <div class="row">
-                        <div class="col">
-                            <a class="btn btn-primary" href="{{ path('sortie_inscription', {'id': sortie.id}) }}">S'inscrire à la sortie</a>
-                            <a class="btn btn-primary" href="{{ path('sortie_desinscription', {'id': sortie.id}) }}">Se désinscrire de la sortie</a>
-                            <a class="btn btn-danger" href="{{ path('sortie_annuler', {'id': sortie.id}) }}">Annuler la sortie</a>
-                        </div>
-                    </div>
-                    <br>
-                    <br>
-                    <br>
-
-
-
-                    <div class="row">
-                        <div class="col-sm-5 col-md-6 col-12 pb-4" id="contentCommentaire">
-                            <h4>Commentaires/Questions</h4>
-                            {% include "sortie/content/_commentaires.html.twig" %}
-                        </div>
-                        <div class="col-lg-4 col-md-5 col-sm-4 offset-md-1 offset-sm-1 col-12 mt-4 formCommentaire">
-                            <form id="formAjax">
-                                <div class="form-group">
-                                    <h4>Poser une question</h4>
-                                    <label for="inputText">Message</label>
-                                    <textarea name="inputCommentaireTexte" id="inputText" cols="30" rows="5" class="form-control"></textarea>
-                                </div>
-                                <div class="form-group pt-3">
-                                    <button type="button" id="buttonAjax" class="btn btn-light">Envoyer</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-
-
+                    <img src="{{ asset('images/divers/ville.png') }}" alt="">
                 </div>
             </div>
         </div>
 
+        <footer>
+            <div class="bouton">
+                <a class="btn btn-primary m-2" href="{{ path('sortie_inscription', {'id': sortie.id}) }}">S'inscrire à la sortie</a>
+                <a class="btn btn-primary m-2" href="{{ path('sortie_desinscription', {'id': sortie.id}) }}">Se désinscrire de la sortie</a>
+                {% if (app.user.roles == ["ROLE_ADMIN"]) or (app.user.id == sortie.organisateur.id) %}
+                    <a class="btn btn-danger m-2" href="{{ path('sortie_edit', {'id': sortie.id}) }}">Modifier la sortie</a>
+                    <a class="btn btn-danger m-2" href="{{ path('sortie_annuler', {'id': sortie.id}) }}">Annuler la sortie</a>
+                {% endif %}
+            </div>
+        </footer>
+
+        <div class="container pt-3 pb-5">
+
+            <div class="row">
+                <div class="col-sm-5 col-md-6 col-12 pb-4" id="contentCommentaire">
+                    <h4>Commentaires/Questions</h4>
+                    {% include "sortie/content/_commentaires.html.twig" %}
+                </div>
+                <div class="col-lg-4 col-md-5 col-sm-4 offset-md-1 offset-sm-1 col-12 mt-4 formCommentaire">
+                    <form id="formAjax">
+                        <div class="form-group">
+                            <h4>Poser une question</h4>
+                            <label for="inputText">Message</label>
+                            <textarea name="inputCommentaireTexte" id="inputText" cols="30" rows="5" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group pt-3">
+                            <button type="button" id="buttonAjax" class="btn btn-light">Envoyer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+
     {% else %}
-        <p>Cette sortie n'est plus disponible</p>
+        <div class="container pt-3 pb-5">
+            <div class="row">
+                <div class="col" style="height: 80vh">
+                    <h1>Désolé, cette sortie n'est plus disponible</h1>
+                    <img src="{{ asset('images/divers/crying-baby.png') }}" alt="" height="100%">
+                </div>
+            </div>
+        </div>
     {% endif %}
+
 
 {% endblock %}
 
@@ -115,4 +149,3 @@
         });
     </script>
 {% endblock %}
-

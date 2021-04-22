@@ -5,13 +5,17 @@
 
 {% block body %}
 
-        <h2 class="div1">Gérer les villes</h2>
+    <section class="section">
+        <h2 class="div1">Gestion des villes</h2>
 
-        <form class="div2 row g-3 justify-content-center" id="formSearch">
+        <form class="div2 row g-3 justify-content-center" id="formSearch" required="required">
             <input class="inputRechercherVille form-control col-sm-3" type="text" id="rechVille" name="rechVille" alt="nom de la ville" placeholder="Filtrer par ville">
             <button class="btnRechercherVille btn btn-light col-sm-2" type="submit" id="rechButton">
                 <i class="bi bi-search"></i> Rechercher
             </button>
+            <a href="{{ path('villes')}}" class="btn btn-secondary col-sm-1">
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </a>
         </form>
 
         {{ form_start(villeForm) }}
@@ -25,24 +29,24 @@
         {{ form_end(villeForm) }}
 
         <ul class="list-group list-group-horizontal row justify-content-center">
-            <li class="list-group-item col-2">Ville</li>
-            <li class="list-group-item col-2">Code postal</li>
-            <li class="list-group-item col-2">Actions</li>
+            <li class="list-group-item col-lg-2 col-md-4">Ville</li>
+            <li class="list-group-item col-lg-2 col-md-4">Code postal</li>
+            <li class="list-group-item col-lg-2 col-md-4">Actions</li>
         </ul>
 
         <div id="searchResult">
         {% for ville in villes %}
            <form id="formVille{{ ville.id }}">
                 <ul class="list-group list-group-horizontal row justify-content-center">
-                    <li class="list-group-item col-2" id="afficherNomVille{{ ville.id }}">{{ ville.nom }}</li>
-                    <li class="list-group-item col-2" id="afficherCPville{{ ville.id }}">{{ ville.codePostal }}</li>
-                    <li class="list-group-item col-1" id="modifier{{ ville.id }}">
-                        <button class="btn btn-outline-secondary" title="Modifier" alt="Modifier la ville" onclick="modifierVille({{ ville.id }})">
+                    <li class="list-group-item col-lg-2 col-md-4" id="afficherNomVille{{ ville.id }}">{{ ville.nom }}</li>
+                    <li class="list-group-item col-lg-2 col-md-4" id="afficherCPville{{ ville.id }}">{{ ville.codePostal }}</li>
+                    <li class="list-group-item col-lg-1 col-md-2" id="modifier{{ ville.id }}">
+                        <button class="btn btn-outline-secondary" title="Modifier" alt="Modifier la ville" onclick="modifierVille({{ ville.id }}, '{{ ville.nom }}','{{ ville.codePostal }}')">
                             <i class="bi bi-pencil"></i>
                         </button>
                     </li>
-                    <li class="list-group-item col-1" id="delete{{ ville.id }}">
-                        <a class="btn btn-outline-secondary" href="{{ path('ville_delete', {'id': ville.id}) }}" title="Supprimer" alt="Supprimer la ville">
+                    <li class="list-group-item col-lg-1 col-md-2" id="delete{{ ville.id }}">
+                        <a class="btn btn-outline-secondary" id="supprimer" href="{{ path('ville_delete', {'id': ville.id}) }}" title="Supprimer" alt="Supprimer la ville">
                             <i class="bi bi-trash"></i>
                         </a>
                     </li>
@@ -50,6 +54,7 @@
            </form>
         {% endfor %}
         </div>
+    </section>
 
 {% endblock %}
 
