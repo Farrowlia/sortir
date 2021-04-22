@@ -6,9 +6,12 @@ use App\Repository\VilleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=VilleRepository::class)
+ * @UniqueEntity(fields={"nom"}, message="Cette ville est déjà présente")
  */
 class Ville
 {
@@ -20,12 +23,16 @@ class Ville
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, unique=true)
+     * @Assert\NotBlank(message="Merci de saisir une ville")
+     * @Assert\Regex("/^[a-z][A-Z]$/")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Assert\NotBlank(message="Merci de saisir un code postal")
+     * @Assert\Regex("/^[0-9]{5}$/")
      */
     private $codePostal;
 

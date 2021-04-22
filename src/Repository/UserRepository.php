@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -79,6 +80,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
     */
+    public function findByMotRecherche(string $motRecherche)
+    {
 
+        $entityManager = $this->getEntityManager();
 
+        return $entityManager->createQuery(
+            'SELECT u
+                FROM App\Entity\User u
+                WHERE u.nom = :query
+                OR u.email = :query
+                OR u.prenom = :query
+                OR u.pseudo = :query'
+        )
+            ->setParameter('query', $motRecherche)
+            ->getResult();
+    }
 }
