@@ -114,7 +114,7 @@ class AdminController extends AbstractController
         $user->setActif(0);
         $entityManager->flush();
 
-        $this->addFlash('message', 'Utilisateur désactivé avec succès');
+        $this->addFlash('success', 'Utilisateur désactivé avec succès');
         return $this->redirectToRoute('gestionUsers');
 
     }
@@ -130,7 +130,7 @@ class AdminController extends AbstractController
         $entityManager->remove($user);
         $entityManager->flush();
 
-        $this->addFlash('message', 'Utilisateur supprimé avec succès');
+        $this->addFlash('success', 'Utilisateur supprimé avec succès');
         return $this->redirectToRoute('gestionUsers');
 
     }

@@ -24,7 +24,7 @@ class Campus
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Assert\Regex ("/^[a-zA-Z]+$/")
+     * @Assert\Regex ("/^[a-zA-Z ]+$/")
      */
     private $nom;
 
