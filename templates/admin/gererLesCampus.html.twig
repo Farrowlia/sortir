@@ -37,7 +37,7 @@
                         <ul class="list-group list-group-horizontal row justify-content-center">
                             <li class="list-group-item col-lg-2 col-md-4" id="afficherNomCampus{{ campus.id }}">{{ campus.nom }}</li>
                             <li class="list-group-item col-lg-1 col-md-2" id="modifier{{ campus.id }}">
-                                <button class="btn btn-outline-secondary" title="Modifier" alt="modifier le site" onclick="modifierCampus({{ campus.id }})">
+                                <button class="btn btn-outline-secondary" title="Modifier" alt="modifier le site" onclick="modifierCampus({{ campus.id }}, '{{ campus.nom }}')">
                                     <i class="bi bi-pencil"></i>
                                 </button>
                             </li>
