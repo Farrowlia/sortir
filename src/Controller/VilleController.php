@@ -83,7 +83,7 @@ class VilleController extends AbstractController
         $entityManager->remove($ville);
         $entityManager->flush();
 
-        $this->addFlash('message', 'Ville supprimée avec succès');
+        $this->addFlash('success', 'Ville supprimée avec succès');
         return $this->redirectToRoute('villes');
 
     }

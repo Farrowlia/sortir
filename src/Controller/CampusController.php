@@ -81,7 +81,7 @@ class CampusController extends AbstractController
         $entityManager->remove($campus);
         $entityManager->flush();
 
-        $this->addFlash('message', 'Campus supprimé avec succès');
+        $this->addFlash('success', 'Campus supprimé avec succès');
         return $this->redirectToRoute('campus');
 
     }
