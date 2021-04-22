@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Services\RaisonAnnulation;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,9 +13,10 @@ class RaisonAnnulationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('raisonAnnulation', TextType::class, [
+            ->add('raisonAnnulation', TextareaType::class, [
                 'required' => true,
-                'label' => 'Indiquez la raison de l\'annulation'
+                'label' => false,
+                'attr' => ['class' => 'col-8 rounded', 'rows' => '4'],
             ]);
 
     }
