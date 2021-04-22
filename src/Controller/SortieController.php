@@ -388,7 +388,7 @@ class SortieController extends AbstractController
             }
         }
         else {
-            return $this->redirectToRoute('main');
+            return $this->redirectToRoute('sortie_detail', ['id' => $id]);
         }
 
         return $this->render('sortie/annuler.html.twig', [
