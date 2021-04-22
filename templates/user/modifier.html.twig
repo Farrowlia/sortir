@@ -24,8 +24,18 @@
                 </div>
                 {{ form_end(userForm) }}
             </div>
+            <div class="col-2">
+                <div class="row">
+                    <a class="btn btn-primary btn-sm mt-3" href="{{ path('admin_user_disable', {'id' : user.id}) }}">Désactiver l'utilisateur</a>
+                </div>
+                <div class="row">
+                    <a class="btn btn-primary btn-sm mt-3" href="{{ path('admin_user_delete', {'id' : user.id}) }}">Supprimer l'utilisateur</a>
+                </div>
+            </div>
         </div>
     </div>
+
+
 
 {% endblock %}
 
