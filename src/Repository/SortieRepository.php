@@ -47,21 +47,23 @@ class SortieRepository extends ServiceEntityRepository
     {
         $query = $this
             ->createQueryBuilder('s')
-            ->select('c', 's', 'u')
-            ->join('s.organisateur', 'u')
-            ->join('s.etat', 'e')
-            ->join('s.campus', 'c');
+            ->select('s', 'o', 'e', 'c')
+            ->leftJoin('s.organisateur', 'o')
+            ->leftJoin('s.etat', 'e')
+            ->leftJoin('s.campus', 'c');
 
         if (!empty($searchSortie->q)) {
             $query = $query
-                ->andWhere('s.nom LIKE :q')
-                ->orWhere('s.description LIKE :q')
+                ->where($query->expr()->orX(
+                    $query->expr()->like('s.nom', ':q'),
+                    $query->expr()->like('s.description', ':q')
+                ))
                 ->setParameter('q', "%{$searchSortie->q}%");
         }
 
         if (empty($searchSortie->archive)) {
             $query = $query
-                ->andWhere('s.etat = 2');
+                ->andWhere('e = 2');
         }
 
         if (!empty($searchSortie->archive)) {
@@ -75,8 +77,8 @@ class SortieRepository extends ServiceEntityRepository
 
         if (!empty($searchSortie->campus)) {
             $query = $query
-                ->andWhere('c.id IN (:campus)')
-                ->setParameter('campus', $searchSortie->campus);
+                ->andWhere('s.campus = :campusId')
+                ->setParameter('campusId', $searchSortie->campus->getId());
         }
 
         if (!empty($searchSortie->dateMin)) {
@@ -96,6 +98,7 @@ class SortieRepository extends ServiceEntityRepository
 
     private function getSearchQueryUser(SearchSortieUser $searchSortieUser, User $user): QueryBuilder
     {
+
         $query = $this
             ->createQueryBuilder('s')
             ->select('c', 's', 'o', 'u')
@@ -106,26 +109,44 @@ class SortieRepository extends ServiceEntityRepository
 
         if (!empty($searchSortieUser->sortieQueJorganise)) {
             $query = $query
-                ->orWhere('o = :idUser')
+                ->where($query->expr()->orX(
+                    $query->expr()->eq('s.etat', '1'),
+                    $query->expr()->eq('s.etat', '2'),
+                    $query->expr()->eq('s.etat', '3'),
+                    $query->expr()->eq('s.etat', '4'),
+                    $query->expr()->eq('s.etat', '5'),
+                    $query->expr()->eq('s.etat', '6')
+                ))
+                ->andWhere('o = :idUser')
                 ->setParameter('idUser', $user->getId());
         }
 
         if (!empty($searchSortieUser->sortieAuquelJeParticipe)) {
             $query = $query
-                ->orWhere('u = :idUser')
+                ->where($query->expr()->orX(
+                    $query->expr()->eq('s.etat', '2'),
+                    $query->expr()->eq('s.etat', '3'),
+                    $query->expr()->eq('s.etat', '4')
+                ))
+                ->andWhere('u = :idUser')
                 ->setParameter('idUser', $user->getId());
         }
 
         if (empty($searchSortieUser->archive)) {
             $query = $query
-                ->andWhere('s.etat = 2');
+                ->andWhere('s.dateDebut >= :today')
+                ->setParameter('today', new \DateTime());
         }
 
         if (!empty($searchSortieUser->archive)) {
             $query = $query
-                ->andWhere('s.etat = 5')
+                ->where($query->expr()->orX(
+                    $query->expr()->eq('o', ':idUser'),
+                    $query->expr()->eq('u', ':idUser')
+                ))
                 ->andWhere('s.dateDebut < :today')
                 ->andWhere('s.dateDebut > :filtre1MonthArchive')
+                ->setParameter('idUser', $user->getId())
                 ->setParameter('today', new \DateTime())
                 ->setParameter('filtre1MonthArchive', date_modify(new \DateTime(), '-1 month'));
         }
