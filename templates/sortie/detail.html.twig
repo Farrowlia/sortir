@@ -1,64 +1,75 @@
 {% extends 'base.html.twig' %}
 
 {% block styleSheets %}<link rel="stylesheet" href="{{ asset('css/dimitri.css') }}">{% endblock %}
+
 {% block title %}{{ sortie.nom }}{% endblock %}
+
+{% block extraStyles %}
+    body {
+    background-image: url("{{ sortie.urlImage}}");
+    }
+{% endblock %}
 
 {% block body %}
 
-    {% if sortie.dateDebut > todayMoinsOneMonth %}
 
-        <div class="container">
-            <div class="row p-5">
-                <div class="col">
-                    <p>Nom: {{ sortie.nom }}</p>
-                    <p>Date sortie: {{ sortie.dateDebut | date('d/m/Y à h:m') }}</p>
-                    <p>Durée: {{ sortie.duree }} min</p>
-                    <p>Date cloture: {{ sortie.dateCloture | date('d/m/Y') }}</p>
-                    <p>Inscription: {{ sortie.nbreInscriptionMax }}</p>
-                    <p>Description: {{ sortie.description }}</p>
-                    <p>Rue: {{ sortie.lieu.rue }}</p>
-                    <p>Ville: {{ sortie.lieu.ville }}</p>
-                    <p>Organisateur :{{ sortie.organisateur.pseudo }}</p>
-                    <p>Etat : {{ sortie.etat.libelle }}</p>
-                    <p>Campus ENI : {{ sortie.campus.nom }}</p>
-                    <br>
-                    <br>
-                    <div class="row">
-                        <div class="col" id="contentCommentaire">
-                            {% include "sortie/content/_commentaires.html.twig" %}
+
+    <div class="h1">
+        <h1>{{ sortie.nom }}</h1>
+    </div>
+                <div class="section">
+                  <div class="article">
+                            <p>Description: {{ sortie.description }}</p>
+                            <p>Durée de la sortie: {{ sortie.duree }} min</p>
+                            <p>Organisateur :{{ sortie.organisateur.pseudo }}</p>
+                            <p>Date cloture de l'inscription: {{ sortie.dateCloture | date('d/m/Y') }}
+                            <p>Nombres d'inscriptions possibles: {{ sortie.nbreInscriptionMax }}</p>
                         </div>
+
+                            <div class="icon">
+    <h3>Infos Utiles</h3>
+
+                    <div class="icon1">
+                            <p>Campus-ENI:</p>
+                        <img src="{{ asset('images/divers/university-campus.png') }}" alt="">
                     </div>
-                    <br>
-                    <div class="row">
-                        <div class="col">
-                            <a class="btn btn-primary" href="{{ path('sortie_inscription', {'id': sortie.id}) }}">S'inscrire à la sortie</a>
-                            <a class="btn btn-primary" href="{{ path('sortie_desinscription', {'id': sortie.id}) }}">Se désinscrire de la sortie</a>
-                            <a class="btn btn-danger" href="{{ path('sortie_annuler', {'id': sortie.id}) }}">Annuler la sortie</a>
+
+                        <div class="icon2">
+                            <p>Date sortie:</p>
+                            <img src="{{ asset('images/divers/date.png') }}" alt="">
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col">
-                            <form id="formAjax">
-                                <label for="inputText">Votre message</label>
-                                <textarea type="textarea" name="inputCommentaireTexte" id="inputText"></textarea>
-                                <input type="button" id="buttonAjax" value="Envoyer">
-                            </form>
+
+                        <div class="icon3">
+                            <p>Rue:</p>
+                            <img src="{{ asset('images/divers/vue-sur-la-rue.png') }}" alt="">
                         </div>
-                    </div>
+
+                        <div class="icon4">
+                            <p>Ville:</p>
+                            <img src="{{ asset('images/divers/ville.png') }}" alt="">
+                            </div>
                 </div>
-            </div>
+                </div>
+
+    <footer>
+        <div class="bouton">
+            <button type="button" class="btn btn-outline-primary">Modifier la Sortie</button>
+            <button type="button" class="btn btn-outline-danger">Annuler la Sortie</button>
         </div>
+    </footer>
 
-    {% else %}
-        <p>Cette sortie n'est plus disponible</p>
-    {% endif %}
 
-{% endblock %}
 
-{% block javascripts %}
-    <script>
-        requeteAjaxFormulaire('#formAjax', '#formAjax input[type="button"]', "click", '#contentCommentaire', false);
-    </script>
-{% endblock %}
+
+
+
+    {% endblock %}
+
+
+
+    {% block javascripts %}
+        <script>
+            requeteAjaxFormulaire('#formAjax', '#formAjax input[type="button"]', "click", '#contentCommentaire', false);
+        </script>
+    {% endblock %}
 
