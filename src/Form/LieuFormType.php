@@ -46,12 +46,15 @@ class LieuFormType extends AbstractType
                 'row_attr' => ['class' => 'col-sm-11 form-group-row'],
                 'label_attr' => ['class' => 'col-sm-3 col-form-label'],
                 'attr' => ['class' => 'm-2 col-sm-5'],
+                'required' => false
 
             ])
             ->add('longitude', NumberType::class, [
                 'row_attr' => ['class' => 'col-sm-11 form-group-row'],
                 'label_attr' => ['class' => 'col-sm-3 col-form-label'],
                 'attr' => ['class' => 'm-2 col-sm-5'],
+                'required' => false
+
             ])
 //            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
 //            ->add('reset', ResetType::class, [
