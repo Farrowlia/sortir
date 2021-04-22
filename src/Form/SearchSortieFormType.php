@@ -41,6 +41,7 @@ class SearchSortieFormType extends AbstractType
             ->add('archive', CheckboxType::class, [
                 'label' => 'Sortie terminée',
                 'required' => false,
+                'label_attr' => ['class' => 'mx-2']
             ])
             ->add('dateMin', DateType::class, [
                 'label' => 'Entre le ',
