@@ -102,7 +102,14 @@
         </div>
 
     {% else %}
-        <p>Cette sortie n'est plus disponible</p>
+        <div class="container pt-3 pb-5">
+            <div class="row">
+                <div class="col" style="height: 80vh">
+                    <h1>Désolé, cette sortie n'est plus disponible</h1>
+                    <img src="{{ asset('images/divers/crying-baby.png') }}" alt="" height="100%">
+                </div>
+            </div>
+        </div>
     {% endif %}
 
 {% endblock %}
