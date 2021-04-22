@@ -7,6 +7,7 @@ use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\User;
+use App\Entity\Ville;
 use App\Form\LieuFormType;
 use App\Form\RaisonAnnulationFormType;
 use App\Form\SearchSortieFormType;
@@ -82,9 +83,9 @@ class SortieController extends AbstractController
         $tableauVille = $villeRepository->findAll();
         $sortieForm = $this->createForm(SortieFormType::class, $sortie);
         $sortieForm->handleRequest($request);
+
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             // vérif si "publier la sortie" est coché
-            dump($request->get('etatcheckbox'));
             if ($request->get('etatcheckbox') !== null) {
                 $etat = $etatRepository->find(2); // état = publiée
             } else {
@@ -134,22 +135,6 @@ class SortieController extends AbstractController
 
         }
 
-        // -------------------- REQUETES AJAX POUR AFFICHER SELECT LIEU (ET DETAIL LIEU)
-        if ($request->get('ajax') && isset($request->get('sortie_form')['ville'])) {
-
-            $tableauLieu = $lieuRepository->findBy(array('ville' => $request->get('sortie_form')['ville']), array('nom' => 'ASC'), null, 0);
-
-            return new JsonResponse([
-                'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
-        }
-
-//        if ($request->get('ajax') && isset($request->get('sortie_form')['lieu'])) {
-//
-//            $lieu = $lieuRepository->find($request->get('sortie_form')['lieu']);
-//
-//            return new JsonResponse([
-//                'content' => $this->renderView('sortie/content/_detailLieu.html.twig', compact('lieu'))]);
-//        }
         //---------------------------------------------------------------------------------------
 
         // envoi du formulaire en HTML
@@ -158,6 +143,20 @@ class SortieController extends AbstractController
             'lieuForm' => $lieuForm->createView(),
             'tableauVille' => $tableauVille
         ]);
+    }
+
+    /**
+     * RECUPERER LES LIEUX PAR VILLE
+     * @Route("/sortie/lieux/{id}", name="sortie_get_lieux_by_ville", requirements={"id"="\d+"})
+     */
+    public function getLieuxByVille(int $id, LieuRepository $lieuRepository)
+    {
+
+        $tableauLieu = $lieuRepository->findBy(array('ville' => $id), array('nom' => 'ASC'), null, 0);
+
+        return new JsonResponse([
+            'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
+
     }
 
     /**

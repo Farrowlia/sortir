@@ -87,3 +87,22 @@ function requeteAjaxGet(selectorElementAction, typeAction, selectorReponse, modi
     });
 
 }
+
+function ajaxGet(url, params, selectorReponse) {
+        console.log(url)
+        const Url = new URL('http://localhost/sortir/public/' + url);
+
+        fetch(Url.pathname + "?" + params.toString(), {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        }).then(response =>
+            response.json()
+        ).then(data => {
+
+            const contentPage = document.querySelector(selectorReponse);
+            contentPage.innerHTML = data.content;
+
+        }).catch(e => alert(e));
+
+}
