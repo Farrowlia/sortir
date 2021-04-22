@@ -18,7 +18,7 @@ class FileCsvUploadFormType extends AbstractType
             ->add('file', FileType::class, [
                 'multiple' => false,
                 'required' => true,
-                'label' => 'Fichier CSV : '
+                'label' => false,
             ]);
 
 //        $builder
