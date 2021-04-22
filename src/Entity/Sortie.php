@@ -21,7 +21,7 @@ class Sortie
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=50)
      * @Assert\GreaterThan (
      *     message="Le nom est trop long",
      *     value="50")

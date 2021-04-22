@@ -43,7 +43,6 @@ class LieuFormType extends AbstractType
                 'attr' => ['class' => 'm-2 col-sm-8'],
             ])
             ->add('latitude', NumberType::class, [
-                'required' => false,
                 'row_attr' => ['class' => 'col-sm-11 form-group-row'],
                 'label_attr' => ['class' => 'col-sm-3 col-form-label'],
                 'attr' => ['class' => 'm-2 col-sm-5'],
@@ -51,7 +50,6 @@ class LieuFormType extends AbstractType
 
             ])
             ->add('longitude', NumberType::class, [
-                'required' => false,
                 'row_attr' => ['class' => 'col-sm-11 form-group-row'],
                 'label_attr' => ['class' => 'col-sm-3 col-form-label'],
                 'attr' => ['class' => 'm-2 col-sm-5'],
