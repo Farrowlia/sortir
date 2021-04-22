@@ -25,7 +25,7 @@ class Ville
     /**
      * @ORM\Column(type="string", length=50, unique=true)
      * @Assert\NotBlank(message="Merci de saisir une ville")
-     * @Assert\Regex("/^[a-z][A-Z]$/")
+     * @Assert\Regex("/^[a-zA-Z]+$/")
      */
     private $nom;
 
