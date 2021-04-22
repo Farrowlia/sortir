@@ -40,7 +40,7 @@
                 <li class="list-group-item col-2" id="afficherPseudoUtilisateur{{ user.id }}">{{ user.pseudo }}</li>
                 <li class="list-group-item col-3" id="afficherEmailUtilisateur{{ user.id }}">{{ user.email }}</li>
                 <li class="list-group-item col-1">
-                    <a href="{{ path('user', {'id' : user.id}) }}" title="Voir le profil" alt="Profil de l'utilisateur">
+                    <a href="{{ path('admin_user', {'id' : user.id}) }}" title="Voir le profil" alt="Profil de l'utilisateur">
                         <i class="bi bi-file-earmark-person btn btn-outline-secondary"></i>
                     </a>
                 </li>

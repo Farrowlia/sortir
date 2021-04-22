@@ -16,7 +16,7 @@
 
         {{ form_start(villeForm) }}
             <div class="div3 row g-3 justify-content-center">
-                <input class="form-control col-sm-3" placeholder="Ajouter une ville ..." {{ form_widget(villeForm.nom) }} {{ form_errors(villeForm.nom) }}>
+                <input class="form-control col-sm-3" placeholder="Ajouter une ville ..." {{ form_widget(villeForm.nom) }}>
                 <input class="form-control col-sm-2" placeholder="Ajouter un code postal ..." {{ form_widget(villeForm.codePostal) }} {{ form_errors(villeForm.codePostal) }}>
                 <button type="submit" class="btnAJouterVille btn btn-light col-sm-2" alt="ajouter une ville">
                     <i class="bi bi-plus-circle"></i> Ajouter

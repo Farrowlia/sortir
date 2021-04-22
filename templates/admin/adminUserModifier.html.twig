@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block styleSheets %}<link rel="stylesheet" href="{{ asset('css/anne.css') }}">{% endblock %}
+{% block title %}Modifier profil{% endblock %}
+
+{% block body %}
+
+    {{ form_start(userForm) }}
+    {{ form_widget(userForm) }}
+    <button type="submit" class="btn">Enregister</button>
+    {{ form_end(userForm) }}
+
+{% endblock %}
+
+
+
