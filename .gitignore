@@ -6,8 +6,32 @@
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/
-/vendor/
+/vendor/*
+
+###> exclure les traductions de la page cookie consent ###
+!/vendor/connectholland/
+/vendor/connectholland/*
+!/vendor/connectholland/cookie-consent-bundle/
+/vendor/connectholland/cookie-consent-bundle/*
+!/vendor/connectholland/cookie-consent-bundle/Resources
+/vendor/connectholland/cookie-consent-bundle/Resources/*
+!/vendor/connectholland/cookie-consent-bundle/Resources/translations
+###< exclure la traduction de la page cookie consent ###
+###> exclure la page error ###
+!/vendor/symfony/
+/vendor/symfony/*
+!/vendor/symfony/error-handler/
+/vendor/symfony/error-handler/*
+!/vendor/symfony/error-handler/Resources
+/vendor/symfony/error-handler/Resources/*
+!/vendor/symfony/error-handler/Resources/views
+/vendor/symfony/error-handler/Resources/views/*
+!/vendor/symfony/error-handler/Resources/views/error.html.php
+###< exclure la page error ###
+#vendor/symfony/error-handler/Resources/view
 ###< symfony/framework-bundle ###
+
+#vendor/connectholland/cookie-consent-bundle/Resources/translations/CHCookieConsentBundle.en.yml
 
 ###> symfony/phpunit-bridge ###
 .phpunit
