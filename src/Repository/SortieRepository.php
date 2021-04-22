@@ -37,7 +37,7 @@ class SortieRepository extends ServiceEntityRepository
         return $this->paginator->paginate($query, $searchSortie->page, 12);
     }
 
-    public function findSearchUser(SearchSortieUser $searchSortieUser, User $user)
+    public function findSearchUser(SearchSortieUser $searchSortieUser, User $user): PaginationInterface
     {
         $query = $this->getSearchQueryUser($searchSortieUser, $user)->getQuery();
         return $this->paginator->paginate($query, $searchSortieUser->page, 12);

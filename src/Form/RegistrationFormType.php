@@ -18,6 +18,7 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('pseudo', null, [
+                'label' => false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez renseigner votre pseudo',
@@ -25,6 +26,7 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('email', null, [
+                'label' => false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez renseigner votre adresse email',
@@ -32,6 +34,7 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('nom', null, [
+                'label' => false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez renseigner votre nom',
@@ -39,6 +42,7 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('prenom', null, [
+                'label' => false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez renseigner votre prénom',
@@ -47,12 +51,14 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('Campus', EntityType::class, [
                 'class' => Campus::class,
-                'choice_label' => 'nom'
+                'choice_label' => 'nom',
+                'placeholder' => 'Campus',
+                'label' => false,
             ])
             ->add('plainPassword', PasswordType::class, [
                 // Mapped à false permet d'encoder le password dans le controller avant l'enregistrement dans l'user
                 'mapped' => false,
-                'label' => 'Password',
+                'label' => false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez renseigner le password',
