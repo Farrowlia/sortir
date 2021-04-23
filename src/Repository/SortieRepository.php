@@ -102,10 +102,10 @@ class SortieRepository extends ServiceEntityRepository
         $query = $this
             ->createQueryBuilder('s')
             ->select('c', 's', 'o', 'u')
-            ->join('s.participants', 'u')
-            ->join('s.organisateur', 'o')
-            ->join('s.etat', 'e')
-            ->join('s.campus', 'c');
+            ->leftJoin('s.participants', 'u')
+            ->leftJoin('s.organisateur', 'o')
+            ->leftJoin('s.etat', 'e')
+            ->leftJoin('s.campus', 'c');
 
         if (!empty($searchSortieUser->sortieQueJorganise)) {
             $query = $query
@@ -117,8 +117,10 @@ class SortieRepository extends ServiceEntityRepository
                     $query->expr()->eq('s.etat', '5'),
                     $query->expr()->eq('s.etat', '6')
                 ))
-                ->andWhere('o = :idUser')
-                ->setParameter('idUser', $user->getId());
+                ->andWhere('s.organisateur = :idUser')
+                ->setParameter('idUser', $user->getId())
+                ->andWhere('s.dateDebut >= :today')
+                ->setParameter('today', new \DateTime());
         }
 
         if (!empty($searchSortieUser->sortieAuquelJeParticipe)) {
@@ -129,14 +131,16 @@ class SortieRepository extends ServiceEntityRepository
                     $query->expr()->eq('s.etat', '4')
                 ))
                 ->andWhere('u = :idUser')
-                ->setParameter('idUser', $user->getId());
-        }
-
-        if (empty($searchSortieUser->archive)) {
-            $query = $query
+                ->setParameter('idUser', $user->getId())
                 ->andWhere('s.dateDebut >= :today')
                 ->setParameter('today', new \DateTime());
         }
+
+//        if (empty($searchSortieUser->archive)) {
+//            $query = $query
+//                ->andWhere('s.dateDebut >= :today')
+//                ->setParameter('today', new \DateTime());
+//        }
 
         if (!empty($searchSortieUser->archive)) {
             $query = $query

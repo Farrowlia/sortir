@@ -45,10 +45,6 @@
 
 
 <main>
-    {# popup cookie #}
-    <div id="popupCookie">
-        {{ render(path('ch_cookie_consent.show_if_cookie_consent_not_set')) }}
-    </div>
     {%  block body %}
         Ce texte est le body par défault
     {% endblock %}
@@ -62,7 +58,7 @@
 <script>
     window.onload = () => {
         document.querySelectorAll("div.messageFlash").forEach(value => {
-            setTimeout(function(){ value.remove(); }, 50000);
+            setTimeout(function(){ value.remove(); }, 5000);
             value.addEventListener("click", () => {
                 value.remove();
             });

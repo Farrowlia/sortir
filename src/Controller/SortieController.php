@@ -123,25 +123,6 @@ class SortieController extends AbstractController
         $lieuForm = $this->createForm(LieuFormType::class, $lieu);
         $lieuForm->handleRequest($request);
 
-        // -------------------- REQUETES AJAX POUR ENREGISTRER UN LIEU ------------------------------
-        if ($request->get('ajax') && $request->get('lieu_form')['nom'])  {
-
-            $lieu->setNom($request->get('lieu_form')['nom']);
-            $lieu->setRue($request->get('lieu_form')['rue']);
-            $lieu->setVille($request->get('lieu_form')['ville']);
-            $lieu->setLatitude($request->get('lieu_form')['latitude']);
-            $lieu->setLongitude($request->get('lieu_form')['longitude']);
-
-                $entityManager->persist($lieu);
-                $entityManager->flush();
-
-//            $tableauLieu = $lieuRepository->findAll();
-//            , compact('tableauLieu')
-            return new JsonResponse([
-//                'content' => $this->renderView('sortie/content/_selectLieu.html.twig')]);
-            'ok']);
-        }
-
         if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
             $entityManager->persist($lieu);
             $entityManager->flush();
@@ -159,7 +140,7 @@ class SortieController extends AbstractController
             $tableauLieu = $lieuRepository->findBy(array('ville' => $request->get('sortie_form')['ville']), array('nom' => 'ASC'), null, 0);
 
             return new JsonResponse([
-                'content' => $this->renderView('sortie/content/_selectLieu.html.twig', ['tableauLieu' => $tableauLieu ])]);
+                'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
         }
 
 //        if ($request->get('ajax') && isset($request->get('sortie_form')['lieu'])) {
@@ -194,8 +175,7 @@ class SortieController extends AbstractController
 
         $user = $userRepository->find($this->getUser());
 
-        // l'utilisateur doit être l'organisateur pour accédier à la page modifier
-        if ($sortie->getOrganisateur()->getId() === $user->getId()) {
+        if ($sortie->getOrganisateur()->getId() === $user->getId() || $user->getAdministrateur()) {
 
             //----------- FORMULAIRE DE LA SORTIE -----------
 
@@ -206,11 +186,11 @@ class SortieController extends AbstractController
             if ($editForm->isSubmitted() && $editForm->isValid()) {
                 if ($editForm->get('cancel')->isClicked()) {
                     // clic sur le bouton Annuler
-//                    $etat = $etatRepository->find(6);
-//                    $sortie->setEtat($etat);
-//
-//                    $this->addFlash('success', 'Votre sortie a bien été annulée !');
-                    return $this->redirectToRoute('sortie_annuler', [$sortie->getId()] );
+                    $etat = $etatRepository->find(6);
+                    $sortie->setEtat($etat);
+
+                    $this->addFlash('success', 'Votre sortie a bien été annulée !');
+                    return $this->redirectToRoute('main');
 
                 } elseif ($editForm->get('delete')->isClicked()) {
                     // clic sur le bouton Supprimer
@@ -253,29 +233,12 @@ class SortieController extends AbstractController
             $lieu = new Lieu();
 
             $lieuForm = $this->createForm(LieuFormType::class, $lieu);
-
             $lieuForm->handleRequest($request);
 
             if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
-                dump($lieu);
                 $entityManager->persist($lieu);
                 $entityManager->flush();
 
-            }
-
-
-
-            // -------------------- REQUETES AJAX POUR ENREGISTRER UN LIEU ------------------------------
-            if ($request->get('lieu_form')['nom'])  {
-                $lieu->setNom($request->get('lieu_form')['nom']);
-                dump($lieu->getNom());
-//                $entityManager->persist($lieu);
-//                $entityManager->flush();
-
-                $tableauLieu = $lieuRepository->findAll();
-
-                return new JsonResponse([
-                    'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
             }
 
             // -------------------- REQUETES AJAX POUR AFFICHER SELECT LIEU ------------------------------
@@ -306,6 +269,7 @@ class SortieController extends AbstractController
     {
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
+        $userVisiteur = $userRepository->find($this->getUser());
 
         if ($request->get('ajax')) {
 
@@ -328,6 +292,7 @@ class SortieController extends AbstractController
             'sortie' => $sortie,
             'tableauParticipants' => $sortie->getParticipants(),
             'commentaires' => $commentaires,
+            'userVisiteur' => $userVisiteur,
             'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
         ]);
     }
@@ -357,12 +322,7 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
 
-        return $this->render('sortie/detail.html.twig', [
-            'sortie' => $sortie,
-            'tableauParticipants' => $sortie->getParticipants(),
-            'commentaires' => $commentaires,
-            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
-        ]);
+        return $this->redirectToRoute('sortie_detail', ['id' => $id]);
     }
 
     /**
@@ -385,12 +345,7 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
 
-        return $this->render('sortie/detail.html.twig', [
-            'sortie' => $sortie,
-            'tableauParticipants' => $sortie->getParticipants(),
-            'commentaires' => $commentaires,
-            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
-        ]);
+        return $this->redirectToRoute('sortie_detail', ['id' => $id]);
     }
 
     /**

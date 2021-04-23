@@ -21,7 +21,7 @@
             {{ sortie.nom }}
         </div>
         <div class="section">
-            <div class="article">
+            <div class="article pt-3 pb-3">
                 <p>Description: {{ sortie.description }}</p>
                 <p>Durée de la sortie: {{ sortie.duree }} min</p>
                 <p>Organisateur: {{ sortie.organisateur.pseudo }}</p>
@@ -94,11 +94,16 @@
 
         <footer>
             <div class="bouton">
-                <a class="btn btn-primary m-2" href="{{ path('sortie_inscription', {'id': sortie.id}) }}">S'inscrire à la sortie</a>
-                <a class="btn btn-primary m-2" href="{{ path('sortie_desinscription', {'id': sortie.id}) }}">Se désinscrire de la sortie</a>
-                {% if (app.user.roles == ["ROLE_ADMIN"]) or (app.user.id == sortie.organisateur.id) %}
+                {% if (userVisiteur in tableauParticipants) %}
+                    <a class="btn btn-primary m-2" href="{{ path('sortie_desinscription', {'id': sortie.id}) }}">Se désinscrire de la sortie</a>
+                {% else %}
+                    <a class="btn btn-primary m-2" href="{{ path('sortie_inscription', {'id': sortie.id}) }}">S'inscrire à la sortie</a>
+                {% endif %}
+                {% if (userVisiteur.roles == ["ROLE_ADMIN"]) or (userVisiteur.id == sortie.organisateur.id) %}
                     <a class="btn btn-danger m-2" href="{{ path('sortie_edit', {'id': sortie.id}) }}">Modifier la sortie</a>
-                    <a class="btn btn-danger m-2" href="{{ path('sortie_annuler', {'id': sortie.id}) }}">Annuler la sortie</a>
+                    {% if userVisiteur.id == sortie.organisateur.id %}
+                        <a class="btn btn-danger m-2" href="{{ path('sortie_annuler', {'id': sortie.id}) }}">Annuler la sortie</a>
+                    {% endif %}
                 {% endif %}
             </div>
         </footer>
