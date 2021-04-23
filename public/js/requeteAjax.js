@@ -1,3 +1,5 @@
+const BASE_URL = 'http://localhost/sortir/public/';
+
 /**
  * Génère une requête Ajax
  * @param {string} selectorFormulaire Sur quel formulaire voulez-vous activer la requête Ajax.
@@ -89,8 +91,8 @@ function requeteAjaxGet(selectorElementAction, typeAction, selectorReponse, modi
 }
 
 function ajaxGet(url, params, selectorReponse) {
-        console.log(url)
-        const Url = new URL('http://localhost/sortir/public/' + url);
+
+        const Url = new URL(BASE_URL + url);
 
         fetch(Url.pathname + "?" + params.toString(), {
             headers: {
@@ -104,5 +106,25 @@ function ajaxGet(url, params, selectorReponse) {
             contentPage.innerHTML = data.content;
 
         }).catch(e => alert(e));
+
+}
+
+function ajaxPost(url, params, callback) {
+
+    const Url = new URL(BASE_URL + url);
+
+    fetch(Url.pathname, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+    }).then(response =>
+        response.json()
+    ).then(data => {
+        callback(data);
+
+    }).catch(e => alert(e));
 
 }
