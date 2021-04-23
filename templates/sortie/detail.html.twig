@@ -100,9 +100,9 @@
                     <a class="btn btn-primary m-2" href="{{ path('sortie_inscription', {'id': sortie.id}) }}">S'inscrire à la sortie</a>
                 {% endif %}
                 {% if (userVisiteur.roles == ["ROLE_ADMIN"]) or (userVisiteur.id == sortie.organisateur.id) %}
-                    <a class="btn btn-danger m-2" href="{{ path('sortie_edit', {'id': sortie.id}) }}">Modifier la sortie</a>
+                    <a class="btn btn-danger m-2" href="{{ path('sortie_annuler', {'id': sortie.id}) }}">Annuler la sortie</a>
                     {% if userVisiteur.id == sortie.organisateur.id %}
-                        <a class="btn btn-danger m-2" href="{{ path('sortie_annuler', {'id': sortie.id}) }}">Annuler la sortie</a>
+                        <a class="btn btn-danger m-2" href="{{ path('sortie_edit', {'id': sortie.id}) }}">Modifier la sortie</a>
                     {% endif %}
                 {% endif %}
             </div>
