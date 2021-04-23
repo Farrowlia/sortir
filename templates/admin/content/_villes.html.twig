@@ -2,7 +2,7 @@
     <li class="list-group-item col-lg-2 col-md-4" id="afficherNomVille{{ villeUpdate.id }}">{{ villeUpdate.nom }}</li>
     <li class="list-group-item col-lg-2 col-md-4" id="afficherCPville{{ villeUpdate.id }}">{{ villeUpdate.codePostal }}</li>
     <li class="list-group-item col-lg-1 col-md-2" id="modifier{{ villeUpdate.id }}">
-        <button class="btn btn-outline-secondary" title="Modifier" alt="modifier la ville" onclick="modifierVille({{ villeUpdate.id }})">
+        <button class="btn btn-outline-secondary" title="Modifier" alt="modifier la ville" onclick="modifierVille({{ villeUpdate.id }}, '{{ villeUpdate.nom }}', '{{ villeUpdate.codePostal }}' )">
             <i class="bi bi-pencil"></i>
         </button>
     </li>
