@@ -47,6 +47,12 @@
                 <a type="button" class="btn btn-primary" href="{{ path('main') }}">Annuler</a>
             </div>
         </div>
+
+        <div hidden>
+            {{ form_row(sortieForm.save) }}
+            {{ form_row(sortieForm.delete) }}
+            {{ form_row(sortieForm.cancel) }}
+        </div>
         {{ form_end(sortieForm) }}
     </div>
 

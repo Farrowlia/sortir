@@ -179,11 +179,10 @@ class SortieController extends AbstractController
             $editForm = $this->createForm(SortieFormType::class, $sortie);
 
             $editForm->handleRequest($request);
-
             if ($editForm->isSubmitted() && $editForm->isValid()) {
                 if ($editForm->get('cancel')->isClicked()) {
                     // clic sur le bouton Annuler
-                    return $this->redirectToRoute('sortie_annuler', [$sortie->getId()] );
+                    return $this->redirectToRoute('sortie_annuler', ["id" => $sortie->getId()] );
 
                 } elseif ($editForm->get('delete')->isClicked()) {
                     // clic sur le bouton Supprimer
@@ -204,7 +203,7 @@ class SortieController extends AbstractController
                     $entityManager->flush();
 
                     $this->addFlash('success', 'Ta sortie a bien été mise à jour !');
-                    return $this->redirectToRoute('sortie_detail', [$sortie->getId()]);
+                    return $this->redirectToRoute('sortie_detail', ["id" => $sortie->getId()]);
                 }
             }
 
