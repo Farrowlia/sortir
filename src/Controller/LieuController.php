@@ -33,8 +33,8 @@ class LieuController extends AbstractController
         $lieu->setRue($params->rue);
         $ville = $villeRepository->find($params->ville);
         $lieu->setVille($ville);
-        $lieu->setLatitude($params->latitude);
-        $lieu->setLongitude($params->longitude);
+        $lieu->setLatitude((float)$params->latitude);
+        $lieu->setLongitude((float)$params->longitude);
 
         $entityManager->persist($lieu);
         $entityManager->flush();
