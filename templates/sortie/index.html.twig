@@ -5,6 +5,11 @@
 
 {% block body %}
 
+    {# popup cookie #}
+    <div id="popupCookie">
+        {{ render(path('ch_cookie_consent.show_if_cookie_consent_not_set')) }}
+    </div>
+
     <div class="container pt-3 pb-5">
         <div class="row p-3">
             <div class="col">

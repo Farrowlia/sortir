@@ -23,7 +23,7 @@ class Ville
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50, unique=true)
+     * @ORM\Column(type="string", length=100, unique=true)
      * @Assert\NotBlank(message="Merci de saisir une ville")
      * @Assert\Regex("/^[a-zA-Z ]+$/")
      */

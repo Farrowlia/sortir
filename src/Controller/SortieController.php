@@ -191,8 +191,7 @@ class SortieController extends AbstractController
 
         $user = $userRepository->find($this->getUser());
 
-        // l'utilisateur doit être l'organisateur pour accédier à la page modifier
-        if ($sortie->getOrganisateur()->getId() === $user->getId()) {
+        if ($sortie->getOrganisateur()->getId() === $user->getId() || $user->getAdministrateur()) {
 
             //----------- FORMULAIRE DE LA SORTIE -----------
 
@@ -246,7 +245,6 @@ class SortieController extends AbstractController
             $lieu = new Lieu();
 
             $lieuForm = $this->createForm(LieuFormType::class, $lieu);
-
             $lieuForm->handleRequest($request);
 
 //            if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
@@ -289,6 +287,7 @@ class SortieController extends AbstractController
     {
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
+        $userVisiteur = $userRepository->find($this->getUser());
 
         if ($request->get('ajax')) {
 
@@ -311,6 +310,7 @@ class SortieController extends AbstractController
             'sortie' => $sortie,
             'tableauParticipants' => $sortie->getParticipants(),
             'commentaires' => $commentaires,
+            'userVisiteur' => $userVisiteur,
             'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
         ]);
     }
@@ -340,12 +340,7 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
 
-        return $this->render('sortie/detail.html.twig', [
-            'sortie' => $sortie,
-            'tableauParticipants' => $sortie->getParticipants(),
-            'commentaires' => $commentaires,
-            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
-        ]);
+        return $this->redirectToRoute('sortie_detail', ['id' => $id]);
     }
 
     /**
@@ -368,12 +363,7 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
 
-        return $this->render('sortie/detail.html.twig', [
-            'sortie' => $sortie,
-            'tableauParticipants' => $sortie->getParticipants(),
-            'commentaires' => $commentaires,
-            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
-        ]);
+        return $this->redirectToRoute('sortie_detail', ['id' => $id]);
     }
 
     /**

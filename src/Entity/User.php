@@ -40,12 +40,12 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=250)
+     * @ORM\Column(type="string", length=50)
      */
     private $nom;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
      */
     private $prenom;
 
@@ -55,7 +55,7 @@ class User implements UserInterface
     private $telephone;
 
     /**
-     * @ORM\Column(type="string", length=30, unique=true)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
     private $pseudo;
 
