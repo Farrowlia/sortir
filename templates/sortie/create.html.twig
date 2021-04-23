@@ -106,10 +106,12 @@
             newLieu.longitude = $('#lieu_form_longitude').val();
 
             ajaxPost('lieu/create', newLieu, () => {
+                $('#sortie_form_ville').prop('selectedIndex',0);
+                $('#sortie_form_lieu').prop('selectedIndex',0);
+                document.querySelector('#sortie_form_lieu').disabled = true;
                 $(".modal").modal("hide");
             });
         })
-
     </script>
 
 {% endblock %}
