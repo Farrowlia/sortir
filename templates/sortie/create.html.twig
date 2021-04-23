@@ -47,6 +47,12 @@
                 <a type="button" class="btn btn-primary" href="{{ path('main') }}">Annuler</a>
             </div>
         </div>
+
+        <div hidden>
+            {{ form_row(sortieForm.save) }}
+            {{ form_row(sortieForm.delete) }}
+            {{ form_row(sortieForm.cancel) }}
+        </div>
         {{ form_end(sortieForm) }}
     </div>
 
@@ -70,7 +76,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                            <button type="submit" id="saveLieu" class="btn btn-primary">Enregistrer</button>
+                            <button type="button" id="saveLieu" class="btn btn-primary">Enregistrer</button>
                         </div>
                         {{ form_end(lieuForm) }}
                     </div>
@@ -91,17 +97,28 @@
 
 {% block javascripts %}
     <script>
-        document.querySelector('#sortie_form_ville').addEventListener("change", () => {
 
+        $('#sortie_form_ville').on('change', () => {
             document.querySelector('#sortie_form_lieu').disabled = false;
             ajaxGet('sortie/lieux/' + $('#sortie_form_ville').val(), new URLSearchParams(),'#sortie_form_lieu');
-        });
+        })
 
+        $('#saveLieu').on('click', () => {
+            const newLieu = {};
+            newLieu.nom = $('#lieu_form_nom').val();
+            newLieu.rue = $('#lieu_form_rue').val();
+            newLieu.ville = $('#lieu_form_ville').val();
+            newLieu.latitude = $('#lieu_form_latitude').val();
+            newLieu.longitude = $('#lieu_form_longitude').val();
+
+            ajaxPost('lieu/create', newLieu, () => {
+                $('#sortie_form_ville').prop('selectedIndex',0);
+                $('#sortie_form_lieu').prop('selectedIndex',0);
+                document.querySelector('#sortie_form_lieu').disabled = true;
+                $(".modal").modal("hide");
+            });
+        })
     </script>
-    {# <script> #}
-    {# $('saveLieu')._hideModal(); #}
-    {# requeteAjaxGet('#saveLieu', "click", '#sortie_form_lieu', false); #}
-    {# </script> #}
 
 {% endblock %}
 

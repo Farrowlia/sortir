@@ -75,7 +75,6 @@ class SortieController extends AbstractController
                            Request $request,
                            EtatRepository $etatRepository,
                            UserRepository $userRepository,
-                           LieuRepository $lieuRepository,
                            VilleRepository $villeRepository
     ): Response
     {
@@ -122,24 +121,6 @@ class SortieController extends AbstractController
         $lieuForm = $this->createForm(LieuFormType::class, $lieu);
         $lieuForm->handleRequest($request);
 
-        // -------------------- REQUETES AJAX POUR ENREGISTRER UN LIEU ------------------------------
-        if ($request->get('ajax') && $request->get('lieu_form')['nom'])  {
-
-            $lieu->setNom($request->get('lieu_form')['nom']);
-            $lieu->setRue($request->get('lieu_form')['rue']);
-            $lieu->setVille($request->get('lieu_form')['ville']);
-            $lieu->setLatitude($request->get('lieu_form')['latitude']);
-            $lieu->setLongitude($request->get('lieu_form')['longitude']);
-
-                $entityManager->persist($lieu);
-                $entityManager->flush();
-
-//            $tableauLieu = $lieuRepository->findAll();
-//            , compact('tableauLieu')
-            return new JsonResponse([
-//                'content' => $this->renderView('sortie/content/_selectLieu.html.twig')]);
-            'ok']);
-        }
 
 //        if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
 //            $entityManager->persist($lieu);
@@ -198,11 +179,10 @@ class SortieController extends AbstractController
             $editForm = $this->createForm(SortieFormType::class, $sortie);
 
             $editForm->handleRequest($request);
-
             if ($editForm->isSubmitted() && $editForm->isValid()) {
                 if ($editForm->get('cancel')->isClicked()) {
                     // clic sur le bouton Annuler
-                    return $this->redirectToRoute('sortie_annuler', [$sortie->getId()] );
+                    return $this->redirectToRoute('sortie_annuler', ["id" => $sortie->getId()] );
 
                 } elseif ($editForm->get('delete')->isClicked()) {
                     // clic sur le bouton Supprimer
@@ -223,7 +203,7 @@ class SortieController extends AbstractController
                     $entityManager->flush();
 
                     $this->addFlash('success', 'Ta sortie a bien été mise à jour !');
-                    return $this->redirectToRoute('sortie_detail', [$sortie->getId()]);
+                    return $this->redirectToRoute('sortie_detail', ["id" => $sortie->getId()]);
                 }
             }
 

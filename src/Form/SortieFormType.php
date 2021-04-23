@@ -12,11 +12,13 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SortieFormType extends AbstractType
@@ -99,6 +101,16 @@ class SortieFormType extends AbstractType
                 'row_attr' => ['class' => 'form-group-row'],
                 'label_attr' => ['class' => 'col-2 col-form-label'],
                 'attr' => ['class' => 'col-8 rounded'],
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Enregistrer',
+                'attr' => ['class' => 'btn btn-success']])
+            ->add('delete', SubmitType::class, [
+                'label' => 'Supprimer la sortie',
+                'attr' => ['class' => 'btn btn-danger']])
+            ->add('cancel', SubmitType::class, [
+                'label' => 'Annuler la sortie',
+                'attr' => ['class' => 'btn btn-danger']
             ]);
 
 
