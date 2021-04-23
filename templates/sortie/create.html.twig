@@ -92,10 +92,11 @@
 {% block javascripts %}
     <script>
         document.querySelector('#sortie_form_ville').addEventListener("change", () => {
+
             document.querySelector('#sortie_form_lieu').disabled = false;
+            ajaxGet('sortie/lieux/' + $('#sortie_form_ville').val(), new URLSearchParams(),'#sortie_form_lieu');
         });
-        requeteAjaxGet('#sortie_form_ville', "change", '#sortie_form_lieu', false);
-        // requeteAjaxGet('#sortie_form_lieu', "change", '#contentDetailLieu', false);
+
     </script>
     {# <script> #}
     {# $('saveLieu')._hideModal(); #}

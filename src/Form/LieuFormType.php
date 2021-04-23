@@ -53,6 +53,7 @@ class LieuFormType extends AbstractType
                 'row_attr' => ['class' => 'col-sm-11 form-group-row'],
                 'label_attr' => ['class' => 'col-sm-3 col-form-label'],
                 'attr' => ['class' => 'm-2 col-sm-5'],
+                
             ])
 //            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
 //            ->add('reset', ResetType::class, [
