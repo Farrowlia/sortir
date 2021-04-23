@@ -255,16 +255,22 @@ class SortieController extends AbstractController
 //            }
 
 
-            // -------------------- REQUETES AJAX POUR ENREGISTRER UN LIEU ------------------------------
-            if ($request->get('lieu_form')['nom'])  {
+            if ($request->get('ajax') && $request->get('lieu_form')['nom'])  {
+
                 $lieu->setNom($request->get('lieu_form')['nom']);
+                $lieu->setRue($request->get('lieu_form')['rue']);
+                $lieu->setVille($request->get('lieu_form')['ville']);
+                $lieu->setLatitude($request->get('lieu_form')['latitude']);
+                $lieu->setLongitude($request->get('lieu_form')['longitude']);
+
                 $entityManager->persist($lieu);
                 $entityManager->flush();
 
-                $tableauLieu = $lieuRepository->findAll();
-
+//            $tableauLieu = $lieuRepository->findAll();
+//            , compact('tableauLieu')
                 return new JsonResponse([
-                    'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
+//                'content' => $this->renderView('sortie/content/_selectLieu.html.twig')]);
+                    'ok']);
             }
 
 
