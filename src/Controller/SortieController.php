@@ -98,8 +98,6 @@ class SortieController extends AbstractController
             $sortie->setOrganisateur($user);
             $sortie->setCampus($user->getCampus());
 
-//            $lieu = $lieuRepository->find($request->get('selectLieu'));
-//            $sortie->setLieu($lieu);
 
             // récupération de l'image
             if ($sortieForm->get('image')->getData()) {
@@ -112,7 +110,7 @@ class SortieController extends AbstractController
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Votre sortie a bien été créée !');
+            $this->addFlash('success', 'Ta sortie a bien été créée !');
             return $this->redirectToRoute('sortie_edit', [
                 "id" => $sortie->getId()]);
         }
@@ -143,16 +141,16 @@ class SortieController extends AbstractController
             'ok']);
         }
 
-        if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
-            $entityManager->persist($lieu);
-            $entityManager->flush();
+//        if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
+//            $entityManager->persist($lieu);
+//            $entityManager->flush();
 
 //              PAS POSSIBLE POUR L'INSTANT
 //            // récupération dans la BDD du lieu tout juste créé
 //            $nouveauLieu = $lieuRepository->find($lieu->getId());
 //            //$sortie->setLieu($nouveauLieu);
 
-        }
+//        }
 
         //---------------------------------------------------------------------------------------
 
@@ -205,17 +203,13 @@ class SortieController extends AbstractController
             if ($editForm->isSubmitted() && $editForm->isValid()) {
                 if ($editForm->get('cancel')->isClicked()) {
                     // clic sur le bouton Annuler
-//                    $etat = $etatRepository->find(6);
-//                    $sortie->setEtat($etat);
-//
-//                    $this->addFlash('success', 'Votre sortie a bien été annulée !');
                     return $this->redirectToRoute('sortie_annuler', [$sortie->getId()] );
 
                 } elseif ($editForm->get('delete')->isClicked()) {
                     // clic sur le bouton Supprimer
                     $entityManager->remove($sortie);
 
-                    $this->addFlash('success', 'Votre sortie a bien été supprimée !');
+                    $this->addFlash('success', 'Ta sortie a bien été supprimée !');
                     return $this->redirectToRoute('main');
 
                 } else {
@@ -229,7 +223,7 @@ class SortieController extends AbstractController
                     $sortie->setEtat($etat);
                     $entityManager->flush();
 
-                    $this->addFlash('success', 'Votre sortie a bien été mise à jour !');
+                    $this->addFlash('success', 'Ta sortie a bien été mise à jour !');
                     return $this->redirectToRoute('sortie_detail', [$sortie->getId()]);
                 }
             }
@@ -255,21 +249,19 @@ class SortieController extends AbstractController
 
             $lieuForm->handleRequest($request);
 
-            if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
-                dump($lieu);
-                $entityManager->persist($lieu);
-                $entityManager->flush();
-
-            }
-
+//            if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
+//                dump($lieu);
+//                $entityManager->persist($lieu);
+//                $entityManager->flush();
+//
+//            }
 
 
             // -------------------- REQUETES AJAX POUR ENREGISTRER UN LIEU ------------------------------
             if ($request->get('lieu_form')['nom'])  {
                 $lieu->setNom($request->get('lieu_form')['nom']);
-                dump($lieu->getNom());
-//                $entityManager->persist($lieu);
-//                $entityManager->flush();
+                $entityManager->persist($lieu);
+                $entityManager->flush();
 
                 $tableauLieu = $lieuRepository->findAll();
 
@@ -277,14 +269,6 @@ class SortieController extends AbstractController
                     'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
             }
 
-            // -------------------- REQUETES AJAX POUR AFFICHER SELECT LIEU ------------------------------
-            if ($request->get('ajax') && isset($request->get('sortie_form')['ville'])) {
-
-                $tableauLieu = $lieuRepository->findBy(array('ville' => $request->get('sortie_form')['ville']), array('nom' => 'ASC'), null, 0);
-
-                return new JsonResponse([
-                    'content' => $this->renderView('sortie/content/_selectLieu.html.twig', compact('tableauLieu'))]);
-            }
 
             //---------------------------------------------------------------------------------------
 
@@ -292,8 +276,8 @@ class SortieController extends AbstractController
             return $this->render('sortie/edit.html.twig', ['sortieForm' => $editForm->createView(), 'lieuForm' => $lieuForm->createView(), 'sortie' => $sortie]);
         }
         // si l'utilisateur n'est pas l'organisateur :
-        $this->addFlash('warn', "Tu dois être l'organisateur pour modifier cette sortie");
-        return $this->redirectToRoute('main');
+        $this->addFlash('warning', "Tu dois être l'organisateur pour modifier cette sortie");
+        return $this->redirectToRoute('sortie_detail', $sortie->getId());
     }
 
 
