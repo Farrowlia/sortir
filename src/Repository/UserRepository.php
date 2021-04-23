@@ -30,9 +30,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $entityManager->createQuery(
             'SELECT u
                 FROM App\Entity\User u
-                WHERE u.pseudo = :query
-                OR u.email = :query
-                AND u.actif = 1'
+                WHERE (u.pseudo = :query OR u.email = :query) AND u.actif = 1'
         )
             ->setParameter('query', $usernameOrEmail)
             ->getOneOrNullResult();
