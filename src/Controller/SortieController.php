@@ -111,7 +111,7 @@ class SortieController extends AbstractController
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            $this->addFlash('succes', 'Votre sortie a bien été créée !');
+            $this->addFlash('success', 'Votre sortie a bien été créée !');
             return $this->redirectToRoute('sortie_edit', [
                 "id" => $sortie->getId()]);
         }
@@ -189,14 +189,14 @@ class SortieController extends AbstractController
                     $etat = $etatRepository->find(6);
                     $sortie->setEtat($etat);
 
-                    $this->addFlash('succes', 'Votre sortie a bien été annulée !');
+                    $this->addFlash('success', 'Votre sortie a bien été annulée !');
                     return $this->redirectToRoute('main');
 
                 } elseif ($editForm->get('delete')->isClicked()) {
                     // clic sur le bouton Supprimer
                     $entityManager->remove($sortie);
 
-                    $this->addFlash('succes', 'Votre sortie a bien été supprimée !');
+                    $this->addFlash('success', 'Votre sortie a bien été supprimée !');
                     return $this->redirectToRoute('main');
 
                 } else {
@@ -210,7 +210,7 @@ class SortieController extends AbstractController
                     $sortie->setEtat($etat);
                     $entityManager->flush();
 
-                    $this->addFlash('succes', 'Votre sortie a bien été mise à jour !');
+                    $this->addFlash('success', 'Votre sortie a bien été mise à jour !');
                     return $this->redirectToRoute('sortie_detail', [$sortie->getId()]);
                 }
             }
@@ -269,6 +269,7 @@ class SortieController extends AbstractController
     {
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
+        $userVisiteur = $userRepository->find($this->getUser());
 
         if ($request->get('ajax')) {
 
@@ -291,6 +292,7 @@ class SortieController extends AbstractController
             'sortie' => $sortie,
             'tableauParticipants' => $sortie->getParticipants(),
             'commentaires' => $commentaires,
+            'userVisiteur' => $userVisiteur,
             'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
         ]);
     }
@@ -320,12 +322,7 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
 
-        return $this->render('sortie/detail.html.twig', [
-            'sortie' => $sortie,
-            'tableauParticipants' => $sortie->getParticipants(),
-            'commentaires' => $commentaires,
-            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
-        ]);
+        return $this->redirectToRoute('sortie_detail', ['id' => $id]);
     }
 
     /**
@@ -348,12 +345,7 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($id);
         $commentaires = $commentaireSortieRepository->findBy(array('sortie' => $id), array('date' => 'DESC'), null, 0);
 
-        return $this->render('sortie/detail.html.twig', [
-            'sortie' => $sortie,
-            'tableauParticipants' => $sortie->getParticipants(),
-            'commentaires' => $commentaires,
-            'todayMoinsOneMonth' => date_modify(new \DateTime(), '-1 month'),
-        ]);
+        return $this->redirectToRoute('sortie_detail', ['id' => $id]);
     }
 
     /**
