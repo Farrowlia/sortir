@@ -23,7 +23,7 @@
          {{ form_row(sortieForm.lieu, {'attr': {'disabled': true}}) }}
 
 
-        {# BOUTON D'AFFICHAGE DU FORMULAIRE DE CREATION DE LIEU #}
+        {# BOUTON D'APPEL DE LA MODAL (POP-UP) DU FORMULAIRE DE CREATION DE LIEU #}
         <div class="form-group-row">
             <button type="button" class="btn btn-outline-primary mb-2 btn-sm" data-bs-toggle="modal"
                     data-bs-target="#blocModal">
@@ -86,12 +86,6 @@
     </div>
     {# FIN DU FORMULAIRE DE CREATION DE LIEU #}
 
-
-    {# {{ form_start(sortieForm) }} #}
-    {# {{ form_widget(lieuForm, {'attr' : { 'display' : 'none'}}) }} #}
-    {# {{ form_end(sortieForm) }} #}
-
-    {# {'attr' : { 'onchange' : 'onLieuSelected(this.value)'}} #}
     </div>
 {% endblock %}
 
@@ -115,7 +109,7 @@
                 $('#sortie_form_ville').prop('selectedIndex',0);
                 $('#sortie_form_lieu').prop('selectedIndex',0);
                 document.querySelector('#sortie_form_lieu').disabled = true;
-                $(".modal").modal("hide");
+                $('.modal').modal('hide');
             });
         })
     </script>

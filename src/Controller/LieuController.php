@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 class LieuController extends AbstractController
 {
@@ -43,19 +42,22 @@ class LieuController extends AbstractController
 
     }
 
-    /**
-     * ça ne fonctionne pas, je n'arrive pas à appeler cette méthode
-     */
-    public function detail(EntityManagerInterface $entityManager,
-                           Request $request,
-                           LieuRepository $lieuRepository):Response
-    {
-        $idLieu = $request->get('id');
-        if ($idLieu)
-        {
-            $lieu = $lieuRepository->findBy($idLieu);
-            return new JsonResponse($lieu);
-        }
-        return new Response("ce lieu n'existe pas");
-    }
+
+
+
+//    /**
+//     * ça ne fonctionne pas, je n'arrive pas à appeler cette méthode
+//     */
+//    public function detail(EntityManagerInterface $entityManager,
+//                           Request $request,
+//                           LieuRepository $lieuRepository):Response
+//    {
+//        $idLieu = $request->get('id');
+//        if ($idLieu)
+//        {
+//            $lieu = $lieuRepository->findBy($idLieu);
+//            return new JsonResponse($lieu);
+//        }
+//        return new Response("ce lieu n'existe pas");
+//    }
 }
