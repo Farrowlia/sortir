@@ -24,7 +24,7 @@
         {{ form_row(sortieForm.lieu, {'attr': {'disabled': false}}) }}
 
 
-        {# BOUTON D'AFFICHAGE DU FORMULAIRE DE CREATION DE LIEU #}
+        {# BOUTON D'APPEL DE LA MODAL (POP-UP) DU FORMULAIRE DE CREATION DE LIEU #}
         <div class="form-group-row">
             <button type="button" class="btn btn-outline-primary mb-2 btn-sm" data-bs-toggle="modal"
                     data-bs-target="#blocModal">
@@ -38,20 +38,15 @@
                 <label for="etatcheckbox" class="form-check-label">Publier la sortie</label>
                 <input class="form-check-input" type="checkbox" name="etatcheckbox" id="etatcheckbox" {{ sortie.etat.id >= 2 ? 'checked' : ''  }}>
             </div>
-            {#            <div class="col">#}
-            {#                <button type="button" class="btn btn-outline-primary m-2 btn-sm float-end" data-bs-toggle="modal"#}
-            {#                        data-bs-target="#blocModal">#}
-            {#                    Ajouter un lieu#}
-            {#                </button>#}
-            {#            </div>#}
+
         </div>
 
-        <div class="row">
-            <div class="col" id="contentDetailLieu">
-                {# ici s'affiche le lieu quand il est sélectionné #}
-                {# IMPORTANT de laisser cette div vide #}
-            </div>
-        </div>
+{#        <div class="row">#}
+{#            <div class="col" id="contentDetailLieu">#}
+{#                #}{# ici s'affiche le lieu quand il est sélectionné #}
+{#                #}{# IMPORTANT de laisser cette div vide #}
+{#            </div>#}
+{#        </div>#}
 
 
         <div class="row">
@@ -99,27 +94,31 @@
     {# FIN DU FORMULAIRE DE CREATION DE LIEU #}
 
 
-    {# {{ form_start(sortieForm) }} #}
-    {# {{ form_widget(lieuForm, {'attr' : { 'display' : 'none'}}) }} #}
-    {# {{ form_end(sortieForm) }} #}
-
-    {# {'attr' : { 'onchange' : 'onLieuSelected(this.value)'}} #}
     </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        document.querySelector('#sortie_form_ville').addEventListener("change", () => {
 
-            document.querySelector('#sortie_form_lieu').disabled = false;
+        $('#sortie_form_ville').on('change', () => {
             ajaxGet('sortie/lieux/' + $('#sortie_form_ville').val(), new URLSearchParams(),'#sortie_form_lieu');
-        });
+        })
 
+        $('#saveLieu').on('click', () => {
+            const newLieu = {};
+            newLieu.nom = $('#lieu_form_nom').val();
+            newLieu.rue = $('#lieu_form_rue').val();
+            newLieu.ville = $('#lieu_form_ville').val();
+            newLieu.latitude = $('#lieu_form_latitude').val();
+            newLieu.longitude = $('#lieu_form_longitude').val();
+
+            ajaxPost('lieu/create', newLieu, () => {
+                $('#sortie_form_ville').prop('selectedIndex',0);
+                $('#sortie_form_lieu').prop('selectedIndex',0);
+                $(".modal").modal('hide');
+            });
+        })
     </script>
-    {# <script> #}
-    {# $('saveLieu')._hideModal(); #}
-    {# requeteAjaxGet('#saveLieu', "click", '#sortie_form_lieu', false); #}
-    {# </script> #}
 
 {% endblock %}
 
